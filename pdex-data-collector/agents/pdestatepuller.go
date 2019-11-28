@@ -68,6 +68,8 @@ func (psp *PDEStatePuller) Execute() {
 	}
 	if bcHeight == 0 {
 		bcHeight = uint64(BCHeightStartForPullingPDEState)
+	} else {
+		bcHeight++
 	}
 
 	var lastPDEState *entities.PDEState

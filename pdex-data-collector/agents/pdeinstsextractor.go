@@ -70,6 +70,8 @@ func (pie *PDEInstsExtractor) Execute() {
 	}
 	if bcHeight == 0 {
 		bcHeight = uint64(BCHeightStartForExtractingInsts)
+	} else {
+		bcHeight++
 	}
 
 	for {
