@@ -1,7 +1,7 @@
 package postgresql
 
 import (
-	"pdex-data-collector/models"
+	"github.com/incognitochain/incognito-analytic/pdex-data-collector/models"
 
 	_ "github.com/lib/pq"
 )

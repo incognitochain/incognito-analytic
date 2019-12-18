@@ -3,9 +3,9 @@ package agents
 import (
 	"errors"
 	"fmt"
-	"pdex-data-collector/entities"
-	"pdex-data-collector/models"
-	"pdex-data-collector/utils"
+	"github.com/incognitochain/incognito-analytic/pdex-data-collector/entities"
+	"github.com/incognitochain/incognito-analytic/pdex-data-collector/models"
+	"github.com/incognitochain/incognito-analytic/pdex-data-collector/utils"
 	"time"
 )
 
