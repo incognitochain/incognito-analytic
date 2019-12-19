@@ -36,7 +36,7 @@ func (client *HttpClient) RPCCall(
 	rpcResponse interface{},
 ) (err error) {
 	rpcProtocol := GetENV("RPC_PROTOCOL", "https")
-	rpcHost := GetENV("RPC_HOST", "mainnet.incognito.org/fullnode")
+	rpcHost := GetENV("RPC_HOST", "localhost:9334")
 	rpcPort := GetENV("RPC_PORT", "")
 	rpcEndpoint := buildHTTPServerAddress(rpcProtocol, rpcHost, rpcPort)
 
