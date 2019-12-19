@@ -76,7 +76,7 @@ func (pie *PDEInstsExtractor) Execute() {
 
 	for {
 		time.Sleep(time.Duration(1000) * time.Millisecond)
-		fmt.Printf("[Instructions Extractor] Proccessing for beacon height: %d", bcHeight)
+		fmt.Printf("[Instructions Extractor] Proccessing for beacon height: %d\n", bcHeight)
 		insts, err := pie.extractPDEInstsFromBeaconBlk(bcHeight)
 		if err != nil {
 			fmt.Println("An error occured while extracting pde instruction from chain: ", err)

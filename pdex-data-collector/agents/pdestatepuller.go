@@ -74,7 +74,7 @@ func (psp *PDEStatePuller) Execute() {
 
 	var lastPDEState *entities.PDEState
 	for {
-		fmt.Printf("[PDE State] Proccessing for beacon height: %d", bcHeight)
+		fmt.Printf("[PDE State] Proccessing for beacon height: %d\n", bcHeight)
 		time.Sleep(time.Duration(500) * time.Millisecond)
 		pdeState, err := psp.getPDEState(bcHeight)
 		if err != nil {
