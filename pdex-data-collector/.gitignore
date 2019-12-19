@@ -6,3 +6,5 @@
 *.dylib
 
 .idea
+*.xml
+*.iml
