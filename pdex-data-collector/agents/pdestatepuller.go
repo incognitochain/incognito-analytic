@@ -96,7 +96,7 @@ func (psp *PDEStatePuller) Execute() {
 				BeaconHeight:    bcHeight,
 				BeaconTimeStamp: time.Unix(pdeState.BeaconTimeStamp, 0),
 			}
-			fmt.Println(poolPairModel.BeaconTimeStamp.Format("2006-01-02 15:04:05"))
+			//fmt.Println(poolPairModel.BeaconTimeStamp.Format("2006-01-02 15:04:05"))
 			err := psp.PDEStateStore.StorePDEPoolPair(&poolPairModel)
 			if err != nil {
 				fmt.Println("An error occured while storing pde pool pair")
