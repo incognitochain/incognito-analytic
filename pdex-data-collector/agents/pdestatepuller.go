@@ -94,7 +94,7 @@ func (psp *PDEStatePuller) Execute() {
 				Token2IDStr:     poolPair.Token2IDStr,
 				Token2PoolValue: poolPair.Token2PoolValue,
 				BeaconHeight:    bcHeight,
-				BeaconTimeStamp: pdeState.BeaconTimeStamp,
+				BeaconTimeStamp: time.Unix(pdeState.BeaconTimeStamp, 0),
 			}
 			err := psp.PDEStateStore.StorePDEPoolPair(&poolPairModel)
 			if err != nil {

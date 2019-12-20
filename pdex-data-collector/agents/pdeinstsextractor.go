@@ -97,7 +97,7 @@ func (pie *PDEInstsExtractor) Execute() {
 				RequestedTxID:       trade.RequestedTxID,
 				Status:              trade.Status,
 				BeaconHeight:        trade.BeaconHeight,
-				BeaconTimeStamp:     insts.BeaconTimeStamp,
+				BeaconTimeStamp:     time.Unix(insts.BeaconTimeStamp, 0),
 			}
 			err := pie.PDEInstructionsStore.StorePDETrade(&tradeModel)
 			if err != nil {

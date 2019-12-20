@@ -35,9 +35,9 @@ func (client *HttpClient) RPCCall(
 	params interface{},
 	rpcResponse interface{},
 ) (err error) {
-	rpcProtocol := GetENV("RPC_PROTOCOL", "https")
-	rpcHost := GetENV("RPC_HOST", "localhost:9334")
-	rpcPort := GetENV("RPC_PORT", "")
+	rpcProtocol := GetENV("RPC_PROTOCOL", "http")
+	rpcHost := GetENV("RPC_HOST", "localhost")
+	rpcPort := GetENV("RPC_PORT", "9334")
 	rpcEndpoint := buildHTTPServerAddress(rpcProtocol, rpcHost, rpcPort)
 
 	payload := map[string]interface{}{

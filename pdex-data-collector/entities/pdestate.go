@@ -18,7 +18,7 @@ type PDEState struct {
 	WaitingPDEContributions map[string]*PDEContribution
 	PDEPoolPairs            map[string]*PDEPoolForPair
 	PDEShares               map[string]uint64
-	BeaconTimeStamp         uint64
+	BeaconTimeStamp         int64
 }
 
 type PDEStateRes struct {

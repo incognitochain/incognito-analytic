@@ -33,14 +33,14 @@ type PDEContributionInst struct {
 	TxReqID               string
 	ShardID               byte
 	Status                string
-	BeaconHeight          uint64
+	BeaconHeight          int64
 }
 
 type PDEInfoFromBeaconBlock struct {
 	PDEContributions []*PDEContributionInst
 	PDETrades        []*PDETradeInst
 	PDEWithdrawals   []*PDEWithdrawalInst
-	BeaconTimeStamp  uint64
+	BeaconTimeStamp  int64
 }
 
 type PDEExtractedInstsRes struct {
