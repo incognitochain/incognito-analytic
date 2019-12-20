@@ -10,4 +10,5 @@ type PDETrade struct {
 	RequestedTxID       string `db:"requested_tx_id"`
 	Status              string `db:"status"`
 	BeaconHeight        uint64 `db:"beacon_height"`
+	BeaconTimeStamp     uint64 `db:"beacon_time_stamp"`
 }

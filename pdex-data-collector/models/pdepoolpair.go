@@ -9,4 +9,5 @@ type PDEPoolPair struct {
 	Token1ToToken2Price uint64 `db:"token1_to_token2_price"`
 	Token2ToToken1Price uint64 `db:"token2_to_token1_price"`
 	BeaconHeight        uint64 `db:"beacon_height"`
+	BeaconTimeStamp     uint64 `db:"beacon_time_stamp"`
 }

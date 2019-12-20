@@ -45,8 +45,8 @@ func (st *PDEStatePGStore) GetLatestProcessedBCHeight() (uint64, error) {
 
 func (st *PDEStatePGStore) StorePDEPoolPair(pdeStateModel *models.PDEPoolPair) error {
 	sqlStr := `
-		INSERT INTO pde_pool_pairs (token1_id_str, token1_pool_value, token2_id_str, token2_pool_value, beacon_height)
-		VALUES (:token1_id_str, :token1_pool_value, :token2_id_str, :token2_pool_value, :beacon_height)
+		INSERT INTO pde_pool_pairs (token1_id_str, token1_pool_value, token2_id_str, token2_pool_value, beacon_height, beacon_time_stamp)
+		VALUES (:token1_id_str, :token1_pool_value, :token2_id_str, :token2_pool_value, :beacon_height, :beacon_time_stamp)
 		RETURNING id
 	`
 	tx := st.DB.MustBegin()

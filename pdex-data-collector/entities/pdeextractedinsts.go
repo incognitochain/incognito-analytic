@@ -40,6 +40,7 @@ type PDEInfoFromBeaconBlock struct {
 	PDEContributions []*PDEContributionInst
 	PDETrades        []*PDETradeInst
 	PDEWithdrawals   []*PDEWithdrawalInst
+	BeaconTimeStamp  uint64
 }
 
 type PDEExtractedInstsRes struct {
