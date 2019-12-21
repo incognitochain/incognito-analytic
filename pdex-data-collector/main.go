@@ -26,7 +26,7 @@ func registerPDEStatePuller(
 ) []agents.Agent {
 	pdeStatePuller := agents.NewPDEStatePuller(
 		"PDE-State-Puller",
-		60, // in sec
+		3, // in sec
 		rpcClient,
 		pdeStateStore,
 	)
@@ -40,7 +40,7 @@ func registerPDEInstsExtractor(
 ) []agents.Agent {
 	pdeStatePuller := agents.NewPDEInstsExtractor(
 		"PDE-Instructions-Extractor",
-		60, // in sec
+		3, // in sec
 		rpcClient,
 		pdeInstructionsPGStore,
 	)
