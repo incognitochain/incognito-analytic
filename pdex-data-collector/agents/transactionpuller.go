@@ -117,7 +117,7 @@ func (puller *TransactionPuller) Execute() {
 				if err != nil || txByID != nil {
 					continue
 				}
-				time.Sleep(time.Duration(500) * time.Millisecond)
+				time.Sleep(time.Duration(10) * time.Millisecond)
 				tx, e := puller.getTransaction(t)
 				if e != nil {
 					fmt.Printf("[Transaction puller] An error occured while getting transaction %s : %+v\n", t, e)
@@ -125,7 +125,7 @@ func (puller *TransactionPuller) Execute() {
 				}
 
 				txModel := models.Transaction{
-					ShardID:     int(tx.ShardID),
+					ShardID:     puller.ShardID,
 					BlockHeight: tx.BlockHeight,
 					BlockHash:   tx.BlockHash,
 					Info:        tx.Info,
@@ -134,33 +134,42 @@ func (puller *TransactionPuller) Execute() {
 					TxVersion:   tx.Version,
 					PRVFee:      tx.Fee,
 					//Data:
-					Proof: tx.Proof,
+					Proof: &tx.Proof,
 					//ProofDetail: tx.ProofDetail
 					TransactedPrivacyCoinFee: tx.PrivacyCustomTokenFee,
-					TransactedPrivacyCoin:    tx.PrivacyCustomTokenData,
 					//TransactedPrivacyCoinProofDetail: tx.PrivacyCustomTokenProofDetail,
 				}
 				dataJson, err := json.Marshal(tx)
 				if err == nil {
 					txModel.Data = string(dataJson)
 				}
-				metadataJson, err := json.Marshal(tx.Metadata)
-				if err == nil {
-					txModel.Data = string(metadataJson)
+				if len(tx.Metadata) > 0 {
+					metadataJson, err := json.Marshal(tx.Metadata)
+					if err == nil {
+						temp := string(metadataJson)
+						txModel.Metadata = &temp
+					}
 				}
 				proofDetailJson, err := json.Marshal(tx.ProofDetail)
 				if err == nil {
-					txModel.ProofDetail = string(proofDetailJson)
+					temp := string(proofDetailJson)
+					txModel.ProofDetail = &temp
 				}
 				privacyCustomTokenProofDetailJson, err := json.Marshal(tx.PrivacyCustomTokenProofDetail)
 				if err == nil {
-					txModel.TransactedPrivacyCoinProofDetail = string(privacyCustomTokenProofDetailJson)
+					temp := string(privacyCustomTokenProofDetailJson)
+					txModel.TransactedPrivacyCoinProofDetail = &temp
+				}
+				if len(tx.PrivacyCustomTokenData) > 0 {
+					txModel.TransactedPrivacyCoin = &tx.PrivacyCustomTokenData
 				}
 				txModel.CreatedTime, _ = time.Parse("2006-01-02T15:04:05.999999", tx.LockTime)
 				err = puller.TransactionsStore.StoreTransaction(&txModel)
 				if err != nil {
 					fmt.Printf("[Transaction puller] An error occured while storing tx %s, shard %d err: %+v\n", t, puller.ShardID, err)
 					continue
+				} else {
+					fmt.Printf("[Transaction puller] Success storing tx %s, shard %d\n", t, puller.ShardID)
 				}
 			}
 		}
