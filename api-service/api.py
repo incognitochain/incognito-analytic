@@ -1,5 +1,5 @@
 from flask import Flask
-from api.pdex import Pdex, PdexTradingPair, PdexToken
+from api.pdexapi import PdexApi
 from api.transactionapi import TransactionAPI
 from flask_restful import Resource, Api
 from flask import request
@@ -14,16 +14,38 @@ class HelloWorld(Resource):
 
 
 api.add_resource(HelloWorld, '/')
-api.add_resource(Pdex, '/pdex')
-api.add_resource(PdexTradingPair, '/pdex/pairs')
-api.add_resource(PdexToken, '/pdex/tokens')
+
+
+@app.route('/pdex', methods=['GET'])
+def pdexApi():
+    pdex = PdexApi(request.args)
+    return pdex.get()
+
+
+@app.route('/pdex/pairs', methods=['GET'])
+@api.representation('application/json')
+def pdexGetTradingPair():
+    pdex = PdexApi(request.args)
+    return pdex.getTradingPair()
+
+
+@app.route('/pdex/tokens', methods=['GET'])
+def pdexGetTradingToken():
+    pdex = PdexApi(request.args)
+    return pdex.getTokens()
+
+
+@app.route('/transaction', methods=['GET'])
+def transactionApi():
+    transactionAPI = TransactionAPI(request.args)
+    return transactionAPI.get()
 
 
 @app.route('/transaction/avg-fee', methods=['GET'])
-def getAvgFee():
+def transactionGetAvgFee():
     transactionAPI = TransactionAPI(request.args)
     return transactionAPI.getAvgFee()
 
 
 if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0')

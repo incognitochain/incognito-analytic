@@ -1,24 +1,21 @@
-from flask_restful import Resource
+import json
+
 from service.pdex import PdexService
 
 
-class Pdex(Resource):
+class PdexApi():
+    def __init__(self, args):
+        self.params = args
+
     def get(self):
         return "Pdex API"
 
-
-class PdexToken(Resource):
-    def get(self):
+    def getTokens(self):
         service = PdexService()
         data = service.getTokens()
         return data
 
-
-class PdexTradingPair(Resource):
-    def get(self):
+    def getTradingPair(self):
         service = PdexService()
         data = service.getTradingPairs()
-        return data
-
-# class PdexTradingTop10Trader(Resource):
-#     def get(self):
+        return json.dumps(data)
