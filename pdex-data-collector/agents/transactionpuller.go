@@ -45,7 +45,7 @@ func NewTransactionPuller(name string,
 }
 
 func (puller *TransactionPuller) getTransaction(txHash string) (*entities.TransactionDetail, error) {
-	params := []interface{}{"txHash"}
+	params := []interface{}{txHash}
 	var shardBlockRes entities.TransactionDetailRes
 	err := puller.RPCClient.RPCCall("gettransactionbyhash", params, &shardBlockRes)
 	if err != nil {
@@ -120,7 +120,7 @@ func (puller *TransactionPuller) Execute() {
 				time.Sleep(time.Duration(500) * time.Millisecond)
 				tx, e := puller.getTransaction(t)
 				if e != nil {
-					fmt.Printf("[Transaction puller] An error occured while getting transaction %s : %+v\n", tx, err)
+					fmt.Printf("[Transaction puller] An error occured while getting transaction %s : %+v\n", t, e)
 					return
 				}
 

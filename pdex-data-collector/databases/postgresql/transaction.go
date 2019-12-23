@@ -1,6 +1,9 @@
 package postgresql
 
-import "github.com/incognitochain/incognito-analytic/pdex-data-collector/models"
+import (
+	"encoding/json"
+	"github.com/incognitochain/incognito-analytic/pdex-data-collector/models"
+)
 
 // BeaconBlockStore is Beacon Block postgresql store
 type TransactionsStore struct {
@@ -49,10 +52,11 @@ func (st *TransactionsStore) LatestProcessedTxByHeight(shardID int, blockHeight 
 }
 
 type ListProcessingTx struct {
-	BlockHeight uint64
-	BlockHash   string
-	ShardID     int
-	TxsHash     []string
+	BlockHeight   uint64
+	BlockHash     string
+	ShardID       int
+	TxsHashString string
+	TxsHash       []string ``
 }
 
 func (st *TransactionsStore) ListProcessingTxByHeight(shardID int, blockHeight uint64) (*ListProcessingTx, error) {
@@ -61,17 +65,26 @@ func (st *TransactionsStore) ListProcessingTxByHeight(shardID int, blockHeight u
 		shardblock.shard_id as ShardID, 
 		shardblock.block_hash as BlockHash,  
 		shardblock.list_hash_tx as TxsHash 
+
 		
 		FROM shard_blocks shardblock
 		
 		WHERE shard_id = $1 AND json_array_length(shardblock.list_hash_tx) > 0 AND block_height = $2
-		
-		ORDER BY block_height DESC
 	`
 	result := []*ListProcessingTx{}
-	err := st.DB.Select(&result, sqlStr, shardID, blockHeight)
+	rows, err := st.DB.Query(sqlStr, shardID, blockHeight)
 	if err != nil {
 		return nil, err
+	}
+	for rows.Next() {
+		item := &ListProcessingTx{
+			TxsHash: []string{},
+		}
+		err1 := rows.Scan(&item.BlockHeight, &item.ShardID, &item.BlockHash, &item.TxsHash)
+		if err1 != nil {
+			return nil, err1
+		}
+		result = append(result, item)
 	}
 	if len(result) > 0 {
 		return result[0], err
@@ -91,12 +104,26 @@ func (st *TransactionsStore) ListNeedProcessingTxByHeight(shardID int, blockHeig
 		
 		WHERE shard_id = $1 AND json_array_length(shardblock.list_hash_tx) > 0 AND block_height >= $2
 		
-		ORDER BY block_height DESC
+		ORDER BY block_height ASC
 	`
 	result := []*ListProcessingTx{}
-	err := st.DB.Select(&result, sqlStr, shardID, blockHeight)
+	rows, err := st.DB.Query(sqlStr, shardID, blockHeight)
 	if err != nil {
 		return nil, err
+	}
+	for rows.Next() {
+		item := &ListProcessingTx{
+			TxsHash: []string{},
+		}
+		err1 := rows.Scan(&item.BlockHeight, &item.ShardID, &item.BlockHash, &item.TxsHashString)
+		if err1 != nil {
+			return nil, err1
+		}
+		err1 = json.Unmarshal([]byte(item.TxsHashString), &item.TxsHash)
+		if err1 != nil {
+			return nil, err1
+		}
+		result = append(result, item)
 	}
 	if len(result) > 0 {
 		return result, err

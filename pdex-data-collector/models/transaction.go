@@ -3,22 +3,22 @@ package models
 import "time"
 
 type Transaction struct {
-	ID        string `json:"id"`
-	TxID      string `json:"tx_id"`
-	TxVersion int8   `json:"tx_version"`
-	TxType    string `json:"tx_type"`
+	ID        string `db:"id"`
+	TxID      string `db:"tx_id"`
+	TxVersion int8   `db:"tx_version"`
+	TxType    string `db:"tx_type"`
 
-	Data                             string    `json:"data"`
-	ShardID                          int       `json:"shard_id"`
-	PRVFee                           uint64    `json:"prv_fee"`
-	Info                             string    `json:"info"`
-	Proof                            string    `json:"proof"`
-	ProofDetail                      string    `json:"proof_detail"`
-	Metadata                         string    `json:"metadata"`
-	TransactedPrivacyCoin            string    `json:"transacted_privacy_coin"`
-	TransactedPrivacyCoinProofDetail string    `json:"transacted_privacy_coin_proof_detail"`
-	TransactedPrivacyCoinFee         uint64    `json:"transacted_privacy_coin_fee"`
-	CreatedTime                      time.Time `json:"created_time"`
-	BlockHeight                      uint64    `json:"block_height"`
-	BlockHash                        string    `json:"block_hash"`
+	Data                             string    `db:"data"`
+	ShardID                          int       `db:"shard_id"`
+	PRVFee                           uint64    `db:"prv_fee"`
+	Info                             string    `db:"info"`
+	Proof                            string    `db:"proof"`
+	ProofDetail                      string    `db:"proof_detail"`
+	Metadata                         string    `db:"metadata"`
+	TransactedPrivacyCoin            string    `db:"transacted_privacy_coin"`
+	TransactedPrivacyCoinProofDetail string    `db:"transacted_privacy_coin_proof_detail"`
+	TransactedPrivacyCoinFee         uint64    `db:"transacted_privacy_coin_fee"`
+	CreatedTime                      time.Time `db:"created_time"`
+	BlockHeight                      uint64    `db:"block_height"`
+	BlockHash                        string    `db:"block_hash"`
 }
