@@ -130,6 +130,7 @@ func NewServer() (*Server, error) {
 		agentsList = registerShardBlockPuller(i, rpcClient, agentsList, shardBlockStore)
 	}
 
+	// tx: 8 shard
 	txStore, err := pg.NewTransactionsStore()
 	if err != nil {
 		return nil, err
