@@ -6,9 +6,9 @@ type BeaconBlock struct {
 	ID           string `data:"id"`
 	BlockHash    string `data:"block_hash"`
 	BlockHeight  uint64 `data:"block_height"`
-	BlockVersion int64  `data:"block_version"`
+	BlockVersion int    `data:"block_version"`
 	Epoch        uint64 `data:"epoch"`
-	Round        uint64 `data:"round"`
+	Round        int    `data:"round"`
 
 	Data         string    `data:"data"`
 	Instructions string    `data:"instructions"`
