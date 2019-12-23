@@ -20,6 +20,5 @@ class PdexTradingPair(Resource):
         data = service.getTradingPairs()
         return data
 
-class PdexTradingTop10Trader(Resource):
-    def get(self):
-
+# class PdexTradingTop10Trader(Resource):
+#     def get(self):

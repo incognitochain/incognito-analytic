@@ -1,7 +1,7 @@
 from flask import jsonify
 from sqlalchemy import create_engine
 
-SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:postgres@34.94.185.164:5432/pdex'
+from service import SQLALCHEMY_DATABASE_URI
 
 db = create_engine(SQLALCHEMY_DATABASE_URI)
 
