@@ -18,26 +18,88 @@ func NewTransactionsStore() (*TransactionsStore, error) {
 	return store, nil
 }
 
-type TxLastProcess struct {
+func (st *TransactionsStore) GetLatestProcessedShardHeight(shardID int) (uint64, error) {
+	sqlStr := `
+		SELECT block_height FROM transactions
+		WHERE shard_id=$1
+		ORDER BY block_height DESC
+		LIMIT 1
+	`
+	blockHeights := []uint64{}
+	err := st.DB.Select(&blockHeights, sqlStr, shardID)
+	if err != nil {
+		return 0, err
+	}
+	if len(blockHeights) == 0 {
+		return 0, nil
+	}
+	return blockHeights[0], nil
+}
+
+func (st *TransactionsStore) LatestProcessedTxByHeight(shardID int, blockHeight uint64) ([]string, error) {
+	sql := `
+		SELECT tx_id FROM transactions WHERE shard_id = $1 AND block_height = $2
+	`
+	result := []string{}
+	err := st.DB.Select(&result, sql, shardID, blockHeight)
+	if err != nil {
+		return result, err
+	}
+	return result, err
+}
+
+type ListProcessingTx struct {
 	BlockHeight uint64
 	BlockHash   string
 	ShardID     int
 	TxsHash     []string
 }
 
-func (st *TransactionsStore) GetLatestProcessedShardHeight(shardID int) (*TxLastProcess, error) {
+func (st *TransactionsStore) ListProcessingTxByHeight(shardID int, blockHeight uint64) (*ListProcessingTx, error) {
 	sqlStr := `
-		SELECT shardblock.block_height as BlockHeight, shardblock.shard_id as ShardID, shardblock.block_hash as BlockHash,  shardblock.list_hash_tx as TxsHash FROM shard_blocks shardblock
-		WHERE shard_id = $1 AND json_array_length(shardblock.list_hash_tx) > 0 
+		SELECT shardblock.block_height as BlockHeight, 
+		shardblock.shard_id as ShardID, 
+		shardblock.block_hash as BlockHash,  
+		shardblock.list_hash_tx as TxsHash 
+		
+		FROM shard_blocks shardblock
+		
+		WHERE shard_id = $1 AND json_array_length(shardblock.list_hash_tx) > 0 AND block_height = $2
+		
 		ORDER BY block_height DESC
 	`
-	result := []*TxLastProcess{}
-	err := st.DB.Select(&result, sqlStr, shardID)
+	result := []*ListProcessingTx{}
+	err := st.DB.Select(&result, sqlStr, shardID, blockHeight)
 	if err != nil {
 		return nil, err
 	}
 	if len(result) > 0 {
 		return result[0], err
+	} else {
+		return nil, nil
+	}
+}
+
+func (st *TransactionsStore) ListNeedProcessingTxByHeight(shardID int, blockHeight uint64) ([]*ListProcessingTx, error) {
+	sqlStr := `
+		SELECT shardblock.block_height as BlockHeight, 
+		shardblock.shard_id as ShardID, 
+		shardblock.block_hash as BlockHash,  
+		shardblock.list_hash_tx as TxsHash 
+		
+		FROM shard_blocks shardblock
+		
+		WHERE shard_id = $1 AND json_array_length(shardblock.list_hash_tx) > 0 AND block_height >= $2
+		
+		ORDER BY block_height DESC
+	`
+	result := []*ListProcessingTx{}
+	err := st.DB.Select(&result, sqlStr, shardID, blockHeight)
+	if err != nil {
+		return nil, err
+	}
+	if len(result) > 0 {
+		return result, err
 	} else {
 		return nil, nil
 	}

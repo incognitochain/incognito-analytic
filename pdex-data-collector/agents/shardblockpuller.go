@@ -56,7 +56,7 @@ func (puller *ShardBlockPuller) getShardBlock(shardBlockHeight uint64, shardID i
 func (puller *ShardBlockPuller) Execute() {
 	fmt.Println("[Shard block puller] Agent is executing...")
 
-	blockHeight, err := puller.ShardBlockStore.GetLatestProcessedBCHeight(puller.ShardID)
+	blockHeight, err := puller.ShardBlockStore.GetLatestProcessedShardHeight(puller.ShardID)
 	if err != nil {
 		fmt.Printf("[Shard block puller] An error occured while getting the latest processed shard block height: %+v \n", err)
 		return
