@@ -105,6 +105,20 @@ func (st *TransactionsStore) ListNeedProcessingTxByHeight(shardID int, blockHeig
 	}
 }
 
+func (st *TransactionsStore) GetTransactionById(txID string) (*models.Transaction, error) {
+	sql := `SELECT * FROM transactions WHERE tx_id=$1`
+	result := []*models.Transaction{}
+	err := st.DB.Select(&result, sql, txID)
+	if err != nil {
+		return nil, err
+	} else {
+		if len(result) == 0 {
+			return nil, nil
+		}
+		return result[0], nil
+	}
+}
+
 func (st *TransactionsStore) StoreTransaction(txs *models.Transaction) error {
 	sqlStr := `
 		INSERT INTO shard_blocks (data, tx_id, tx_version, shard_id, tx_type, prv_fee, info, proof, proof_detail, metadata, transacted_privacy_coin, transacted_privacy_coin_proof_detail, transacted_privacy_coin_fee, created_time, block_height, block_hash)

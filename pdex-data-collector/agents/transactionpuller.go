@@ -17,6 +17,7 @@ type TransactionsStore interface {
 	LatestProcessedTxByHeight(shardID int, blockHeight uint64) ([]string, error)
 	ListProcessingTxByHeight(shardID int, blockHeight uint64) (*postgresql.ListProcessingTx, error)
 	ListNeedProcessingTxByHeight(shardID int, blockHeight uint64) ([]*postgresql.ListProcessingTx, error)
+	GetTransactionById(txID string) (*models.Transaction, error)
 }
 
 type TransactionPuller struct {
@@ -99,62 +100,71 @@ func (puller *TransactionPuller) Execute() {
 	}
 
 	latestBlockHeight += 1
-
-	temp, err := puller.TransactionsStore.ListNeedProcessingTxByHeight(puller.ShardID, latestBlockHeight)
-	if len(temp) > 0 {
-		for _, t := range temp {
-			processingTxs = append(processingTxs, t.TxsHash...)
+	for {
+		temp, err := puller.TransactionsStore.ListNeedProcessingTxByHeight(puller.ShardID, latestBlockHeight)
+		if len(temp) > 0 && err == nil {
+			for _, t := range temp {
+				processingTxs = append(processingTxs, t.TxsHash...)
+			}
+			latestBlockHeight = temp[len(temp)-1].BlockHeight
+		} else {
+			fmt.Printf("[Transaction puller] No more tx to process")
 		}
-	}
 
-	if len(processingTxs) > 0 {
-		for _, t := range processingTxs {
-			time.Sleep(time.Duration(500) * time.Millisecond)
-			tx, e := puller.getTransaction(t)
-			if e != nil {
-				fmt.Printf("[Transaction puller] An error occured while getting transaction %s : %+v\n", tx, err)
-				return
-			}
+		if len(processingTxs) > 0 {
+			for _, t := range processingTxs {
+				txByID, err := puller.TransactionsStore.GetTransactionById(t)
+				if err != nil || txByID != nil {
+					continue
+				}
+				time.Sleep(time.Duration(500) * time.Millisecond)
+				tx, e := puller.getTransaction(t)
+				if e != nil {
+					fmt.Printf("[Transaction puller] An error occured while getting transaction %s : %+v\n", tx, err)
+					return
+				}
 
-			txModel := models.Transaction{
-				ShardID:     int(tx.ShardID),
-				BlockHeight: tx.BlockHeight,
-				BlockHash:   tx.BlockHash,
-				Info:        tx.Info,
-				TxID:        tx.Hash,
-				TxType:      tx.Type,
-				TxVersion:   tx.Version,
-				PRVFee:      tx.Fee,
-				//Data:
-				Proof: tx.Proof,
-				//ProofDetail: tx.ProofDetail
-				TransactedPrivacyCoinFee: tx.PrivacyCustomTokenFee,
-				TransactedPrivacyCoin:    tx.PrivacyCustomTokenData,
-				//TransactedPrivacyCoinProofDetail: tx.PrivacyCustomTokenProofDetail,
-			}
-			dataJson, err := json.Marshal(tx)
-			if err == nil {
-				txModel.Data = string(dataJson)
-			}
-			metadataJson, err := json.Marshal(tx.Metadata)
-			if err == nil {
-				txModel.Data = string(metadataJson)
-			}
-			proofDetailJson, err := json.Marshal(tx.ProofDetail)
-			if err == nil {
-				txModel.ProofDetail = string(proofDetailJson)
-			}
-			privacyCustomTokenProofDetailJson, err := json.Marshal(tx.PrivacyCustomTokenProofDetail)
-			if err == nil {
-				txModel.TransactedPrivacyCoinProofDetail = string(privacyCustomTokenProofDetailJson)
-			}
-			txModel.CreatedTime, _ = time.Parse("2006-01-02T15:04:05.999999", tx.LockTime)
-			err = puller.TransactionsStore.StoreTransaction(&txModel)
-			if err != nil {
-				fmt.Printf("[Transaction puller] An error occured while storing tx %s, shard %d err: %+v\n", t, puller.ShardID, err)
-				continue
+				txModel := models.Transaction{
+					ShardID:     int(tx.ShardID),
+					BlockHeight: tx.BlockHeight,
+					BlockHash:   tx.BlockHash,
+					Info:        tx.Info,
+					TxID:        tx.Hash,
+					TxType:      tx.Type,
+					TxVersion:   tx.Version,
+					PRVFee:      tx.Fee,
+					//Data:
+					Proof: tx.Proof,
+					//ProofDetail: tx.ProofDetail
+					TransactedPrivacyCoinFee: tx.PrivacyCustomTokenFee,
+					TransactedPrivacyCoin:    tx.PrivacyCustomTokenData,
+					//TransactedPrivacyCoinProofDetail: tx.PrivacyCustomTokenProofDetail,
+				}
+				dataJson, err := json.Marshal(tx)
+				if err == nil {
+					txModel.Data = string(dataJson)
+				}
+				metadataJson, err := json.Marshal(tx.Metadata)
+				if err == nil {
+					txModel.Data = string(metadataJson)
+				}
+				proofDetailJson, err := json.Marshal(tx.ProofDetail)
+				if err == nil {
+					txModel.ProofDetail = string(proofDetailJson)
+				}
+				privacyCustomTokenProofDetailJson, err := json.Marshal(tx.PrivacyCustomTokenProofDetail)
+				if err == nil {
+					txModel.TransactedPrivacyCoinProofDetail = string(privacyCustomTokenProofDetailJson)
+				}
+				txModel.CreatedTime, _ = time.Parse("2006-01-02T15:04:05.999999", tx.LockTime)
+				err = puller.TransactionsStore.StoreTransaction(&txModel)
+				if err != nil {
+					fmt.Printf("[Transaction puller] An error occured while storing tx %s, shard %d err: %+v\n", t, puller.ShardID, err)
+					continue
+				}
 			}
 		}
+		latestBlockHeight++
 	}
 
 	fmt.Println("[Transaction puller] Agent is finished...")
