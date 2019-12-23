@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/signal"
 	"runtime"
+	"strconv"
 	"syscall"
 	"time"
 )
@@ -67,14 +68,30 @@ func registerShardBlockPuller(
 	agentsList []agents.Agent,
 	shardBlockStore *pg.ShardBlockStore,
 ) []agents.Agent {
-	pdeStatePuller := agents.NewShardBlockPuller(
-		"Shard-Block-Puller",
+	shardBlockPuller := agents.NewShardBlockPuller(
+		"Shard-Block-Puller-Shard-"+strconv.Itoa(shardID),
 		3, // in sec
 		rpcClient,
 		shardID,
 		shardBlockStore,
 	)
-	return append(agentsList, pdeStatePuller)
+	return append(agentsList, shardBlockPuller)
+}
+
+func registerTransactionPuller(
+	shardID int,
+	rpcClient *utils.HttpClient,
+	agentsList []agents.Agent,
+	transactionsStore *pg.TransactionsStore,
+) []agents.Agent {
+	txPuller := agents.NewTransactionPuller(
+		"Transaction-Puller-Shard-"+strconv.Itoa(shardID),
+		3, // in sec
+		rpcClient,
+		shardID,
+		transactionsStore,
+	)
+	return append(agentsList, txPuller)
 }
 
 // NewServer is to new server instance
@@ -111,6 +128,14 @@ func NewServer() (*Server, error) {
 	}
 	for i := 0; i <= 7; i++ {
 		agentsList = registerShardBlockPuller(i, rpcClient, agentsList, shardBlockStore)
+	}
+
+	txStore, err := pg.NewTransactionsStore()
+	if err != nil {
+		return nil, err
+	}
+	for i := 0; i <= 7; i++ {
+		agentsList = registerTransactionPuller(i, rpcClient, agentsList, txStore)
 	}
 
 	//
