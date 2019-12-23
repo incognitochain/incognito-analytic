@@ -34,3 +34,12 @@ class PdexService:
         for r in result_set:
             tokens[r[0]] = {"name": r[1], "exchange_rate": r[2]}
         return tokens
+
+    def countTradingTxs(self):
+        sql = """
+            SELECT count(requested_tx_id) FROM pde_trades
+        """
+
+        result_set = db.execute(sql)
+        for r in result_set:
+            return r[0]

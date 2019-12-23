@@ -35,6 +35,12 @@ def pdexGetTradingToken():
     return pdex.getTokens()
 
 
+@app.route('/pdex/count-trading-tx', methods=['GET'])
+def pdexCountTradingTxs():
+    pdex = PdexApi(request.args)
+    return pdex.countTradingTxs()
+
+
 @app.route('/transaction', methods=['GET'])
 def transactionApi():
     transactionAPI = TransactionAPI(request.args)

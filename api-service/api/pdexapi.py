@@ -19,3 +19,8 @@ class PdexApi():
         service = PdexService()
         data = service.getTradingPairs()
         return json.dumps(data)
+
+    def countTradingTxs(self):
+        service = PdexService()
+        count = service.countTradingTxs()
+        return {'count': count}
