@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
+	"github.com/incognitochain/incognito-analytic/pdex-data-collector/agents"
+	pg "github.com/incognitochain/incognito-analytic/pdex-data-collector/databases/postgresql"
+	"github.com/incognitochain/incognito-analytic/pdex-data-collector/utils"
 	"os"
 	"os/signal"
-	"pdex-data-collector/agents"
-	pg "pdex-data-collector/databases/postgresql"
-	"pdex-data-collector/utils"
 	"runtime"
 	"syscall"
 	"time"
@@ -26,7 +26,7 @@ func registerPDEStatePuller(
 ) []agents.Agent {
 	pdeStatePuller := agents.NewPDEStatePuller(
 		"PDE-State-Puller",
-		60, // in sec
+		3, // in sec
 		rpcClient,
 		pdeStateStore,
 	)
@@ -40,9 +40,39 @@ func registerPDEInstsExtractor(
 ) []agents.Agent {
 	pdeStatePuller := agents.NewPDEInstsExtractor(
 		"PDE-Instructions-Extractor",
-		60, // in sec
+		3, // in sec
 		rpcClient,
 		pdeInstructionsPGStore,
+	)
+	return append(agentsList, pdeStatePuller)
+}
+
+func registerBeaconBlockPuller(
+	rpcClient *utils.HttpClient,
+	agentsList []agents.Agent,
+	beaconBlockStore *pg.BeaconBlockStore,
+) []agents.Agent {
+	pdeStatePuller := agents.NewBeaconBlockPuller(
+		"Beacon-Block-Puller",
+		3, // in sec
+		rpcClient,
+		beaconBlockStore,
+	)
+	return append(agentsList, pdeStatePuller)
+}
+
+func registerShardBlockPuller(
+	shardID int,
+	rpcClient *utils.HttpClient,
+	agentsList []agents.Agent,
+	shardBlockStore *pg.ShardBlockStore,
+) []agents.Agent {
+	pdeStatePuller := agents.NewShardBlockPuller(
+		"Shard-Block-Puller",
+		3, // in sec
+		rpcClient,
+		shardID,
+		shardBlockStore,
 	)
 	return append(agentsList, pdeStatePuller)
 }
@@ -50,18 +80,41 @@ func registerPDEInstsExtractor(
 // NewServer is to new server instance
 func NewServer() (*Server, error) {
 	rpcClient := utils.NewHttpClient()
+	agentsList := []agents.Agent{}
+
+	// ----------------------- Register agent -----------------------
+	// pde instruction
 	pdeStateStore, err := pg.NewPDEStatePGStore()
 	if err != nil {
 		return nil, err
 	}
+	agentsList = registerPDEStatePuller(rpcClient, agentsList, pdeStateStore)
+
+	// pde instruction
 	pdeInstructionsPGStore, err := pg.NewPDEInstructionsPGStore()
 	if err != nil {
 		return nil, err
 	}
-
-	agentsList := []agents.Agent{}
-	agentsList = registerPDEStatePuller(rpcClient, agentsList, pdeStateStore)
 	agentsList = registerPDEInstsExtractor(rpcClient, agentsList, pdeInstructionsPGStore)
+
+	// beacon block
+	beaconBlockStore, err := pg.NewBeaconBlockStore()
+	if err != nil {
+		return nil, err
+	}
+	agentsList = registerBeaconBlockPuller(rpcClient, agentsList, beaconBlockStore)
+
+	// shard block: 8 shard
+	shardBlockStore, err := pg.NewShardBlockStore()
+	if err != nil {
+		return nil, err
+	}
+	for i := 0; i <= 7; i++ {
+		agentsList = registerShardBlockPuller(i, rpcClient, agentsList, shardBlockStore)
+	}
+
+	//
+	// ----------------------- End -----------------------
 
 	quitChan := make(chan os.Signal)
 	signal.Notify(quitChan, syscall.SIGTERM)

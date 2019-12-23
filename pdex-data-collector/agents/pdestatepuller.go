@@ -3,9 +3,9 @@ package agents
 import (
 	"errors"
 	"fmt"
-	"pdex-data-collector/entities"
-	"pdex-data-collector/models"
-	"pdex-data-collector/utils"
+	"github.com/incognitochain/incognito-analytic/pdex-data-collector/entities"
+	"github.com/incognitochain/incognito-analytic/pdex-data-collector/models"
+	"github.com/incognitochain/incognito-analytic/pdex-data-collector/utils"
 	"time"
 )
 
@@ -74,7 +74,7 @@ func (psp *PDEStatePuller) Execute() {
 
 	var lastPDEState *entities.PDEState
 	for {
-		fmt.Printf("[PDE State] Proccessing for beacon height: %d", bcHeight)
+		fmt.Printf("[PDE State] Proccessing for beacon height: %d\n", bcHeight)
 		time.Sleep(time.Duration(500) * time.Millisecond)
 		pdeState, err := psp.getPDEState(bcHeight)
 		if err != nil {
@@ -94,7 +94,9 @@ func (psp *PDEStatePuller) Execute() {
 				Token2IDStr:     poolPair.Token2IDStr,
 				Token2PoolValue: poolPair.Token2PoolValue,
 				BeaconHeight:    bcHeight,
+				BeaconTimeStamp: time.Unix(pdeState.BeaconTimeStamp, 0),
 			}
+			//fmt.Println(poolPairModel.BeaconTimeStamp.Format("2006-01-02 15:04:05"))
 			err := psp.PDEStateStore.StorePDEPoolPair(&poolPairModel)
 			if err != nil {
 				fmt.Println("An error occured while storing pde pool pair")

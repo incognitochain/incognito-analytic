@@ -3,9 +3,9 @@ package agents
 import (
 	"errors"
 	"fmt"
-	"pdex-data-collector/entities"
-	"pdex-data-collector/models"
-	"pdex-data-collector/utils"
+	"github.com/incognitochain/incognito-analytic/pdex-data-collector/entities"
+	"github.com/incognitochain/incognito-analytic/pdex-data-collector/models"
+	"github.com/incognitochain/incognito-analytic/pdex-data-collector/utils"
 	"time"
 )
 
@@ -76,7 +76,7 @@ func (pie *PDEInstsExtractor) Execute() {
 
 	for {
 		time.Sleep(time.Duration(1000) * time.Millisecond)
-		fmt.Printf("[Instructions Extractor] Proccessing for beacon height: %d", bcHeight)
+		fmt.Printf("[Instructions Extractor] Proccessing for beacon height: %d\n", bcHeight)
 		insts, err := pie.extractPDEInstsFromBeaconBlk(bcHeight)
 		if err != nil {
 			fmt.Println("An error occured while extracting pde instruction from chain: ", err)
@@ -97,6 +97,7 @@ func (pie *PDEInstsExtractor) Execute() {
 				RequestedTxID:       trade.RequestedTxID,
 				Status:              trade.Status,
 				BeaconHeight:        trade.BeaconHeight,
+				BeaconTimeStamp:     time.Unix(insts.BeaconTimeStamp, 0),
 			}
 			err := pie.PDEInstructionsStore.StorePDETrade(&tradeModel)
 			if err != nil {

@@ -1,7 +1,7 @@
 package postgresql
 
 import (
-	"pdex-data-collector/models"
+	"github.com/incognitochain/incognito-analytic/pdex-data-collector/models"
 
 	_ "github.com/lib/pq"
 )
@@ -54,7 +54,8 @@ func (is *PDEInstructionsPGStore) StorePDETrade(tradeModel *models.PDETrade) err
 			shard_id,
 			requested_tx_id,
 			status,
-			beacon_height
+			beacon_height,
+			beacon_time_stamp
 		)
 		VALUES (
 			:trader_address_str,
@@ -65,7 +66,8 @@ func (is *PDEInstructionsPGStore) StorePDETrade(tradeModel *models.PDETrade) err
 			:shard_id,
 			:requested_tx_id,
 			:status,
-			:beacon_height
+			:beacon_height,
+			:beacon_time_stamp
 		)
 		RETURNING id
 	`
