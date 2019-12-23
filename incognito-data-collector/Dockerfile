@@ -31,7 +31,7 @@ RUN  apk update && \
 COPY ./incognito-data-collector /
 COPY ./run.sh /
 
-RUN chmod +x /pdex-data-collector
+RUN chmod +x /incognito-data-collector
 RUN chmod +x /run.sh
 
 CMD ["/bin/sh", "./run.sh"]
