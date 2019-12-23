@@ -56,23 +56,23 @@ func (puller *ShardBlockPuller) getShardBlock(shardBlockHeight uint64, shardID i
 func (puller *ShardBlockPuller) Execute() {
 	fmt.Println("[Shard block puller] Agent is executing...")
 
-	bcHeight, err := puller.ShardBlockStore.GetLatestProcessedBCHeight(puller.ShardID)
+	blockHeight, err := puller.ShardBlockStore.GetLatestProcessedBCHeight(puller.ShardID)
 	if err != nil {
-		fmt.Printf("[Shard block puller] An error occured while getting the latest processed beacon height: %+v \n", err)
+		fmt.Printf("[Shard block puller] An error occured while getting the latest processed shard block height: %+v \n", err)
 		return
 	}
-	if bcHeight == 0 {
-		bcHeight = uint64(1)
+	if blockHeight == 0 {
+		blockHeight = uint64(1)
 	} else {
-		bcHeight++
+		blockHeight++
 	}
 
 	for {
-		fmt.Printf("[Shard block puller] Proccessing for beacon height: %d\n", bcHeight)
+		fmt.Printf("[Shard block puller] Proccessing for shard %d block height: %d\n", puller.ShardID, blockHeight)
 		time.Sleep(time.Duration(500) * time.Millisecond)
-		shardBlockRes, err := puller.getShardBlock(bcHeight, puller.ShardID)
+		shardBlockRes, err := puller.getShardBlock(blockHeight, puller.ShardID)
 		if err != nil {
-			fmt.Println("[Shard block puller] An error occured while getting pde state from chain: ", err)
+			fmt.Printf("[Shard block puller] An error occured while getting shard %d block height %d from chain: %+v \n", puller.ShardID, blockHeight, err)
 			return
 		}
 
@@ -81,35 +81,43 @@ func (puller *ShardBlockPuller) Execute() {
 		}
 
 		shardBlockModel := models.ShardBlock{
-			BlockHash:        shardBlockRes.Hash,
-			BlockHeight:      shardBlockRes.Height,
-			BlockVersion:     shardBlockRes.Version,
-			CreatedTime:      time.Unix(shardBlockRes.Time, 0),
-			Epoch:            shardBlockRes.Epoch,
-			NextBlock:        shardBlockRes.NextBlockHash,
-			PreBlock:         shardBlockRes.PreviousBlockHash,
-			BeaconBlockHeigh: shardBlockRes.BeaconHeight,
-			BlockProducer:    shardBlockRes.BlockProducer,
-			CountTx:          len(shardBlockRes.TxHashes),
-			ShardID:          puller.ShardID,
-			Round:            shardBlockRes.Round,
+			BlockHash:         shardBlockRes.Hash,
+			BlockHeight:       shardBlockRes.Height,
+			BlockVersion:      shardBlockRes.Version,
+			CreatedTime:       time.Unix(shardBlockRes.Time, 0),
+			Epoch:             shardBlockRes.Epoch,
+			NextBlock:         shardBlockRes.NextBlockHash,
+			PreBlock:          shardBlockRes.PreviousBlockHash,
+			BeaconBlockHeight: shardBlockRes.BeaconHeight,
+			BlockProducer:     shardBlockRes.BlockProducer,
+			CountTx:           len(shardBlockRes.TxHashes),
+			ShardID:           puller.ShardID,
+			Round:             shardBlockRes.Round,
 		}
 
 		dataJson, err1 := json.Marshal(shardBlockRes)
 		if err1 == nil {
 			shardBlockModel.Data = string(dataJson)
 		}
-		listTxsJson, err1 := json.Marshal(shardBlockRes.TxHashes)
-		if err1 == nil {
-			shardBlockModel.ListHashTx = string(listTxsJson)
+		if len(shardBlockRes.Txs) > 0 {
+			listTx := []string{}
+			for _, tx := range shardBlockRes.Txs {
+				listTx = append(listTx, tx.Hash)
+			}
+			listTxsJson, err1 := json.Marshal(listTx)
+			if err1 == nil {
+				shardBlockModel.ListHashTx = string(listTxsJson)
+			}
+		} else {
+			shardBlockModel.ListHashTx = "[]"
 		}
 
 		err = puller.ShardBlockStore.StoreShardBloc(&shardBlockModel)
 		if err != nil {
-			fmt.Println("[Shard block puller] An error occured while storing beacon block", err)
+			fmt.Printf("[Shard block puller] An error occured while storing shard block %d, shard %d err: %+v\n", blockHeight, puller.ShardID, err)
 			continue
 		}
-		bcHeight++
+		blockHeight++
 	}
 
 	fmt.Println("[Shard block puller] Agent is finished...")

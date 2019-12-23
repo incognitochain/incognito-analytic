@@ -24,8 +24,8 @@ func NewShardBlockStore() (*ShardBlockStore, error) {
 func (st *ShardBlockStore) GetLatestProcessedBCHeight(shardID int) (uint64, error) {
 	sqlStr := `
 		SELECT block_height FROM shard_blocks
-		WHERE shard_id=:shar_id
-		ORDER BY beacon_height DESC
+		WHERE shard_id=$1
+		ORDER BY block_height DESC
 		LIMIT 1
 	`
 	bcHeights := []uint64{}
