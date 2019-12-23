@@ -5,7 +5,7 @@ import "time"
 type BeaconBlock struct {
 	ID           string `data:"id"`
 	BlockHash    string `data:"block_hash"`
-	BlockHeigh   uint64 `data:"block_heigh"`
+	BlockHeight  uint64 `data:"block_height"`
 	BlockVersion int64  `data:"block_version"`
 	Epoch        uint64 `data:"epoch"`
 	Round        uint64 `data:"round"`
