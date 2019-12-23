@@ -11,11 +11,11 @@ type ShardBlock struct {
 	BlockHeight   uint64 `db:"block_height"`
 	BlockProducer string `db:"block_producer"`
 	Epoch         uint64 `db:"epoch"`
-	Round         uint64 `db:"round"`
+	Round         int    `db:"round"`
 
 	CreatedTime      time.Time `db:"created_time"`
 	Data             string    `db:"data"`
-	CountTx          uint64    `db:"count_tx"`
+	CountTx          int       `db:"count_tx"`
 	ShardID          int       `db:"shard_id"`
 	PreBlock         string    `db:"pre_block"`
 	NextBlock        string    `db:"next_block"`

@@ -11,12 +11,12 @@ type ShardBlockStore struct {
 }
 
 // NewBeaconBlockStore initialises BeaconBlockStore with pg connection
-func NewShardBlockStore() (*BeaconBlockStore, error) {
+func NewShardBlockStore() (*ShardBlockStore, error) {
 	pgConn, err := getPGConnection()
 	if err != nil {
 		return nil, err
 	}
-	store := &BeaconBlockStore{}
+	store := &ShardBlockStore{}
 	store.DB = pgConn
 	return store, nil
 }

@@ -61,12 +61,28 @@ func registerBeaconBlockPuller(
 	return append(agentsList, pdeStatePuller)
 }
 
+func registerShardBlockPuller(
+	shardID int,
+	rpcClient *utils.HttpClient,
+	agentsList []agents.Agent,
+	shardBlockStore *pg.ShardBlockStore,
+) []agents.Agent {
+	pdeStatePuller := agents.NewShardBlockPuller(
+		"Shard-Block-Puller",
+		3, // in sec
+		rpcClient,
+		shardID,
+		shardBlockStore,
+	)
+	return append(agentsList, pdeStatePuller)
+}
+
 // NewServer is to new server instance
 func NewServer() (*Server, error) {
 	rpcClient := utils.NewHttpClient()
 	agentsList := []agents.Agent{}
 
-	// Register agent
+	// ----------------------- Register agent -----------------------
 	// pde instruction
 	pdeStateStore, err := pg.NewPDEStatePGStore()
 	if err != nil {
@@ -87,7 +103,18 @@ func NewServer() (*Server, error) {
 		return nil, err
 	}
 	agentsList = registerBeaconBlockPuller(rpcClient, agentsList, beaconBlockStore)
-	// End
+
+	// shard block: 8 shard
+	shardBlockStore, err := pg.NewShardBlockStore()
+	if err != nil {
+		return nil, err
+	}
+	for i := 0; i <= 7; i++ {
+		agentsList = registerShardBlockPuller(i, rpcClient, agentsList, shardBlockStore)
+	}
+
+	//
+	// ----------------------- End -----------------------
 
 	quitChan := make(chan os.Signal)
 	signal.Notify(quitChan, syscall.SIGTERM)
