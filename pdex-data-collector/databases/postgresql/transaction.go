@@ -148,7 +148,7 @@ func (st *TransactionsStore) GetTransactionById(txID string) (*models.Transactio
 
 func (st *TransactionsStore) StoreTransaction(txs *models.Transaction) error {
 	sqlStr := `
-		INSERT INTO shard_blocks (data, tx_id, tx_version, shard_id, tx_type, prv_fee, info, proof, proof_detail, metadata, transacted_privacy_coin, transacted_privacy_coin_proof_detail, transacted_privacy_coin_fee, created_time, block_height, block_hash)
+		INSERT INTO transactions (data, tx_id, tx_version, shard_id, tx_type, prv_fee, info, proof, proof_detail, metadata, transacted_privacy_coin, transacted_privacy_coin_proof_detail, transacted_privacy_coin_fee, created_time, block_height, block_hash)
 		VALUES (:data, :tx_id, :tx_version, :shard_id, :tx_type, :prv_fee, :info, :proof, :proof_detail, :metadata, :transacted_privacy_coin, :transacted_privacy_coin_proof_detail, :transacted_privacy_coin_fee, :created_time, :block_height, :block_hash)
 		RETURNING id
 	`
