@@ -108,7 +108,7 @@ func (puller *TransactionPuller) Execute() {
 			}
 			latestBlockHeight = temp[len(temp)-1].BlockHeight
 		} else {
-			fmt.Printf("[Transaction puller] No more tx to process")
+			fmt.Printf("[Transaction puller] No more tx to process\n")
 		}
 
 		if len(processingTxs) > 0 {
