@@ -13,7 +13,7 @@ class PdexService:
         """)
 
         pairs = []
-        tokens = self.getToken()
+        tokens = self.getTokens()
         for r in result_set:
             token1 = r[0]
             token2 = r[1]
@@ -25,7 +25,7 @@ class PdexService:
                 pairs.append(pair)
         return pairs
 
-    def getToken(self):
+    def getTokens(self):
         sql = """
             SELECT address, name, exchange_rate FROM pde_token_name
         """

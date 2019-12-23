@@ -10,7 +10,7 @@ class Pdex(Resource):
 class PdexToken(Resource):
     def get(self):
         service = PdexService()
-        data = service.getToken()
+        data = service.getTokens()
         return data
 
 
@@ -19,3 +19,7 @@ class PdexTradingPair(Resource):
         service = PdexService()
         data = service.getTradingPairs()
         return data
+
+class PdexTradingTop10Trader(Resource):
+    def get(self):
+

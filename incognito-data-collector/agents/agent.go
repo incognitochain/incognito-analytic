@@ -2,7 +2,7 @@ package agents
 
 import (
 	"fmt"
-	"github.com/incognitochain/incognito-analytic/pdex-data-collector/utils"
+	"github.com/incognitochain/incognito-analytic/incognito-data-collector/utils"
 )
 
 type AgentAbs struct {

@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/incognitochain/incognito-analytic/pdex-data-collector/agents"
-	pg "github.com/incognitochain/incognito-analytic/pdex-data-collector/databases/postgresql"
-	"github.com/incognitochain/incognito-analytic/pdex-data-collector/utils"
+	"github.com/incognitochain/incognito-analytic/incognito-data-collector/agents"
+	pg "github.com/incognitochain/incognito-analytic/incognito-data-collector/databases/postgresql"
+	"github.com/incognitochain/incognito-analytic/incognito-data-collector/utils"
 	"os"
 	"os/signal"
 	"runtime"

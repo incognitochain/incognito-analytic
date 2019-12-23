@@ -28,7 +28,7 @@ RUN  apk update && \
      apk add libc6-compat && \
      apk add ca-certificates
 
-COPY ./pdex-data-collector /
+COPY ./incognito-data-collector /
 COPY ./run.sh /
 
 RUN chmod +x /pdex-data-collector
