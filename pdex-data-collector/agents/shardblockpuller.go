@@ -12,8 +12,8 @@ import (
 )
 
 type ShardBlockStore interface {
-	GetLatestProcessedBCHeight(shardID int) (uint64, error)
-	StoreShardBloc(block *models.ShardBlock) error
+	GetLatestProcessedShardHeight(shardID int) (uint64, error)
+	StoreShardBlock(block *models.ShardBlock) error
 }
 
 type ShardBlockPuller struct {
@@ -112,7 +112,7 @@ func (puller *ShardBlockPuller) Execute() {
 			shardBlockModel.ListHashTx = "[]"
 		}
 
-		err = puller.ShardBlockStore.StoreShardBloc(&shardBlockModel)
+		err = puller.ShardBlockStore.StoreShardBlock(&shardBlockModel)
 		if err != nil {
 			fmt.Printf("[Shard block puller] An error occured while storing shard block %d, shard %d err: %+v\n", blockHeight, puller.ShardID, err)
 			continue

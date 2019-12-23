@@ -21,25 +21,25 @@ func NewShardBlockStore() (*ShardBlockStore, error) {
 	return store, nil
 }
 
-func (st *ShardBlockStore) GetLatestProcessedBCHeight(shardID int) (uint64, error) {
+func (st *ShardBlockStore) GetLatestProcessedShardHeight(shardID int) (uint64, error) {
 	sqlStr := `
 		SELECT block_height FROM shard_blocks
 		WHERE shard_id=$1
 		ORDER BY block_height DESC
 		LIMIT 1
 	`
-	bcHeights := []uint64{}
-	err := st.DB.Select(&bcHeights, sqlStr, shardID)
+	blockHeights := []uint64{}
+	err := st.DB.Select(&blockHeights, sqlStr, shardID)
 	if err != nil {
 		return 0, err
 	}
-	if len(bcHeights) == 0 {
+	if len(blockHeights) == 0 {
 		return 0, nil
 	}
-	return bcHeights[0], nil
+	return blockHeights[0], nil
 }
 
-func (st *ShardBlockStore) StoreShardBloc(beaconBlockModel *models.ShardBlock) error {
+func (st *ShardBlockStore) StoreShardBlock(beaconBlockModel *models.ShardBlock) error {
 	sqlStr := `
 		INSERT INTO shard_blocks (block_hash, created_time, data, count_tx, shard_id, block_height, block_producer, pre_block, next_block, list_hash_tx, beacon_block_height, block_version, epoch, round)
 		VALUES (:block_hash, :created_time, :data, :count_tx, :shard_id, :block_height, :block_producer, :pre_block, :next_block, :list_hash_tx, :beacon_block_height, :block_version, :epoch, :round)
