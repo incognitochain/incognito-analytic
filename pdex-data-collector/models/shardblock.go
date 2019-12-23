@@ -5,20 +5,20 @@ import (
 )
 
 type ShardBlock struct {
-	ID            string `json:"id"`
-	BlockHash     string `json:"block_hash"`
-	BlockVersion  int    `json:"block_version"`
-	BlockHeight   uint64 `json:"block_height"`
-	BlockProducer string `json:"block_producer"`
-	Epoch         uint64 `data:"epoch"`
-	Round         uint64 `data:"round"`
+	ID            string `db:"id"`
+	BlockHash     string `db:"block_hash"`
+	BlockVersion  int    `db:"block_version"`
+	BlockHeight   uint64 `db:"block_height"`
+	BlockProducer string `db:"block_producer"`
+	Epoch         uint64 `db:"epoch"`
+	Round         uint64 `db:"round"`
 
-	CreatedTime      time.Time `json:"created_time"`
-	Data             string    `json:"data"`
-	CountTx          uint64    `json:"count_tx"`
-	ShardID          int       `json:"shard_id"`
-	PreBlock         string    `json:"pre_block"`
-	NextBlock        string    `json:"next_block"`
-	ListHashTx       string    `json:"list_hash_tx"`
-	BeaconBlockHeigh uint64    `json:"beacon_block_heigh"`
+	CreatedTime      time.Time `db:"created_time"`
+	Data             string    `db:"data"`
+	CountTx          uint64    `db:"count_tx"`
+	ShardID          int       `db:"shard_id"`
+	PreBlock         string    `db:"pre_block"`
+	NextBlock        string    `db:"next_block"`
+	ListHashTx       string    `db:"list_hash_tx"`
+	BeaconBlockHeigh uint64    `db:"beacon_block_heigh"`
 }

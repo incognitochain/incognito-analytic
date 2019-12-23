@@ -47,21 +47,47 @@ func registerPDEInstsExtractor(
 	return append(agentsList, pdeStatePuller)
 }
 
+func registerBeaconBlockPuller(
+	rpcClient *utils.HttpClient,
+	agentsList []agents.Agent,
+	beaconBlockStore *pg.BeaconBlockStore,
+) []agents.Agent {
+	pdeStatePuller := agents.NewBeaconBlockPuller(
+		"Beacon-Block-Puller",
+		3, // in sec
+		rpcClient,
+		beaconBlockStore,
+	)
+	return append(agentsList, pdeStatePuller)
+}
+
 // NewServer is to new server instance
 func NewServer() (*Server, error) {
 	rpcClient := utils.NewHttpClient()
+	agentsList := []agents.Agent{}
+
+	// Register agent
+	// pde instruction
 	pdeStateStore, err := pg.NewPDEStatePGStore()
 	if err != nil {
 		return nil, err
 	}
+	agentsList = registerPDEStatePuller(rpcClient, agentsList, pdeStateStore)
+
+	// pde instruction
 	pdeInstructionsPGStore, err := pg.NewPDEInstructionsPGStore()
 	if err != nil {
 		return nil, err
 	}
-
-	agentsList := []agents.Agent{}
-	agentsList = registerPDEStatePuller(rpcClient, agentsList, pdeStateStore)
 	agentsList = registerPDEInstsExtractor(rpcClient, agentsList, pdeInstructionsPGStore)
+
+	// beacon block
+	beaconBlockStore, err := pg.NewBeaconBlockStore()
+	if err != nil {
+		return nil, err
+	}
+	agentsList = registerBeaconBlockPuller(rpcClient, agentsList, beaconBlockStore)
+	// End
 
 	quitChan := make(chan os.Signal)
 	signal.Notify(quitChan, syscall.SIGTERM)

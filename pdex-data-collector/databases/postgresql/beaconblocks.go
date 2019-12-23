@@ -25,7 +25,7 @@ func NewBeaconBlockStore() (*BeaconBlockStore, error) {
 func (st *BeaconBlockStore) GetLatestProcessedBCHeight() (uint64, error) {
 	sqlStr := `
 		SELECT block_height FROM beacon_blocks
-		ORDER BY beacon_height DESC
+		ORDER BY block_height DESC
 		LIMIT 1
 	`
 	bcHeights := []uint64{}
@@ -41,8 +41,8 @@ func (st *BeaconBlockStore) GetLatestProcessedBCHeight() (uint64, error) {
 
 func (st *BeaconBlockStore) StoreBeaconBlock(beaconBlockModel *models.BeaconBlock) error {
 	sqlStr := `
-		INSERT INTO beacon_blocks (block_hash, block_heigh, data, instructions, pre_block, next_block, created_time, block_version, epoch, round)
-		VALUES (:block_hash, :block_heigh, :data, :instructions, :pre_block, :next_block, :created_time, :block_version, :epoch, :round)
+		INSERT INTO beacon_blocks (block_hash, block_height, data, instructions, pre_block, next_block, created_time, block_version, epoch, round)
+		VALUES (:block_hash, :block_height, :data, :instructions, :pre_block, :next_block, :created_time, :block_version, :epoch, :round)
 		RETURNING id
 	`
 	tx := st.DB.MustBegin()

@@ -39,7 +39,7 @@ func NewBeaconBlockPuller(name string,
 func (puller *BeaconBlockPuller) getBeaconBlock(beaconHeight uint64) (*entities.BeaconBlock, error) {
 	params := []interface{}{beaconHeight}
 	var beaconBlock entities.BeaconBlockRes
-	err := puller.RPCClient.RPCCall("getpdestate", params, &beaconBlock)
+	err := puller.RPCClient.RPCCall("retrievebeaconblockbyheight", params, &beaconBlock)
 	if err != nil {
 		return nil, err
 	}
@@ -98,7 +98,7 @@ func (puller *BeaconBlockPuller) Execute() {
 
 		err = puller.BeaconBlockStore.StoreBeaconBlock(&beaconBlockModel)
 		if err != nil {
-			fmt.Println("[Beacon block puller] An error occured while storing pde pool pair")
+			fmt.Println("[Beacon block puller] An error occured while storing beacon block", err)
 			continue
 		}
 		bcHeight++

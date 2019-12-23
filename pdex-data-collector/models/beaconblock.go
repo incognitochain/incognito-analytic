@@ -3,16 +3,16 @@ package models
 import "time"
 
 type BeaconBlock struct {
-	ID           string `data:"id"`
-	BlockHash    string `data:"block_hash"`
-	BlockHeight  uint64 `data:"block_height"`
-	BlockVersion int    `data:"block_version"`
-	Epoch        uint64 `data:"epoch"`
-	Round        int    `data:"round"`
+	ID           string `db:"id"`
+	BlockHash    string `db:"block_hash"`
+	BlockHeight  uint64 `db:"block_height"`
+	BlockVersion int    `db:"block_version"`
+	Epoch        uint64 `db:"epoch"`
+	Round        int    `db:"round"`
 
-	Data         string    `data:"data"`
-	Instructions string    `data:"instructions"`
-	PreBlock     string    `data:"pre_block"`
-	NextBlock    string    `data:"next_block"`
-	CreatedTime  time.Time `data:"created_time"`
+	Data         string    `db:"data"`
+	Instructions string    `db:"instructions"`
+	PreBlock     string    `db:"pre_block"`
+	NextBlock    string    `db:"next_block"`
+	CreatedTime  time.Time `db:"created_time"`
 }
