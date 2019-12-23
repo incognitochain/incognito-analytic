@@ -144,11 +144,7 @@ func (puller *TransactionPuller) Execute() {
 					txModel.Data = string(dataJson)
 				}
 				if len(tx.Metadata) > 0 {
-					metadataJson, err := json.Marshal(tx.Metadata)
-					if err == nil {
-						temp := string(metadataJson)
-						txModel.Metadata = &temp
-					}
+					txModel.Metadata = &tx.Metadata
 				}
 				proofDetailJson, err := json.Marshal(tx.ProofDetail)
 				if err == nil {
