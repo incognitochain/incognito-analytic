@@ -1,4 +1,5 @@
 from service.token import TokenService
+import json
 
 
 class TokenAPI():
@@ -12,3 +13,9 @@ class TokenAPI():
     def listTokens(self):
         service = TokenService()
         return service.listTokens()
+
+    def listTokenTxs(self):
+        service = TokenService()
+        tokenId = self.params['token_id']
+        data = service.listTokenTxs(tokenId)
+        return json.dumps(data)

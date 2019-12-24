@@ -59,6 +59,11 @@ def getListTokens():
     tokenAPI = TokenAPI(request.args)
     return tokenAPI.listTokens()
 
+@app.route('/token/txs', methods=['GET'])
+def getListTokenTxs():
+    tokenAPI = TokenAPI(request.args)
+    return tokenAPI.listTokenTxs()
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

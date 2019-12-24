@@ -20,3 +20,13 @@ class TokenService:
                 "supply": r[4]
             }
         return result
+
+    def listTokenTxs(self, tokenId):
+        sql = """
+                    SELECT list_hash_tx FROM tokens WHERE token_id='""" + tokenId + """'
+                """
+        resultSet = db.execute(sql)
+        result = []
+        for r in resultSet:
+            result = r[0]
+        return result
