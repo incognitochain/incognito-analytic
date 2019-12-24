@@ -42,11 +42,11 @@ func (st *TokensStore) StoreToken(token *models.Token) error {
 
 func (st *TokensStore) UpdateToken(token *models.Token) error {
 	sqlStr := `
-		UPDATE tokens count_tx=:count_tx, list_hash_tx=:list_hash_tx WHERE token_id=:token_id
+		UPDATE tokens SET count_tx=$1, list_hash_tx=$2 WHERE token_id=$3
 		RETURNING id
 	`
 	tx := st.DB.MustBegin()
 	defer tx.Commit()
-	_, err := tx.NamedQuery(sqlStr, token)
+	_, err := tx.Exec(sqlStr, token.CountTx, token.ListHashTx, token.ID)
 	return err
 }
