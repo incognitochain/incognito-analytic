@@ -38,8 +38,9 @@ class PdexApi():
         service = PdexService()
         tradingPairs = service.getTradingPairs()
         for pair in tradingPairs:
-            token1 = pair[pair.keys()[0]]
-            token2 = pair[pair.keys()[1]]
+            keys = list(pair.keys())
+            token1 = pair[keys[0]]
+            token2 = pair[keys[1]]
 
             item = {
                 "id": token1["name"] + "_" + token2["name"],
