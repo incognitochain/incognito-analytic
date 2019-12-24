@@ -99,7 +99,7 @@ func (puller *TokenPuller) Execute() {
 					fmt.Printf("[Token puller] An error occured while StoreToken %s %s: %+v\n", token.ID, token.Name, err)
 					continue
 				} else {
-					fmt.Printf("[Token puller] Add token success %s %s: %+v\n", token.ID, token.Name)
+					fmt.Printf("[Token puller] Add token success %s %s\n", token.ID, token.Name)
 				}
 			}
 		}
