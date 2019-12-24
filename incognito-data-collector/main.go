@@ -99,13 +99,13 @@ func registerTokenPuller(
 	agentsList []agents.Agent,
 	tokenStore *pg.TokensStore,
 ) []agents.Agent {
-	txPuller := agents.NewTokenPuller(
+	tokenPuller := agents.NewTokenPuller(
 		"Token-Puller",
 		3, // in sec
 		rpcClient,
 		tokenStore,
 	)
-	return append(agentsList, txPuller)
+	return append(agentsList, tokenPuller)
 }
 
 // NewServer is to new server instance
@@ -158,7 +158,7 @@ func NewServer() (*Server, error) {
 	if err != nil {
 		return nil, err
 	}
-	registerTokenPuller(rpcClient, agentsList, tokenStore)
+	agentsList = registerTokenPuller(rpcClient, agentsList, tokenStore)
 
 	//
 	// ----------------------- End -----------------------
