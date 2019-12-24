@@ -9,5 +9,5 @@ type Token struct {
 	Supply     uint64  `db:"supply"`
 	ListHashTx *string `db:"list_hash_tx"`
 	Data       string  `db:"data"`
-	Info       string  `db:info`
+	Info       string  `db:"info""`
 }
