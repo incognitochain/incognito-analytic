@@ -70,9 +70,7 @@ func (puller *BeaconBlockPuller) Execute() {
 		if err != nil {
 			fmt.Println("[Beacon block puller] An error occured while getting pde state from chain: ", err)
 			bcHeight, _ = puller.BeaconBlockStore.GetLatestProcessedBCHeight()
-
-			bcHeight++
-			return
+			continue
 		}
 
 		if beaconBlockRes == nil {

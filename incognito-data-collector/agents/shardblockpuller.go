@@ -73,9 +73,7 @@ func (puller *ShardBlockPuller) Execute() {
 		shardBlockRes, err := puller.getShardBlock(blockHeight, puller.ShardID)
 		if err != nil {
 			fmt.Printf("[Shard block puller] An error occured while getting shard %d block height %d from chain: %+v \n", puller.ShardID, blockHeight, err)
-			blockHeight, _ = puller.ShardBlockStore.GetLatestProcessedShardHeight(puller.ShardID)
-			blockHeight++
-			return
+			continue
 		}
 
 		if shardBlockRes == nil {
