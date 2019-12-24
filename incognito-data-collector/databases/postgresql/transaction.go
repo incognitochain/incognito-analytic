@@ -80,7 +80,11 @@ func (st *TransactionsStore) ListProcessingTxByHeight(shardID int, blockHeight u
 		item := &ListProcessingTx{
 			TxsHash: []string{},
 		}
-		err1 := rows.Scan(&item.BlockHeight, &item.ShardID, &item.BlockHash, &item.TxsHash)
+		err1 := rows.Scan(&item.BlockHeight, &item.ShardID, &item.BlockHash, &item.TxsHashString)
+		if err1 != nil {
+			return nil, err1
+		}
+		err1 = json.Unmarshal([]byte(item.TxsHashString), &item.TxsHash)
 		if err1 != nil {
 			return nil, err1
 		}
