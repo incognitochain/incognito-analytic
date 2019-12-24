@@ -57,15 +57,6 @@ func (puller *TransactionPuller) getTransaction(txHash string) (*entities.Transa
 	return shardBlockRes.Result, nil
 }
 
-func stringInSlice(a string, list []string) bool {
-	for _, b := range list {
-		if b == a {
-			return true
-		}
-	}
-	return false
-}
-
 func (puller *TransactionPuller) Execute() {
 	fmt.Println("[Transaction puller] Agent is executing...")
 
@@ -90,7 +81,7 @@ func (puller *TransactionPuller) Execute() {
 
 		if len(temp.TxsHash) > len(latestTxs) {
 			for _, a := range temp.TxsHash {
-				if !stringInSlice(a, latestTxs) {
+				if !utils.StringInSlice(a, latestTxs) {
 					processingTxs = append(processingTxs, a)
 				}
 			}

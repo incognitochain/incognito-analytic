@@ -16,3 +16,13 @@ type CustomToken struct {
 type ListCustomToken struct {
 	ListCustomToken []CustomToken `json:"ListCustomToken"`
 }
+
+type ListCustomTokenRes struct {
+	RPCBaseRes
+	Result *ListCustomToken
+}
+
+type CustomTokenRes struct {
+	RPCBaseRes
+	Result *CustomToken
+}
