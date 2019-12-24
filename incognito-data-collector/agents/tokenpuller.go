@@ -67,7 +67,6 @@ func (puller *TokenPuller) Execute() {
 	fmt.Println("[Token puller] Agent is executing...")
 
 	for {
-		time.Sleep(1000 * time.Millisecond)
 		currentTokens, err := puller.TokenStore.GetListTokenIds()
 		if err != nil {
 			return
@@ -75,7 +74,7 @@ func (puller *TokenPuller) Execute() {
 
 		listTokensOnChain, err := puller.getListToken()
 		if err != nil {
-			return
+			continue
 		}
 
 		for _, token := range listTokensOnChain.ListCustomToken {
@@ -90,14 +89,14 @@ func (puller *TokenPuller) Execute() {
 
 				dataJson, err := json.Marshal(token)
 				if err != nil {
-					fmt.Printf("[Token puller] An error occured while json.Marshal %s %s: %+v", token.ID, token.Name, err)
+					fmt.Printf("[Token puller] An error occured while json.Marshal %s %s: %+v\n", token.ID, token.Name, err)
 					continue
 				}
 				tokenModel.Data = string(dataJson)
 
 				err = puller.TokenStore.StoreToken(&tokenModel)
 				if err != nil {
-					fmt.Printf("[Token puller] An error occured while StoreToken %s %s: %+v", token.ID, token.Name, err)
+					fmt.Printf("[Token puller] An error occured while StoreToken %s %s: %+v\n", token.ID, token.Name, err)
 					continue
 				}
 			}
@@ -106,7 +105,7 @@ func (puller *TokenPuller) Execute() {
 		for _, tokenId := range currentTokens {
 			token, err := puller.getToken(tokenId)
 			if err != nil {
-				fmt.Printf("[Token puller] An error occured while getToken by id %s %s: %+v", token.ID, token.Name, err)
+				fmt.Printf("[Token puller] An error occured while getToken by id %s %s: %+v\n", token.ID, token.Name, err)
 				continue
 			}
 			tokenModel := models.Token{
@@ -116,7 +115,7 @@ func (puller *TokenPuller) Execute() {
 			if tokenModel.CountTx > 0 {
 				jsonListTxs, err := json.Marshal(token.ListTxs)
 				if err != nil {
-					fmt.Printf("[Token puller] An error occured while json Marshal ListTxs by id %s %s: %+v", token.ID, token.Name, err)
+					fmt.Printf("[Token puller] An error occured while json Marshal ListTxs by id %s %s: %+v\n", token.ID, token.Name, err)
 					continue
 				}
 				jsonListTxsStr := string(jsonListTxs)
@@ -124,9 +123,10 @@ func (puller *TokenPuller) Execute() {
 			}
 			err = puller.TokenStore.UpdateToken(&tokenModel)
 			if err != nil {
-				fmt.Printf("[Token puller] An error occured while UpdateToken by id %s %s: %+v", token.ID, token.Name, err)
+				fmt.Printf("[Token puller] An error occured while UpdateToken by id %s %s: %+v\n", token.ID, token.Name, err)
 				continue
 			}
 		}
+		time.Sleep(30 * time.Second)
 	}
 }
