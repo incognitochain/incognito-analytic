@@ -24,3 +24,10 @@ class PdexApi():
         service = PdexService()
         count = service.countTradingTxs()
         return {'count': count}
+
+    def getLastTradingTx(self):
+        service = PdexService()
+        tokenSell = self.params.get("tokenSell", "")
+        tokenBuy = self.params.get("tokenBuy", "")
+        data = service.lastTradingTx(tokenSell, tokenBuy)
+        return data

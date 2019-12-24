@@ -17,6 +17,7 @@ class HelloWorld(Resource):
 api.add_resource(HelloWorld, '/')
 
 
+# PDEX Api
 @app.route('/pdex', methods=['GET'])
 def pdexApi():
     pdex = PdexApi(request.args)
@@ -43,6 +44,15 @@ def pdexGetTradingToken():
 def pdexCountTradingTxs():
     pdex = PdexApi(request.args)
     return pdex.countTradingTxs()
+
+
+# Last trading tx
+# token1=?
+# token2=?
+@app.route('/pdex/last-trading-tx', methods=['GET'])
+def pdexGetLastTradingTx():
+    pdex = PdexApi(request.args)
+    return pdex.getLastTradingTx()
 
 
 # Transaction API

@@ -43,3 +43,32 @@ class PdexService:
         result_set = db.execute(sql)
         for r in result_set:
             return r[0]
+
+    def lastTradingTx(self, token1="", token2=""):
+        sql = """
+            SELECT tx_id, shard_id, prv_fee, info, block_height, block_hash, metadata, transacted_privacy_coin_fee, created_time FROM transactions WHERE tx_id in (
+                SELECT requested_tx_id FROM pde_trades order by beacon_height desc limit 1
+            )
+        """
+
+        if token1 != "" and token2 != "":
+            sql = """
+                        SELECT tx_id, shard_id, prv_fee, info, block_height, block_hash, metadata, transacted_privacy_coin_fee, created_time FROM transactions WHERE tx_id in (
+                            SELECT requested_tx_id FROM pde_trades WHERE token1_id_str='""" + token1 + """' AND token2_id_str='""" + token2 + """' ORDER BY beacon_height desc limit 1
+                        )
+                    """
+
+        result_set = db.execute(sql)
+        for r in result_set:
+            return {
+                "tx_id": r[0],
+                "shard_id": r[1],
+                "prv_fee": r[2],
+                "info": r[3],
+                "block_height": r[4],
+                "block_hash": r[5],
+                "metadata": r[6],
+                "transacted_privacy_coin_fee": r[7],
+                "created_time": r[8],
+            }
+        return {}
