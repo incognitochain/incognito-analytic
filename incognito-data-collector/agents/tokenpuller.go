@@ -78,7 +78,7 @@ func (puller *TokenPuller) Execute() {
 		}
 
 		for _, token := range listTokensOnChain.ListCustomToken {
-			if !utils.StringInSlice(token.Name, currentTokens) {
+			if !utils.StringInSlice(token.ID, currentTokens) {
 				tokenModel := models.Token{
 					Name:    token.Name,
 					TokenID: token.ID,
