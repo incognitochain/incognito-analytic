@@ -98,6 +98,8 @@ func (puller *TokenPuller) Execute() {
 				if err != nil {
 					fmt.Printf("[Token puller] An error occured while StoreToken %s %s: %+v\n", token.ID, token.Name, err)
 					continue
+				} else {
+					fmt.Printf("[Token puller] Add token success %s %s: %+v\n", token.ID, token.Name)
 				}
 			}
 		}
@@ -105,7 +107,7 @@ func (puller *TokenPuller) Execute() {
 		for _, tokenId := range currentTokens {
 			token, err := puller.getToken(tokenId)
 			if err != nil {
-				fmt.Printf("[Token puller] An error occured while getToken by id %s %s: %+v\n", token.ID, token.Name, err)
+				fmt.Printf("[Token puller] An error occured while getToken by id %s %s\n", token.ID, token.Name, err)
 				continue
 			}
 			tokenModel := models.Token{
@@ -125,6 +127,8 @@ func (puller *TokenPuller) Execute() {
 			if err != nil {
 				fmt.Printf("[Token puller] An error occured while UpdateToken by id %s %s: %+v\n", token.ID, token.Name, err)
 				continue
+			} else {
+				fmt.Printf("[Token puller] Update token success %s %s\n", token.ID, token.Name)
 			}
 		}
 		time.Sleep(30 * time.Second)
