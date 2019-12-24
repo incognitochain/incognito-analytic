@@ -47,6 +47,6 @@ func (st *TokensStore) UpdateToken(token *models.Token) error {
 	`
 	tx := st.DB.MustBegin()
 	defer tx.Commit()
-	_, err := tx.Exec(sqlStr, token.CountTx, token.ListHashTx, token.ID)
+	_, err := tx.Exec(sqlStr, token.CountTx, token.ListHashTx, token.TokenID)
 	return err
 }
