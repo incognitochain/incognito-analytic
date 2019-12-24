@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from flask import Flask
 from api.pdexapi import PdexApi
 from api.tokenapi import TokenAPI
@@ -22,6 +23,35 @@ api.add_resource(HelloWorld, '/')
 def pdexApi():
     pdex = PdexApi(request.args)
     return pdex.get()
+
+
+# DEX info
+@app.route('/info', methods=['GET'])
+def pdexInfo():
+    result = {
+        "name": "Incognito Privacy Decentralized Exchange",
+        "description": """Completely anonymous trading – no KYC, no records of buyers, sellers or transaction amounts. No third party risk – you control your money and hold your own private keys. Decentralized, scalable, cross-chain liquidity. Trade BTC, ETH, PRV and more with 100% confidentiality.""",
+        "location": "Vietnam",
+        "logo": "https://incognito.org/assets/236ce48.svg",
+        "website": "https://incognito.org/",
+        "twitter": "Incognito Chain",
+        "version": "1.0",
+        "capability": {
+            "markets": True,
+            "trades": True,
+            "ordersSnapshot": False,
+            "candles": False,
+            "ticker": False
+        }
+    }
+    return result
+
+
+# DEX market info
+@app.route("/market")
+def pdexMarket():
+    pdex = PdexApi(request.args)
+    return pdex.getMarketInfo()
 
 
 # Get active trading pair
