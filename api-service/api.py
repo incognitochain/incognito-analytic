@@ -1,5 +1,6 @@
 from flask import Flask
 from api.pdexapi import PdexApi
+from api.tokenapi import TokenAPI
 from api.transactionapi import TransactionAPI
 from flask_restful import Resource, Api
 from flask import request
@@ -51,6 +52,12 @@ def transactionApi():
 def transactionGetAvgFee():
     transactionAPI = TransactionAPI(request.args)
     return transactionAPI.getAvgFee()
+
+
+@app.route('/token/list', methods=['GET'])
+def getListTokens():
+    tokenAPI = TokenAPI(request.args)
+    return tokenAPI.listTokens()
 
 
 if __name__ == '__main__':
