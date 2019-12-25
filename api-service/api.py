@@ -110,6 +110,16 @@ def transactionGetAvgFee():
     return transactionAPI.getAvgFee()
 
 
+# List contribute liquidity tx
+# page=
+# limit=
+# order_trend=
+@app.route('/transaction/contribute-liquidity', methods=['GET'])
+def listContributeLiquidityTxs():
+    txApi = TransactionAPI(request.args)
+    return txApi.listContributeLiquidityTx()
+
+
 # List all token in network
 @app.route('/token/list', methods=['GET'])
 def getListTokens():
