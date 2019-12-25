@@ -74,7 +74,11 @@ func (puller *BeaconBlockPuller) Execute() {
 		}
 
 		if beaconBlockRes == nil {
-			break
+			continue
+		}
+
+		if beaconBlockRes.NextBlockHash == "" {
+			continue
 		}
 
 		beaconBlockModel := models.BeaconBlock{
