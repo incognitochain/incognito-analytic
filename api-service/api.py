@@ -120,6 +120,16 @@ def listContributeLiquidityTxs():
     return txApi.listContributeLiquidityTx()
 
 
+# List withdraw liquidity tx
+# page=
+# limit=
+# order_trend=
+@app.route('/transaction/withdraw-liquidity', methods=['GET'])
+def listWithdrawLiquidityTxs():
+    txApi = TransactionAPI(request.args)
+    return txApi.listWithdrawLiquidityTx()
+
+
 # List all token in network
 @app.route('/token/list', methods=['GET'])
 def getListTokens():

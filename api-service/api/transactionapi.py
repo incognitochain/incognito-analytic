@@ -22,7 +22,7 @@ class TransactionAPI():
         else:
             return {tokenID: service.getAvgFeeToken(tokenID)}
 
-    def listContributeLiquidityTx(self):
+    def listWithdrawLiquidityTx(self):
 
         page = self.params.get('page', 0)
         limit = self.params.get('limit', 0)
@@ -30,7 +30,7 @@ class TransactionAPI():
         order_trend = self.params.get('order_trend', 'ASC')
 
         service = TransactionService()
-        txs = service.listTxByMetadataType(metadataType=90, page=int(page), limit=int(limit), order_trend=order_trend)
+        txs = service.listTxByMetadataType(metadataType=93, page=int(page), limit=int(limit), order_trend=order_trend)
         if int(group) == 1:
             result = {}
             for tx in txs:
