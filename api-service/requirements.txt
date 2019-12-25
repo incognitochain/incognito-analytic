@@ -3,3 +3,4 @@ Flask
 flask-restful
 sqlalchemy
 psycopg2
+flask-restful-swagger

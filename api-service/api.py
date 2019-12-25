@@ -3,24 +3,22 @@ from flask import Flask
 from api.pdexapi import PdexApi
 from api.tokenapi import TokenAPI
 from api.transactionapi import TransactionAPI
-from flask_restful import Resource, Api
 from flask import request
+from flasgger import Swagger
 
 app = Flask(__name__)
-api = Api(app)
-
-
-class HelloWorld(Resource):
-    def get(self):
-        return {'Incognito': 'API\'s working'}
-
-
-api.add_resource(HelloWorld, '/')
+Swagger(app)
 
 
 # PDEX Api
 @app.route('/pdex', methods=['GET'])
 def pdexApi():
+    """
+    Pdex API
+    ---
+    tags:
+      - Awesomeness Language API
+    """
     pdex = PdexApi(request.args)
     return {'result': pdex.get()}
 
@@ -28,6 +26,13 @@ def pdexApi():
 # DEX info
 @app.route('/info', methods=['GET'])
 def pdexInfo():
+    """
+    Pdex Info
+    ---
+    responses:
+        200:
+            description: Get pDex info
+    """
     result = {
         "name": "Incognito Privacy Decentralized Exchange",
         "description": """Completely anonymous trading – no KYC, no records of buyers, sellers or transaction amounts. No third party risk – you control your money and hold your own private keys. Decentralized, scalable, cross-chain liquidity. Trade BTC, ETH, PRV and more with 100% confidentiality.""",
@@ -50,6 +55,13 @@ def pdexInfo():
 # DEX market info
 @app.route("/market")
 def pdexMarket():
+    """
+        Pdex Market
+        ---
+        responses:
+            200:
+                description: Get pDex info
+        """
     pdex = PdexApi(request.args)
     return pdex.getMarketInfo()
 
@@ -57,6 +69,13 @@ def pdexMarket():
 # Get active trading pair
 @app.route('/pdex/pairs', methods=['GET'])
 def pdexGetTradingPair():
+    """
+    Pdex Pairs
+    ---
+    responses:
+        200:
+            description: Get pDex info
+    """
     pdex = PdexApi(request.args)
     return {'result': pdex.getTradingPair()}
 
