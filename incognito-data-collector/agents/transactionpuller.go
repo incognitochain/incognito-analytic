@@ -100,6 +100,7 @@ func (puller *TransactionPuller) Execute() {
 			latestBlockHeight = temp[len(temp)-1].BlockHeight
 		} else {
 			fmt.Printf("[Transaction puller] No more tx to process\n")
+			continue
 		}
 
 		if len(processingTxs) > 0 {
@@ -112,7 +113,7 @@ func (puller *TransactionPuller) Execute() {
 				tx, e := puller.getTransaction(t)
 				if e != nil {
 					fmt.Printf("[Transaction puller] An error occured while getting transaction %s : %+v\n", t, e)
-					return
+					continue
 				}
 
 				txModel := models.Transaction{
