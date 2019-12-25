@@ -28,15 +28,27 @@ class TransactionService:
             return float(r[1])
         return 0
 
-    def listTxByMetadataType(self, metadataType, page=0, limit=10, order_trend='ASC'):
+    def listTxByMetadataType(self, metadataType, page=0, limit=10, order_trend='ASC', bridgeTokenID='',
+                             deBridgeTokenID=''):
         pagenator = """"""
         if limit > 0:
             pagenator = """
                 OFFSET """ + str(page * limit) + """
                 LIMIT """ + str(limit)
+        byBridgeTokenID = """"""
+        if bridgeTokenID != '':
+            byBridgeTokenID = """ AND CAST(t.metadata ->> 'TokenID' as TEXT) = '""" + bridgeTokenID + """'"""
+
+        byDeBridgeTokenID = """"""
+        if deBridgeTokenID != '':
+            if metadataType == 80:
+                byDeBridgeTokenID = """ AND CAST(t.metadata ->> 'IncTokenID' as TEXT) = '""" + deBridgeTokenID + """'"""
+            else:
+                byDeBridgeTokenID = """ AND CAST(t.metadata ->> 'TokenID' as TEXT) = '""" + deBridgeTokenID + """'"""
+
         sql = """
                 SELECT t.tx_id, t.metadata FROM transactions as t
-                WHERE CAST(t.metadata ->> 'Type' as INT) = """ + str(metadataType) \
+                WHERE CAST(t.metadata ->> 'Type' as INT) = """ + str(metadataType) + byBridgeTokenID + byDeBridgeTokenID \
               + pagenator + """
                 ORDER BY t.created_time """ + order_trend + """
         """

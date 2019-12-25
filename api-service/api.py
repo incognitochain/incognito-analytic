@@ -114,6 +114,7 @@ def transactionGetAvgFee():
 # page=
 # limit=
 # order_trend=
+# group=
 @app.route('/transaction/contribute-liquidity', methods=['GET'])
 def listContributeLiquidityTxs():
     txApi = TransactionAPI(request.args)
@@ -128,6 +129,46 @@ def listContributeLiquidityTxs():
 def listWithdrawLiquidityTxs():
     txApi = TransactionAPI(request.args)
     return txApi.listWithdrawLiquidityTx()
+
+
+# List deposit centralized bridge token tx
+# page=
+# limit=
+# order_trend=
+@app.route('/transaction/deposit-centralized-bridge-token', methods=['GET'])
+def listDepositCentralizedBridgeTokenTxs():
+    txApi = TransactionAPI(request.args)
+    return txApi.listDepositCentralizeBridgeTx()
+
+
+# List deposit decentralized bridge token tx
+# page=
+# limit=
+# order_trend=
+@app.route('/transaction/deposit-decentralized-bridge-token', methods=['GET'])
+def listDepositDecentralizedBridgeTokenTxs():
+    txApi = TransactionAPI(request.args)
+    return txApi.listDepositDecentralizeBridgeTx()
+
+
+# List withdraw centralized bridge token tx
+# page=
+# limit=
+# order_trend=
+@app.route('/transaction/withdraw-centralized-bridge-token', methods=['GET'])
+def listWithdrawCentralizedBridgeTokenTxs():
+    txApi = TransactionAPI(request.args)
+    return txApi.listWithdrawCentralizeBridgeTx()
+
+
+# List withdraw decentralized bridge token tx
+# page=
+# limit=
+# order_trend=
+@app.route('/transaction/withdraw-decentralized-bridge-token', methods=['GET'])
+def listWithdrawDecentralizedBridgeTokenTxs():
+    txApi = TransactionAPI(request.args)
+    return txApi.listWithdrawDecentralizeBridgeTx()
 
 
 # List all token in network
