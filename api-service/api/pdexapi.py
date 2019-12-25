@@ -1,7 +1,9 @@
+# -*- coding: utf-8 -*-
 import json
 from flask_restful import fields, marshal
 
 from service.pdex import PdexService
+from service.token import TokenService
 
 
 class PdexApi():
@@ -84,3 +86,43 @@ class PdexApi():
         #     }
         # ]
         return json.dumps(result)
+
+    def lastHoursVolume(self):
+        token1 = self.params.get('token1', '')
+        token2 = self.params.get('token2', '')
+        # default 24 hours
+        hours = self.params.get('hours', 24)
+
+        if token1 == '' and token2 == '':
+            return {}
+        else:
+            service = PdexService()
+            tokenService = TokenService()
+
+            data = service.lastTradingTxInHours(token1, token2, hours)
+            if len(data) == 0:
+                return {}
+
+            result = {}
+            tokens = tokenService.listTokens()
+            for tx in data:
+                metadata = tx['metadata']
+                if metadata['TokenIDToSellStr'] == '0000000000000000000000000000000000000000000000000000000000000004':
+                    sellToken = 'PRV'
+                else:
+                    sellToken = tokens[metadata['TokenIDToSellStr']]['name']
+                sellAmount = metadata['SellAmount']
+                if metadata['TokenIDToBuyStr'] == '0000000000000000000000000000000000000000000000000000000000000004':
+                    buyToken = 'PRV'
+                else:
+                    buyToken = tokens[metadata['TokenIDToBuyStr']]['name']
+                buyAmount = tx['receive_amount']
+
+                if sellToken not in result:
+                    result[sellToken] = 0
+                result[sellToken] += sellAmount
+
+                if buyToken not in result:
+                    result[buyToken] = 0
+                result[buyToken] += buyAmount
+            return result

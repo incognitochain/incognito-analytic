@@ -77,12 +77,22 @@ def pdexCountTradingTxs():
 
 
 # Last trading tx
-# token1=?
-# token2=?
+# tokenSell=?
+# tokenBuy=?
 @app.route('/pdex/last-trading-tx', methods=['GET'])
 def pdexGetLastTradingTx():
     pdex = PdexApi(request.args)
     return pdex.getLastTradingTx()
+
+
+# Last volume 24 hours
+# token1=?
+# token2=?
+# hours=24
+@app.route('/pdex/last-volume', methods=['GET'])
+def pdexLastVolume24Hours():
+    pdex = PdexApi(request.args)
+    return pdex.lastHoursVolume()
 
 
 # Transaction API
