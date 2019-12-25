@@ -12,7 +12,7 @@ api = Api(app)
 
 class HelloWorld(Resource):
     def get(self):
-        return {'hello': 'world'}
+        return {'Incognito': 'API\'s working'}
 
 
 api.add_resource(HelloWorld, '/')
@@ -22,7 +22,7 @@ api.add_resource(HelloWorld, '/')
 @app.route('/pdex', methods=['GET'])
 def pdexApi():
     pdex = PdexApi(request.args)
-    return pdex.get()
+    return {'result': pdex.get()}
 
 
 # DEX info
@@ -56,24 +56,23 @@ def pdexMarket():
 
 # Get active trading pair
 @app.route('/pdex/pairs', methods=['GET'])
-@api.representation('application/json')
 def pdexGetTradingPair():
     pdex = PdexApi(request.args)
-    return pdex.getTradingPair()
+    return {'result': pdex.getTradingPair()}
 
 
 # Get active trading token
 @app.route('/pdex/tokens', methods=['GET'])
 def pdexGetTradingToken():
     pdex = PdexApi(request.args)
-    return pdex.getTokens()
+    return {'result': pdex.getTokens()}
 
 
 # Count trading txs
 @app.route('/pdex/count-trading-tx', methods=['GET'])
 def pdexCountTradingTxs():
     pdex = PdexApi(request.args)
-    return pdex.countTradingTxs()
+    return {'result': pdex.countTradingTxs()}
 
 
 # Last trading tx
@@ -82,7 +81,7 @@ def pdexCountTradingTxs():
 @app.route('/pdex/last-trading-tx', methods=['GET'])
 def pdexGetLastTradingTx():
     pdex = PdexApi(request.args)
-    return pdex.getLastTradingTx()
+    return {'result': pdex.getLastTradingTx()}
 
 
 # Last volume 24 hours
@@ -92,14 +91,14 @@ def pdexGetLastTradingTx():
 @app.route('/pdex/last-volume', methods=['GET'])
 def pdexLastVolume24Hours():
     pdex = PdexApi(request.args)
-    return pdex.lastHoursVolume()
+    return {'result': pdex.lastHoursVolume()}
 
 
 # Transaction API
 @app.route('/transaction', methods=['GET'])
 def transactionApi():
     transactionAPI = TransactionAPI(request.args)
-    return transactionAPI.get()
+    return {'result': transactionAPI.get()}
 
 
 # Get AVG Fee for token or PRV
@@ -107,7 +106,7 @@ def transactionApi():
 @app.route('/transaction/avg-fee', methods=['GET'])
 def transactionGetAvgFee():
     transactionAPI = TransactionAPI(request.args)
-    return transactionAPI.getAvgFee()
+    return {'result': transactionAPI.getAvgFee()}
 
 
 # List contribute liquidity tx
@@ -118,7 +117,7 @@ def transactionGetAvgFee():
 @app.route('/transaction/contribute-liquidity', methods=['GET'])
 def listContributeLiquidityTxs():
     txApi = TransactionAPI(request.args)
-    return txApi.listContributeLiquidityTx()
+    return {'result': txApi.listContributeLiquidityTx()}
 
 
 # List withdraw liquidity tx
@@ -128,7 +127,7 @@ def listContributeLiquidityTxs():
 @app.route('/transaction/withdraw-liquidity', methods=['GET'])
 def listWithdrawLiquidityTxs():
     txApi = TransactionAPI(request.args)
-    return txApi.listWithdrawLiquidityTx()
+    return {'result': txApi.listWithdrawLiquidityTx()}
 
 
 # List deposit centralized bridge token tx
@@ -138,7 +137,7 @@ def listWithdrawLiquidityTxs():
 @app.route('/transaction/deposit-centralized-bridge-token', methods=['GET'])
 def listDepositCentralizedBridgeTokenTxs():
     txApi = TransactionAPI(request.args)
-    return txApi.listDepositCentralizeBridgeTx()
+    return {'result': txApi.listDepositCentralizeBridgeTx()}
 
 
 # List deposit decentralized bridge token tx
@@ -148,7 +147,7 @@ def listDepositCentralizedBridgeTokenTxs():
 @app.route('/transaction/deposit-decentralized-bridge-token', methods=['GET'])
 def listDepositDecentralizedBridgeTokenTxs():
     txApi = TransactionAPI(request.args)
-    return txApi.listDepositDecentralizeBridgeTx()
+    return {'result': txApi.listDepositDecentralizeBridgeTx()}
 
 
 # List withdraw centralized bridge token tx
@@ -158,7 +157,7 @@ def listDepositDecentralizedBridgeTokenTxs():
 @app.route('/transaction/withdraw-centralized-bridge-token', methods=['GET'])
 def listWithdrawCentralizedBridgeTokenTxs():
     txApi = TransactionAPI(request.args)
-    return txApi.listWithdrawCentralizeBridgeTx()
+    return {'result': txApi.listWithdrawCentralizeBridgeTx()}
 
 
 # List withdraw decentralized bridge token tx
@@ -168,14 +167,14 @@ def listWithdrawCentralizedBridgeTokenTxs():
 @app.route('/transaction/withdraw-decentralized-bridge-token', methods=['GET'])
 def listWithdrawDecentralizedBridgeTokenTxs():
     txApi = TransactionAPI(request.args)
-    return txApi.listWithdrawDecentralizeBridgeTx()
+    return {'result': txApi.listWithdrawDecentralizeBridgeTx()}
 
 
 # List all token in network
 @app.route('/token/list', methods=['GET'])
 def getListTokens():
     tokenAPI = TokenAPI(request.args)
-    return tokenAPI.listTokens()
+    return {'result': tokenAPI.listTokens()}
 
 
 # List all tx hash of token
@@ -183,7 +182,7 @@ def getListTokens():
 @app.route('/token/txs', methods=['GET'])
 def getListTokenTxs():
     tokenAPI = TokenAPI(request.args)
-    return tokenAPI.listTokenTxs()
+    return {'result': tokenAPI.listTokenTxs()}
 
 
 if __name__ == '__main__':

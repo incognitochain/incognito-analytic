@@ -33,7 +33,7 @@ class TransactionAPI():
         result = []
         for tx in txs:
             result.append(tx)
-        return json.dumps(result)
+        return result
 
     def listDepositCentralizeBridgeTx(self):
 
@@ -51,7 +51,7 @@ class TransactionAPI():
         result = []
         for tx in txs:
             result.append(tx)
-        return json.dumps(result)
+        return result
 
     def listWithdrawCentralizeBridgeTx(self):
 
@@ -69,7 +69,7 @@ class TransactionAPI():
         result = []
         for tx in txs:
             result.append(tx)
-        return json.dumps(result)
+        return result
 
     def listDepositDecentralizeBridgeTx(self):
 
@@ -87,7 +87,7 @@ class TransactionAPI():
         result = []
         for tx in txs:
             result.append(tx)
-        return json.dumps(result)
+        return result
 
     def listWithdrawDecentralizeBridgeTx(self):
 
@@ -105,4 +105,4 @@ class TransactionAPI():
         result = []
         for tx in txs:
             result.append(tx)
-        return json.dumps(result)
+        return result
