@@ -525,5 +525,33 @@ def listBeaconBlock():
     }
 
 
+@app.route('/block/beacon/block', methods=['GET'])
+def getBeaconBlock():
+    """
+    Get beacon block
+    ---
+    tags:
+        - Beacon Block API
+    parameters:
+        - name: block_height
+          type: string
+          in: query
+          default: 0
+          required: false
+        - name: block_hash
+          type: string
+          in: query
+          default: 0
+          required: false
+    responses:
+        200:
+            description: Get beacon block
+    """
+    blockAPI = BlockAPI(request.args)
+    return {
+        'result': blockAPI.getBeaconBlock()
+    }
+
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

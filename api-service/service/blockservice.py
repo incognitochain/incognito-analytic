@@ -29,8 +29,7 @@ class BlockService:
                         OFFSET """ + str(page * limit) + """
                         LIMIT """ + str(limit)
 
-        sql = """
-                        SELECT block_height, block_hash, created_time, CAST(data ->> 'BlockProducer' as TEXT) as block_producer FROM beacon_blocks as b ORDER BY b.block_height desc """ \
+        sql = """SELECT block_height, block_hash, created_time, CAST(data ->> 'BlockProducer' as TEXT) as block_producer FROM beacon_blocks as b ORDER BY b.block_height desc """ \
               + pagenator
 
         dataSet = db.execute(sql)
@@ -44,3 +43,12 @@ class BlockService:
             }
             result.append(item)
         return result
+
+    def getBeaconBlock(self, block_height=0, block_hash=""):
+        if block_height == 0 and block_hash == "":
+            return {}
+
+        sql = """SELECT data FROM beacon_blocks WHERE block_height=""" + str(block_height) + """ OR block_hash='""" + block_hash + """'"""
+        dataSet = db.execute(sql)
+        for r in dataSet:
+            return r[0]
