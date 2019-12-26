@@ -18,4 +18,4 @@ class TokenAPI():
         service = TokenService()
         tokenId = self.params['token_id']
         data = service.listTokenTxs(tokenId)
-        return json.dumps(data)
+        return data

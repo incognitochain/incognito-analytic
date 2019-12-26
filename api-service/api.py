@@ -264,6 +264,32 @@ def listContributeLiquidityTxs():
 # order_trend=
 @app.route('/transaction/withdraw-liquidity', methods=['GET'])
 def listWithdrawLiquidityTxs():
+    """
+    List withdraw liquidity tx
+    ---
+    tags:
+        - Transaction API
+    parameters:
+        - name: page
+          in: query
+          type: string
+          required: false
+          default: 0
+        - name: limit
+          in: query
+          type: string
+          required: false
+          default: 0
+        - name: order_trend
+          in: query
+          type: string
+          required: false
+          default: asc
+
+    responses:
+        200:
+            description: List withdraw liquidity tx
+    """
     txApi = TransactionAPI(request.args)
     return {'result': txApi.listWithdrawLiquidityTx()}
 
@@ -274,51 +300,163 @@ def listWithdrawLiquidityTxs():
 # order_trend=
 @app.route('/transaction/deposit-centralized-bridge-token', methods=['GET'])
 def listDepositCentralizedBridgeTokenTxs():
+    """
+    List deposit centralized bridge token tx
+    ---
+    tags:
+        - Transaction API
+    parameters:
+        - name: page
+          in: query
+          type: string
+          required: false
+          default: 0
+        - name: limit
+          in: query
+          type: string
+          required: false
+          default: 0
+        - name: order_trend
+          in: query
+          type: string
+          required: false
+          default: asc
+
+    responses:
+        200:
+            description: List deposit centralized bridge token tx
+    """
     txApi = TransactionAPI(request.args)
     return {'result': txApi.listDepositCentralizeBridgeTx()}
 
 
-# List deposit decentralized bridge token tx
-# page=
-# limit=
-# order_trend=
 @app.route('/transaction/deposit-decentralized-bridge-token', methods=['GET'])
 def listDepositDecentralizedBridgeTokenTxs():
+    """
+    List deposit decentralized bridge token tx
+    ---
+    tags:
+        - Transaction API
+    parameters:
+        - name: page
+          in: query
+          type: string
+          required: false
+          default: 0
+        - name: limit
+          in: query
+          type: string
+          required: false
+          default: 0
+        - name: order_trend
+          in: query
+          type: string
+          required: false
+          default: asc
+
+    responses:
+        200:
+            description: List deposit decentralized bridge token tx
+    """
     txApi = TransactionAPI(request.args)
     return {'result': txApi.listDepositDecentralizeBridgeTx()}
 
 
-# List withdraw centralized bridge token tx
-# page=
-# limit=
-# order_trend=
 @app.route('/transaction/withdraw-centralized-bridge-token', methods=['GET'])
 def listWithdrawCentralizedBridgeTokenTxs():
+    """
+    List withdraw centralized bridge token tx
+    ---
+    tags:
+        - Transaction API
+    parameters:
+        - name: page
+          in: query
+          type: string
+          required: false
+          default: 0
+        - name: limit
+          in: query
+          type: string
+          required: false
+          default: 0
+        - name: order_trend
+          in: query
+          type: string
+          required: false
+          default: asc
+
+    responses:
+        200:
+            description: List withdraw centralized bridge token tx
+    """
     txApi = TransactionAPI(request.args)
     return {'result': txApi.listWithdrawCentralizeBridgeTx()}
 
 
-# List withdraw decentralized bridge token tx
-# page=
-# limit=
-# order_trend=
 @app.route('/transaction/withdraw-decentralized-bridge-token', methods=['GET'])
 def listWithdrawDecentralizedBridgeTokenTxs():
+    """
+    List withdraw decentralized bridge token tx
+    ---
+    tags:
+        - Transaction API
+    parameters:
+        - name: page
+          in: query
+          type: string
+          required: false
+          default: 0
+        - name: limit
+          in: query
+          type: string
+          required: false
+          default: 0
+        - name: order_trend
+          in: query
+          type: string
+          required: false
+          default: asc
+
+    responses:
+        200:
+            description: List withdraw centralized bridge token tx
+    """
     txApi = TransactionAPI(request.args)
     return {'result': txApi.listWithdrawDecentralizeBridgeTx()}
 
 
-# List all token in network
 @app.route('/token/list', methods=['GET'])
 def getListTokens():
+    """
+    List all token in network
+    ---
+    tags:
+        - Token API
+    responses:
+        200:
+            description: List all token in network
+    """
     tokenAPI = TokenAPI(request.args)
     return {'result': tokenAPI.listTokens()}
 
 
-# List all tx hash of token
-# token_id=?
 @app.route('/token/txs', methods=['GET'])
 def getListTokenTxs():
+    """
+    List all tx hash of token
+    ---
+    tags:
+        - Token API
+    parameters:
+        - name: token_id
+          type: string
+          in: query
+          required: true
+    responses:
+        200:
+            description: List all tx hash of token
+    """
     tokenAPI = TokenAPI(request.args)
     return {'result': tokenAPI.listTokenTxs()}
 
