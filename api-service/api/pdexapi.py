@@ -198,3 +198,10 @@ class PdexApi():
             if not a:
                 return False
         return True
+
+    def leaderTraderByTradeTxs(self):
+        pdexService = PdexService()
+        hours = self.params.get('hours', 24)
+
+        data = pdexService.leaderTraderByTradeTxs(last_hours=int(hours))
+        return data

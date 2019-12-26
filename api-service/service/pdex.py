@@ -133,3 +133,25 @@ class PdexService:
         sql = """INSERT INTO pde_token_name (address, name, exchange_rate) VALUES(%s, %s, %s)"""
         db.execute(sql, (token['id'], token['address'], token['rate']))
         return True
+
+    def leaderTraderByTradeTxs(self, last_hours=24):
+        sql = """
+        select pt.trader_address_str, count(*) from pde_trades pt
+        join transactions t on t.tx_id = pt.requested_tx_id and t.created_time >= NOW() - INTERVAL '""" \
+              + str(last_hours) + """ HOURS'
+        group by pt.trader_address_str
+        order by count(*) desc
+        """
+
+        data = db.execute(sql)
+        result = {}
+        index = 1
+        for r in data:
+            item = {
+                'trader': r[0],
+                'txs': r[1],
+            }
+            result[index] = item
+            index += 1
+
+        return result

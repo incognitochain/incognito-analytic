@@ -175,6 +175,27 @@ def pdexLastVolume24Hours():
     return {'result': pdex.lastHoursVolume()}
 
 
+@app.route('/pdex/trader/leader-board/by-count-trade-tx', methods=['GET'])
+def leaderTraderByTradeTxs():
+    """
+    Leader board by number of trading tx
+    ---
+    parameters:
+        - name: hours
+          in: query
+          type: string
+          required: false
+          default: 24
+    tags:
+        - Pdex API
+    responses:
+        200:
+            description: Leader board by number of trading tx
+    """
+    pdex = PdexApi(request.args)
+    return {'result': pdex.leaderTraderByTradeTxs()}
+
+
 # Transaction API
 @app.route('/transaction', methods=['GET'])
 def transactionApi():
