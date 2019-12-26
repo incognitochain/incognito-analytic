@@ -25,7 +25,6 @@ def pdexApi():
     return {'result': pdex.get()}
 
 
-# DEX info
 @app.route('/info', methods=['GET'])
 def pdexInfo():
     """
@@ -56,7 +55,6 @@ def pdexInfo():
     return result
 
 
-# DEX market info
 @app.route("/market")
 def pdexMarket():
     """
@@ -72,7 +70,6 @@ def pdexMarket():
     return pdex.getMarketInfo()
 
 
-# Get active trading pair
 @app.route('/pdex/pairs', methods=['GET'])
 def pdexGetTradingPair():
     """
@@ -88,7 +85,6 @@ def pdexGetTradingPair():
     return {'result': pdex.getTradingPair()}
 
 
-# Get active trading token
 @app.route('/pdex/tokens', methods=['GET'])
 def pdexGetTradingToken():
     """
@@ -104,7 +100,6 @@ def pdexGetTradingToken():
     return {'result': pdex.getTokens()}
 
 
-# Count trading txs
 @app.route('/pdex/count-trading-tx', methods=['GET'])
 def pdexCountTradingTxs():
     """
@@ -120,9 +115,6 @@ def pdexCountTradingTxs():
     return {'result': pdex.countTradingTxs()}
 
 
-# Last trading tx
-# tokenSell=?
-# tokenBuy=?
 @app.route('/pdex/last-trading-tx', methods=['GET'])
 def pdexGetLastTradingTx():
     """
@@ -147,10 +139,6 @@ def pdexGetLastTradingTx():
     return {'result': pdex.getLastTradingTx()}
 
 
-# Last volume 24 hours
-# token1=?
-# token2=?
-# hours=24
 @app.route('/pdex/last-volume', methods=['GET'])
 def pdexLastVolume24Hours():
     """
@@ -195,8 +183,26 @@ def transactionApi():
     return {'result': transactionAPI.get()}
 
 
-# Get AVG Fee for token or PRV
-# token_id=?
+@app.route('/transaction/detail', methods=['GET'])
+def getTxByHash():
+    """
+    Get tx by hash
+    ---
+    tags:
+        - Transaction API
+    parameters:
+        - name: hash
+          type: string
+          in: query
+          required: true
+    responses:
+        200:
+            description: Get tx by hash
+    """
+    transactionAPI = TransactionAPI(request.args)
+    return {'result': transactionAPI.getTxByHash()}
+
+
 @app.route('/transaction/avg-fee', methods=['GET'])
 def transactionGetAvgFee():
     """
@@ -218,11 +224,6 @@ def transactionGetAvgFee():
     return {'result': transactionAPI.getAvgFee()}
 
 
-# List contribute liquidity tx
-# page=
-# limit=
-# order_trend=
-# group=
 @app.route('/transaction/contribute-liquidity', methods=['GET'])
 def listContributeLiquidityTxs():
     """
@@ -260,10 +261,6 @@ def listContributeLiquidityTxs():
     return {'result': txApi.listContributeLiquidityTx()}
 
 
-# List withdraw liquidity tx
-# page=
-# limit=
-# order_trend=
 @app.route('/transaction/withdraw-liquidity', methods=['GET'])
 def listWithdrawLiquidityTxs():
     """
@@ -296,10 +293,6 @@ def listWithdrawLiquidityTxs():
     return {'result': txApi.listWithdrawLiquidityTx()}
 
 
-# List deposit centralized bridge token tx
-# page=
-# limit=
-# order_trend=
 @app.route('/transaction/deposit-centralized-bridge-token', methods=['GET'])
 def listDepositCentralizedBridgeTokenTxs():
     """
@@ -463,9 +456,7 @@ def getListTokenTxs():
     return {'result': tokenAPI.listTokenTxs()}
 
 
-#
 # Bock API
-#
 @app.route('/block/beacon/count', methods=['GET'])
 def countBeaconBlock():
     """

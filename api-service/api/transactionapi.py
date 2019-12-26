@@ -129,3 +129,9 @@ class TransactionAPI():
         for tx in txs:
             result.append(tx)
         return result
+
+    def getTxByHash(self):
+        service = TransactionService()
+        hash = self.params.get('hash', '')
+        data = service.getTxByHash(hash=hash)
+        return data

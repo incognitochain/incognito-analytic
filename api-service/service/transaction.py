@@ -61,3 +61,12 @@ class TransactionService:
             }
             txs.append(tx)
         return txs
+
+    def getTxByHash(self, hash=''):
+        if hash == '':
+            return {}
+
+        sql = """SELECT data from transactions WHERE tx_id='""" + hash + """' """
+        data = db.execute(sql)
+        for r in data:
+            return r[0]
