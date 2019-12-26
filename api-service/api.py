@@ -64,7 +64,7 @@ def pdexMarket():
             - Pdex API
         responses:
             200:
-                description: Get pDex info
+                description: Get pDex market
         """
     pdex = PdexApi(request.args)
     return pdex.getMarketInfo()
@@ -80,15 +80,24 @@ def pdexGetTradingPair():
         - Pdex API
     responses:
         200:
-            description: Get pDex info
+            description: Get active trading pair
     """
     pdex = PdexApi(request.args)
     return {'result': pdex.getTradingPair()}
 
 
 # Get active trading token
-@app.route('/pdex/tokens', methods=['GET'])a
+@app.route('/pdex/tokens', methods=['GET'])
 def pdexGetTradingToken():
+    """
+    Pdex Pairs Token
+    ---
+    tags:
+        - Pdex API
+    responses:
+        200:
+            description: Get active trading token
+    """
     pdex = PdexApi(request.args)
     return {'result': pdex.getTokens()}
 
@@ -96,6 +105,15 @@ def pdexGetTradingToken():
 # Count trading txs
 @app.route('/pdex/count-trading-tx', methods=['GET'])
 def pdexCountTradingTxs():
+    """
+    Pdex trading txs
+    ---
+    tags:
+        - Pdex API
+    responses:
+        200:
+            description: Count trading txs
+    """
     pdex = PdexApi(request.args)
     return {'result': pdex.countTradingTxs()}
 
@@ -105,6 +123,24 @@ def pdexCountTradingTxs():
 # tokenBuy=?
 @app.route('/pdex/last-trading-tx', methods=['GET'])
 def pdexGetLastTradingTx():
+    """
+    Pdex last trading tx
+    ---
+    tags:
+        - Pdex API
+    parameters:
+      - name: tokenSell
+        in: query
+        type: string
+        required: true
+      - name: tokenBuy
+        in: query
+        type: string
+        required: true
+    responses:
+        200:
+            description: Last trading tx
+    """
     pdex = PdexApi(request.args)
     return {'result': pdex.getLastTradingTx()}
 
@@ -115,6 +151,28 @@ def pdexGetLastTradingTx():
 # hours=24
 @app.route('/pdex/last-volume', methods=['GET'])
 def pdexLastVolume24Hours():
+    """
+    Pdex last trading tx
+    ---
+    tags:
+        - Pdex API
+    parameters:
+      - name: token1
+        in: query
+        type: string
+        required: true
+      - name: token2
+        in: query
+        type: string
+        required: true
+      - name: hours
+        in: query
+        type: string
+        required: true
+    responses:
+        200:
+            description: Last trading tx
+    """
     pdex = PdexApi(request.args)
     return {'result': pdex.lastHoursVolume()}
 
@@ -122,6 +180,15 @@ def pdexLastVolume24Hours():
 # Transaction API
 @app.route('/transaction', methods=['GET'])
 def transactionApi():
+    """
+    Transaction API
+    ---
+    tags:
+        - Transaction API
+    responses:
+        200:
+            description: Transaction API
+    """
     transactionAPI = TransactionAPI(request.args)
     return {'result': transactionAPI.get()}
 
@@ -130,6 +197,21 @@ def transactionApi():
 # token_id=?
 @app.route('/transaction/avg-fee', methods=['GET'])
 def transactionGetAvgFee():
+    """
+    Get AVG Fee for token or PRV
+    ---
+    tags:
+        - Transaction API
+    parameters:
+        - name: token_id
+          in: query
+          type: string
+          required: false
+
+    responses:
+        200:
+            description: Get AVG Fee for Token or PRV
+    """
     transactionAPI = TransactionAPI(request.args)
     return {'result': transactionAPI.getAvgFee()}
 
@@ -141,6 +223,37 @@ def transactionGetAvgFee():
 # group=
 @app.route('/transaction/contribute-liquidity', methods=['GET'])
 def listContributeLiquidityTxs():
+    """
+    List contribute liquidity tx
+    ---
+    tags:
+        - Transaction API
+    parameters:
+        - name: page
+          in: query
+          type: string
+          required: false
+          default: 0
+        - name: limit
+          in: query
+          type: string
+          required: false
+          default: 0
+        - name: order_trend
+          in: query
+          type: string
+          required: false
+          default: asc
+        - name: group
+          in: query
+          type: string
+          required: false
+          default: 0
+
+    responses:
+        200:
+            description: List contribute liquidity tx
+    """
     txApi = TransactionAPI(request.args)
     return {'result': txApi.listContributeLiquidityTx()}
 
