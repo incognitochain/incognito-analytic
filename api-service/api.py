@@ -79,13 +79,13 @@ def pdexGetTradingPair():
         - Pdex API
     responses:
         200:
-            description: Get active trading pair
+            description: Get active trading pair. Update list pairs
     """
     pdex = PdexApi(request.args)
     return {'result': pdex.getTradingPair()}
 
 
-@app.route('/pdex/tokens', methods=['GET'])
+@app.route('/pdex/tokens', methods=['GET', 'PUT'])
 def pdexGetTradingToken():
     """
     Pdex Pairs Token
@@ -97,7 +97,10 @@ def pdexGetTradingToken():
             description: Get active trading token
     """
     pdex = PdexApi(request.args)
-    return {'result': pdex.getTokens()}
+    if request.method == 'GET':
+        return {'result': pdex.getTokens()}
+    elif request.method == 'PUT':
+        return {'result': pdex.updateListTokens()}
 
 
 @app.route('/pdex/count-trading-tx', methods=['GET'])

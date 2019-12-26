@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 import json
+
+import requests
+
 from flask_restful import fields, marshal
 
 from service.pdex import PdexService
@@ -126,3 +129,43 @@ class PdexApi():
                     result[buyToken] = 0
                 result[buyToken] += buyAmount
             return result
+
+    def updateListTokens(self):
+        pdexService = PdexService()
+        # get missing pdex token1
+        token1 = pdexService.getMissingPdexToken1()
+        # get missing pdex token 2
+        token2 = pdexService.getMissingPdexToken2()
+
+        missTokens = {}
+        for t in token1:
+            missTokens[t] = {}
+        for t in token2:
+            missTokens[t] = {}
+
+        if len(missTokens.keys()) == 0:
+            return True
+
+        pTokens = requests.get('https://api.incognito.org/ptoken/list')
+        if pTokens.status_code != 200:
+            return False
+        pTokens = pTokens.json().get('Result')
+
+        temps = {}
+        for t in pTokens:
+            temps[t['TokenID']] = {
+                'address': t['Name'],
+                'rate': '1e' + str(t['Decimals']),
+                'id': t['TokenID'],
+            }
+
+        for t in missTokens.keys():
+            if t in temps.keys():
+                missTokens[t] = temps[t]
+            else:
+                missTokens.pop(t, None)
+        for t in missTokens:
+            a = pdexService.insertPdexToken(token=missTokens[t])
+            if not a:
+                return False
+        return True

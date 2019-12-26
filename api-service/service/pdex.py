@@ -95,3 +95,41 @@ class PdexService:
             }
             result.append(item)
         return result
+
+    def getMissingPdexToken1(self):
+        sql = """
+            SELECT DISTINCT(token1_id_str) FROM pde_pool_pairs pp 
+            WHERE 
+            token1_id_str NOT IN (
+                SELECT address FROM pde_token_name
+            )
+        """
+
+        data = db.execute(sql)
+        result = []
+        for r in data:
+            result.append(r[0])
+        return result
+
+    def getMissingPdexToken2(self):
+        sql = """
+            SELECT DISTINCT(token2_id_str) FROM pde_pool_pairs pp 
+            WHERE 
+            token2_id_str NOT IN (
+                SELECT address FROM pde_token_name
+            )
+        """
+
+        data = db.execute(sql)
+        result = []
+        for r in data:
+            result.append(r[0])
+        return result
+
+    def insertPdexToken(self, token=None):
+        if token == None:
+            return False
+
+        sql = """INSERT INTO pde_token_name (address, name, exchange_rate) VALUES(%s, %s, %s)"""
+        db.execute(sql, (token['id'], token['address'], token['rate']))
+        return True
