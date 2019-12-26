@@ -31,19 +31,19 @@ class BlockAPI():
     def countShardBlock(self):
         blockService = BlockService()
         shardID = self.params.get('shard_id', 0)
-        return blockService.countShardBlock(shard_id=shardID)
+        return blockService.countShardBlock(shard_id=int(shardID))
 
     def lastShardBlock(self):
         blockService = BlockService()
         shardID = self.params.get('shard_id', 0)
-        return blockService.lastShardBlock(shard_id=shardID)
+        return blockService.lastShardBlock(shard_id=int(shardID))
 
     def listShardBlock(self):
         blockService = BlockService()
         shardID = self.params.get('shard_id', 0)
         page = self.params.get('page', 0)
         limit = self.params.get('limit', 0)
-        return blockService.listShardBlock(shard_id=shardID, page=int(page), limit=int(limit))
+        return blockService.listShardBlock(shard_id=int(shardID), page=int(page), limit=int(limit))
 
     def getShardBlock(self):
         blockService = BlockService()
