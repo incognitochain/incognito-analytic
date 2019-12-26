@@ -139,4 +139,8 @@ class TransactionAPI():
     def countTx(self):
         service = TransactionService()
         data = service.countTx()
+        total = 0
+        for key in data.keys():
+            total += int(data.get(key).get('count'))
+        data['total'] = total
         return data
