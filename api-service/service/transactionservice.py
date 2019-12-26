@@ -70,3 +70,15 @@ class TransactionService:
         data = db.execute(sql)
         for r in data:
             return r[0]
+
+    def countTx(self):
+        sql = """SELECT shard_id, max(block_height), count(tx_id), max(created_time) from transactions group by shard_id order by shard_id"""
+        data = db.execute(sql)
+        result = {}
+        for r in data:
+            result[r[0]] = {
+                'last_block_height': r[1],
+                'count': r[2],
+                'last_created_time': r[3]
+            }
+        return result

@@ -135,3 +135,8 @@ class TransactionAPI():
         hash = self.params.get('hash', '')
         data = service.getTxByHash(hash=hash)
         return data
+
+    def countTx(self):
+        service = TransactionService()
+        data = service.countTx()
+        return data

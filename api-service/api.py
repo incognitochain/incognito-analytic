@@ -183,6 +183,21 @@ def transactionApi():
     return {'result': transactionAPI.get()}
 
 
+@app.route('/transaction/count', methods=['GET'])
+def countTotaTx():
+    """
+    Count total tx
+    ---
+    tags:
+        - Transaction API
+    responses:
+        200:
+            description: Count total tx
+    """
+    transactionAPI = TransactionAPI(request.args)
+    return {'result': transactionAPI.countTx()}
+
+
 @app.route('/transaction/detail', methods=['GET'])
 def getTxByHash():
     """
