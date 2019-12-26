@@ -1,7 +1,7 @@
 import json
 from flask_restful import Resource
 
-from service.transaction import TransactionService
+from service.transactionservice import TransactionService
 
 
 class TransactionAPI():
