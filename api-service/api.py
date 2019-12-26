@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import Flask
+
+from api.blockapi import BlockAPI
 from api.pdexapi import PdexApi
 from api.tokenapi import TokenAPI
 from api.transactionapi import TransactionAPI
@@ -459,6 +461,40 @@ def getListTokenTxs():
     """
     tokenAPI = TokenAPI(request.args)
     return {'result': tokenAPI.listTokenTxs()}
+
+
+@app.route('/block/beacon/count', methods=['GET'])
+def countBeaconBlock():
+    """
+    Count beacon block
+    ---
+    tags:
+        - Beacon Block API
+    responses:
+        200:
+            description: Count beacon block
+    """
+    blockAPI = BlockAPI(request.args)
+    return {
+        'result': blockAPI.countBeaconBlock()
+    }
+
+
+@app.route('/block/beacon/last-block', methods=['GET'])
+def lastBeaconBlock():
+    """
+    Last beacon block
+    ---
+    tags:
+        - Beacon Block API
+    responses:
+        200:
+            description: Last beacon block
+    """
+    blockAPI = BlockAPI(request.args)
+    return {
+        'result': blockAPI.lastBeaconBlock()
+    }
 
 
 if __name__ == '__main__':
