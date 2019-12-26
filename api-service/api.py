@@ -162,6 +162,11 @@ def pdexLastVolume24Hours():
         in: query
         type: string
         required: true
+      - name: direction
+        in: query
+        type: string
+        required: false
+        default: false
     responses:
         200:
             description: Last trading tx

@@ -95,6 +95,8 @@ class PdexApi():
         token2 = self.params.get('token2', '')
         # default 24 hours
         hours = self.params.get('hours', 24)
+        direction = self.params.get('direction', 'false')
+        direction = direction.lower() in ['true', '1', 't', 'y', 'yes', 'yeah', 'yup', 'certainly', 'uh-huh']
 
         if token1 == '' and token2 == '':
             return {}
@@ -108,26 +110,53 @@ class PdexApi():
 
             result = {}
             tokens = tokenService.listTokens()
-            for tx in data:
-                metadata = tx['metadata']
-                if metadata['TokenIDToSellStr'] == '0000000000000000000000000000000000000000000000000000000000000004':
-                    sellToken = 'PRV'
-                else:
-                    sellToken = tokens[metadata['TokenIDToSellStr']]['name']
-                sellAmount = metadata['SellAmount']
-                if metadata['TokenIDToBuyStr'] == '0000000000000000000000000000000000000000000000000000000000000004':
-                    buyToken = 'PRV'
-                else:
-                    buyToken = tokens[metadata['TokenIDToBuyStr']]['name']
-                buyAmount = tx['receive_amount']
+            if not direction:
+                for tx in data:
+                    metadata = tx['metadata']
+                    if metadata[
+                        'TokenIDToSellStr'] == '0000000000000000000000000000000000000000000000000000000000000004':
+                        sellToken = 'PRV'
+                    else:
+                        sellToken = tokens[metadata['TokenIDToSellStr']]['name']
+                    if metadata[
+                        'TokenIDToBuyStr'] == '0000000000000000000000000000000000000000000000000000000000000004':
+                        buyToken = 'PRV'
+                    else:
+                        buyToken = tokens[metadata['TokenIDToBuyStr']]['name']
+                    sellAmount = metadata['SellAmount']
+                    buyAmount = tx['receive_amount']
 
-                if sellToken not in result:
-                    result[sellToken] = 0
-                result[sellToken] += sellAmount
+                    if sellToken not in result:
+                        result[sellToken] = 0
+                    result[sellToken] += sellAmount
 
-                if buyToken not in result:
-                    result[buyToken] = 0
-                result[buyToken] += buyAmount
+                    if buyToken not in result:
+                        result[buyToken] = 0
+                    result[buyToken] += buyAmount
+            else:
+                for tx in data:
+                    metadata = tx['metadata']
+                    if metadata[
+                        'TokenIDToSellStr'] == '0000000000000000000000000000000000000000000000000000000000000004':
+                        sellToken = 'PRV'
+                    else:
+                        sellToken = tokens[metadata['TokenIDToSellStr']]['name']
+                    if metadata[
+                        'TokenIDToBuyStr'] == '0000000000000000000000000000000000000000000000000000000000000004':
+                        buyToken = 'PRV'
+                    else:
+                        buyToken = tokens[metadata['TokenIDToBuyStr']]['name']
+                    sellAmount = metadata['SellAmount']
+                    buyAmount = tx['receive_amount']
+
+                    if sellToken not in result:
+                        result[sellToken] = {'sell': 0, 'buy': 0}
+                    if buyToken not in result:
+                        result[buyToken] = {'sell': 0, 'buy': 0}
+
+                    result[sellToken]['sell'] += sellAmount
+                    result[buyToken]['buy'] += buyAmount
+
             return result
 
     def updateListTokens(self):
