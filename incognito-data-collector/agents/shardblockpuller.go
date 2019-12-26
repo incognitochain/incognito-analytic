@@ -80,6 +80,15 @@ func (puller *ShardBlockPuller) Execute() {
 			break
 		}
 
+		blockHeight, err := puller.ShardBlockStore.GetLatestProcessedShardHeight(puller.ShardID)
+		if blockHeight == shardBlockRes.Height {
+			continue
+		}
+
+		if shardBlockRes.NextBlockHash == "" {
+			continue
+		}
+
 		shardBlockModel := models.ShardBlock{
 			BlockHash:         shardBlockRes.Hash,
 			BlockHeight:       shardBlockRes.Height,
