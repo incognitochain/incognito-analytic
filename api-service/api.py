@@ -463,6 +463,9 @@ def getListTokenTxs():
     return {'result': tokenAPI.listTokenTxs()}
 
 
+#
+# Bock API
+#
 @app.route('/block/beacon/count', methods=['GET'])
 def countBeaconBlock():
     """
@@ -550,6 +553,107 @@ def getBeaconBlock():
     blockAPI = BlockAPI(request.args)
     return {
         'result': blockAPI.getBeaconBlock()
+    }
+
+
+@app.route('/block/shard/count', methods=['GET'])
+def countShardBlock():
+    """
+    Count shard block
+    ---
+    tags:
+        - Shard Block API
+    parameters:
+        - name: shard_id
+          type: string
+          in: query
+          default: 0
+          required: true
+    responses:
+        200:
+            description: Count shard block
+    """
+    blockAPI = BlockAPI(request.args)
+    return {
+        'result': blockAPI.countShardBlock()
+    }
+
+
+@app.route('/block/shard/last-block', methods=['GET'])
+def lastShardBlock():
+    """
+    Last shard block
+    ---
+    tags:
+        - Shard Block API
+    responses:
+        200:
+            description: Last shard block
+    """
+    blockAPI = BlockAPI(request.args)
+    return {
+        'result': blockAPI.lastShardBlock()
+    }
+
+
+@app.route('/block/shard/list', methods=['GET'])
+def listShardBlock():
+    """
+    List shard block
+    ---
+    tags:
+        - Shard Block API
+    parameters:
+        - name: shard_id
+          type: string
+          in: query
+          default: 0
+          required: true
+        - name: page
+          type: string
+          in: query
+          default: 0
+          required: true
+        - name: limit
+          type: string
+          in: query
+          default: 0
+          required: true
+    responses:
+        200:
+            description: List shard block
+    """
+    blockAPI = BlockAPI(request.args)
+    return {
+        'result': blockAPI.listShardBlock()
+    }
+
+
+@app.route('/block/shard/block', methods=['GET'])
+def getShardBlock():
+    """
+    Get shard block
+    ---
+    tags:
+        - Shard Block API
+    parameters:
+        - name: block_height
+          type: string
+          in: query
+          default: 0
+          required: false
+        - name: block_hash
+          type: string
+          in: query
+          default: 0
+          required: false
+    responses:
+        200:
+            description: Get shard block
+    """
+    blockAPI = BlockAPI(request.args)
+    return {
+        'result': blockAPI.getShardBlock()
     }
 
 
