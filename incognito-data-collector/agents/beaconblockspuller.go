@@ -80,8 +80,8 @@ func (puller *BeaconBlockPuller) Execute() {
 			continue
 		}
 
-		bcHeight, _ = puller.BeaconBlockStore.GetLatestProcessedBCHeight()
-		if bcHeight == beaconBlockRes.Height {
+		bcHeightTemp, _ := puller.BeaconBlockStore.GetLatestProcessedBCHeight()
+		if bcHeightTemp == beaconBlockRes.Height {
 			continue
 		}
 

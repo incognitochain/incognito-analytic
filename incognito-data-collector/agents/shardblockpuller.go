@@ -80,8 +80,8 @@ func (puller *ShardBlockPuller) Execute() {
 			break
 		}
 
-		blockHeight, err := puller.ShardBlockStore.GetLatestProcessedShardHeight(puller.ShardID)
-		if blockHeight == shardBlockRes.Height {
+		blockHeightTemp, _ := puller.ShardBlockStore.GetLatestProcessedShardHeight(puller.ShardID)
+		if blockHeightTemp == shardBlockRes.Height {
 			continue
 		}
 
