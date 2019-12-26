@@ -14,10 +14,10 @@ Swagger(app)
 @app.route('/pdex', methods=['GET'])
 def pdexApi():
     """
-    Pdex API
+    Pdex Default
     ---
     tags:
-      - Awesomeness Language API
+      - Pdex API
     """
     pdex = PdexApi(request.args)
     return {'result': pdex.get()}
@@ -29,6 +29,8 @@ def pdexInfo():
     """
     Pdex Info
     ---
+    tags:
+      - Pdex API
     responses:
         200:
             description: Get pDex info
@@ -58,6 +60,8 @@ def pdexMarket():
     """
         Pdex Market
         ---
+        tags:
+            - Pdex API
         responses:
             200:
                 description: Get pDex info
@@ -72,6 +76,8 @@ def pdexGetTradingPair():
     """
     Pdex Pairs
     ---
+    tags:
+        - Pdex API
     responses:
         200:
             description: Get pDex info
@@ -81,7 +87,7 @@ def pdexGetTradingPair():
 
 
 # Get active trading token
-@app.route('/pdex/tokens', methods=['GET'])
+@app.route('/pdex/tokens', methods=['GET'])a
 def pdexGetTradingToken():
     pdex = PdexApi(request.args)
     return {'result': pdex.getTokens()}
