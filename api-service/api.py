@@ -497,5 +497,33 @@ def lastBeaconBlock():
     }
 
 
+@app.route('/block/beacon/list', methods=['GET'])
+def listBeaconBlock():
+    """
+    List beacon block
+    ---
+    tags:
+        - Beacon Block API
+    parameters:
+        - name: page
+          type: string
+          in: query
+          default: 0
+          required: true
+        - name: limit
+          type: string
+          in: query
+          default: 0
+          required: true
+    responses:
+        200:
+            description: List beacon block
+    """
+    blockAPI = BlockAPI(request.args)
+    return {
+        'result': blockAPI.listBeaconBlock()
+    }
+
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

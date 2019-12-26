@@ -8,7 +8,7 @@ db = create_engine(SQLALCHEMY_DATABASE_URI)
 class BlockService:
     def countBeaconBlock(self):
         sql = """
-            SELECT COUNT(block_height) FROM beacon_blocks
+            SELECT COUNT(distinct(block_height)) FROM beacon_blocks
         """
         resultSet = db.execute(sql)
         for r in resultSet:
@@ -21,3 +21,26 @@ class BlockService:
         resultSet = db.execute(sql)
         for r in resultSet:
             return r[0]
+
+    def listBeaconBlock(self, page=0, limit=0):
+        pagenator = """"""
+        if limit > 0:
+            pagenator = """
+                        OFFSET """ + str(page * limit) + """
+                        LIMIT """ + str(limit)
+
+        sql = """
+                        SELECT block_height, block_hash, created_time, CAST(data ->> 'BlockProducer' as TEXT) as block_producer FROM beacon_blocks as b ORDER BY b.block_height desc """ \
+              + pagenator
+
+        dataSet = db.execute(sql)
+        result = []
+        for r in dataSet:
+            item = {
+                'block_height': r[0],
+                'block_hash': r[1],
+                'created_time': r[2],
+                'block_producer': r[3],
+            }
+            result.append(item)
+        return result
