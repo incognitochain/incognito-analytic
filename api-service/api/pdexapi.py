@@ -258,7 +258,9 @@ class PdexApi():
             for k, v in result.items():
                 item = v
                 keys = v.keys()
-                item['volume'] = item[keys[0]] * item[keys()[1]]
+                tokenVol1 = item[keys[0]]
+                tokenVol2 = item[keys[1]]
+                item['volume'] = tokenVol1 * tokenVol2
                 item['trader'] = k
                 temp.append(item)
 
