@@ -2,9 +2,6 @@
 import json
 
 import requests
-from ansible.vars import reserved
-
-from flask_restful import fields, marshal
 from operator import itemgetter
 from service.pdex import PdexService
 from service.token import TokenService
