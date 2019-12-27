@@ -4,3 +4,4 @@ flask-restful
 sqlalchemy
 psycopg2
 flasgger
+requests
