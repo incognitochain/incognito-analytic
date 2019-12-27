@@ -2,9 +2,10 @@
 import json
 
 import requests
+from ansible.vars import reserved
 
 from flask_restful import fields, marshal
-
+from operator import itemgetter
 from service.pdex import PdexService
 from service.token import TokenService
 
@@ -205,3 +206,67 @@ class PdexApi():
 
         data = pdexService.leaderTraderByTradeTxs(last_hours=int(hours))
         return data
+
+    def leaderTraderByVolume(self):
+        token1 = self.params.get('token1', '')
+        token2 = self.params.get('token2', '')
+        # default 24 hours
+        hours = self.params.get('hours', 24)
+
+        if token1 == '' and token2 == '':
+            return {}
+        else:
+            service = PdexService()
+            tokenService = TokenService()
+
+            data = service.lastTradingTxInHours(token1, token2, hours)
+            if len(data) == 0:
+                return {}
+
+            result = {}
+            tokens = tokenService.listTokens()
+
+            for tx in data:
+                if tx.get('trader_address_str') not in result:
+                    result[tx.get('trader_address_str')] = {
+                        # 'txs': 0
+                    }
+
+                # result[tx.get('trader_address_str')]['txs'] += 1
+
+                metadata = tx['metadata']
+                if metadata['TokenIDToSellStr'] == '0000000000000000000000000000000000000000000000000000000000000004':
+                    sellToken = 'PRV-' + metadata['TokenIDToSellStr']
+                else:
+                    sellToken = tokens[metadata['TokenIDToSellStr']]['name'] + '-' + metadata['TokenIDToSellStr']
+                if metadata['TokenIDToBuyStr'] == '0000000000000000000000000000000000000000000000000000000000000004':
+                    buyToken = 'PRV-' + metadata['TokenIDToBuyStr']
+                else:
+                    buyToken = tokens[metadata['TokenIDToBuyStr']]['name'] + '-' + metadata['TokenIDToBuyStr']
+                sellAmount = metadata['SellAmount']
+                buyAmount = tx['receive_amount']
+
+                if sellToken not in result[tx.get('trader_address_str')]:
+                    result[tx.get('trader_address_str')][sellToken] = 0
+                result[tx.get('trader_address_str')][sellToken] += sellAmount
+
+                if buyToken not in result[tx.get('trader_address_str')]:
+                    result[tx.get('trader_address_str')][buyToken] = 0
+                result[tx.get('trader_address_str')][buyToken] += buyAmount
+
+            temp = []
+            for k, v in result.items():
+                item = v
+                keys = v.keys()
+                item['volume'] = item[keys[0]] * item[keys()[1]]
+                item['trader'] = k
+                temp.append(item)
+
+            temp = sorted(temp, key=itemgetter('volume'), reverse=True)
+
+            index = 1
+            for r in temp:
+                result[index] = r
+                index += 1
+
+            return result
