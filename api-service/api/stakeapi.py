@@ -1,6 +1,8 @@
 import requests
 
 from service.blockservice import BlockService
+from service.pdex import PdexService
+from service.token import TokenService
 from service.transactionservice import TransactionService
 
 
@@ -27,3 +29,29 @@ class StakeAPI():
         for v in stakingTxs:
             total += v.get('metadata').get('StakingAmountShard')
         return total
+
+    def prvFee(self):
+        txService = TransactionService()
+        return txService.sumPRVFee()
+
+    def tokenFee(self):
+        txService = TransactionService()
+
+        tokenID = self.params.get('token_id', '')
+
+        tokenServie = TokenService()
+        tokens = tokenServie.listTokens()
+
+        tokenName = tokens.get(tokenID).get('name')
+
+        pdexService = PdexService()
+        pdexTokens = pdexService.getTokens()
+
+        data = txService.sumTokenFee(tokenID=tokenID)
+        result = {
+            'name': tokenName,
+            'fee': data[tokenID],
+            'id': tokenID,
+            'rate': pdexTokens.get(tokenID).get('exchange_rate'),
+        }
+        return result

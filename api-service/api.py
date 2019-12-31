@@ -757,5 +757,45 @@ def stakedToken():
     }
 
 
+@app.route('/stake/total-prv-fee', methods=['GET'])
+def totalPRVFee():
+    """
+    Get total PRV fee
+    ---
+    tags:
+        - Stake API
+    responses:
+        200:
+            description: Get total PRV fee
+    """
+    stakeAPI = StakeAPI(request.args)
+    return {
+        'result': stakeAPI.prvFee(),
+    }
+
+
+@app.route('/stake/total-token-fee', methods=['GET'])
+def totalTokenFee():
+    """
+    Get total PRV fee
+    ---
+    parameters:
+        - name: token_id
+          type: string
+          in: query
+          required: true
+          default: 'ffd8d42dc40a8d166ea4848baf8b5f6e912ad79875f4373070b59392b1756c8f'
+    tags:
+        - Stake API
+    responses:
+        200:
+            description: Get total PRV fee
+    """
+    stakeAPI = StakeAPI(request.args)
+    return {
+        'result': stakeAPI.tokenFee(),
+    }
+
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

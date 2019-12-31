@@ -96,3 +96,26 @@ class TransactionService:
                 'created_time': r[7],
             })
         return result
+
+    def sumPRVFee(self):
+        sql = """
+            select sum(prv_fee) from transactions where prv_fee > 0 and prv_fee is not null
+        """
+        data = db.execute(sql)
+        for r in data:
+            return r[0]
+
+    def sumTokenFee(self, tokenID=''):
+        if tokenID == '':
+            return {}
+        sql = """
+            select cast(transacted_privacy_coin->>'PropertyID' as text) as token_id, transacted_privacy_coin, transacted_privacy_coin_fee  from transactions where transacted_privacy_coin_fee > 0 and transacted_privacy_coin_fee is not null and cast(transacted_privacy_coin->>'PropertyID' as text) = '""" + tokenID + """'
+        """
+
+        data = db.execute(sql)
+        result = {}
+        for r in data:
+            if r[0] not in result.keys():
+                result[r[0]] = 0
+            result[r[0]] += r[2]
+        return result
