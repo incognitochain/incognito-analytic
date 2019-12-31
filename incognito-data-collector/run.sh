@@ -19,4 +19,4 @@ if [ -z "$postgresport" ]; then
 fi
 
 echo "run ./incognito-data-collector"
-./incognito-data-collector postgreshost=$postgreshost postgresport=$postgresport postgresuser=$postgresuser postgrespwd=$postgrespwd  > /data/log.txt 2>/data/error_log.txt
+postgreshost=$postgreshost postgresport=$postgresport postgresuser=$postgresuser postgrespwd=$postgrespwd ./incognito-data-collector  > /data/log.txt 2>/data/error_log.txt
