@@ -21,4 +21,8 @@ if [ -z "$postgresport" ]; then
     postgresport="5432";
 fi
 
+if [ -z "$postgresdb" ]; then
+    postgresdb="pdex";
+fi
+
 docker run --restart=always -p 8080:5000 -d -v $PWD/data:/data -e postgreshost=$postgreshost -e postgresport=$postgresport -e postgresuser=$postgresuser -e postgrespwd=$postgrespwd -e postgresdb=$postgresdb --name incognito-analytic-api-service incognitochain/incognito-analytic:incognito-analytic-api-service

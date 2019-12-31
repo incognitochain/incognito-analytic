@@ -21,5 +21,9 @@ if [ -z "$postgresport" ]; then
     postgresport="5432";
 fi
 
+if [ -z "$postgresdb" ]; then
+    postgresdb="pdex";
+fi
+
 echo "python api.py > /data/log_api_service.txt 2>/data/error_log_api_service.txt"
-postgreshost=$postgreshost postgresport=$postgresport postgresuser=$postgresuser postgrespwd=$postgrespwd python api.py > /data/log_api_service.txt 2>/data/error_log_api_service.txt
+postgreshost=$postgreshost postgresport=$postgresport postgresuser=$postgresuser postgrespwd=$postgrespwd postgresdb=$postgresdb python api.py > /data/log_api_service.txt 2>/data/error_log_api_service.txt
