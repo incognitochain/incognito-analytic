@@ -22,4 +22,8 @@ if [ -z "$postgresport" ]; then
     postgresport="5432";
 fi
 
-docker run --restart=always --net host -d -v $PWD/data:/data  -e postgrespwd=$postgrespwd --name incognito-data-collector incognitochain/incognito-analytic:incognito-data-collector
+if [ -z "$postgresdb" ]; then
+    postgresdb="pdex";
+fi
+
+docker run --restart=always --net host -d -v $PWD/data:/data -e postgreshost=$postgreshost -e postgresport=$postgresport -e postgresuser=$postgresuser -e postgrespwd=$postgrespwd -e postgresdb=$postgresdb --name incognito-data-collector incognitochain/incognito-analytic:incognito-data-collector
