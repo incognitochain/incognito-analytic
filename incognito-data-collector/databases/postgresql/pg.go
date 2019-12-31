@@ -49,7 +49,7 @@ func getPGConnection() (*sqlx.DB, error) {
 	if dbNameP == "" {
 		dbNameP = dbName
 	}
-	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", userNameP, passwordP, hostP, portP, dbNameP)
+	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", userNameP, passwordP, hostP, portP, dbNameP)
 	pgConn, err := sqlx.Open("postgres", connStr)
 	if err != nil {
 		fmt.Println("An error occured while openning connection to pg")
