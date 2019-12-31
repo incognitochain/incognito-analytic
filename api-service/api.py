@@ -740,5 +740,22 @@ def mindedToken():
     }
 
 
+@app.route('/stake/staked-token', methods=['GET'])
+def stakedToken():
+    """
+    Get total staked PRV token
+    ---
+    tags:
+        - Stake API
+    responses:
+        200:
+            description: Get total staked PRV token
+    """
+    stakeAPI = StakeAPI(request.args)
+    return {
+        'result': stakeAPI.getTotalStakedTokens(),
+    }
+
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

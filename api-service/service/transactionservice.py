@@ -82,3 +82,17 @@ class TransactionService:
                 'last_created_time': r[3]
             }
         return result
+
+    def listStakingTxs(self):
+        sql = """
+            SELECT tx_id, tx_version, shard_id, tx_type, prv_fee, proof_detail, metadata, created_time FROM transactions WHERE CAST(metadata->>'Type' as INT) = 63
+        """
+        data = db.execute(sql)
+        result = []
+        for r in data:
+            result.append({
+                'tx_id': r[0],
+                'metadata': r[6],
+                'created_time': r[7],
+            })
+        return result
