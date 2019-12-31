@@ -3,6 +3,7 @@ from flask import Flask
 
 from api.blockapi import BlockAPI
 from api.pdexapi import PdexApi
+from api.stakeapi import StakeAPI
 from api.tokenapi import TokenAPI
 from api.transactionapi import TransactionAPI
 from flask import request
@@ -718,6 +719,24 @@ def getShardBlock():
     blockAPI = BlockAPI(request.args)
     return {
         'result': blockAPI.getShardBlock()
+    }
+
+
+# Stake
+@app.route('/stake/minded-token', methods=['GET'])
+def mindedToken():
+    """
+    Get mined PRV token
+    ---
+    tags:
+        - Stake API
+    responses:
+        200:
+            description: Get mined PRV token
+    """
+    stakeAPI = StakeAPI(request.args)
+    return {
+        'result': stakeAPI.getMinedPRVToken(),
     }
 
 
