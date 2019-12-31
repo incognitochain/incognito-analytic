@@ -65,7 +65,7 @@ func (puller *BeaconBlockPuller) Execute() {
 
 	for {
 		fmt.Printf("[Beacon block puller] Proccessing for beacon height: %d\n", bcHeight)
-		time.Sleep(time.Duration(200) * time.Millisecond)
+		time.Sleep(120 * time.Second)
 		beaconBlockRes, err := puller.getBeaconBlock(bcHeight)
 		if err != nil {
 			fmt.Println("[Beacon block puller] An error occured while getting pde state from chain: ", err)

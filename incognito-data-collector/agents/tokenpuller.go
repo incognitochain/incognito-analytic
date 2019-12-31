@@ -131,6 +131,6 @@ func (puller *TokenPuller) Execute() {
 				fmt.Printf("[Token puller] Update token success %s %s\n", token.ID, token.Name)
 			}
 		}
-		time.Sleep(30 * time.Second)
+		time.Sleep(120 * time.Second)
 	}
 }

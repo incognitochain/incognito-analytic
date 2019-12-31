@@ -109,7 +109,7 @@ func (puller *TransactionPuller) Execute() {
 				if err != nil || txByID != nil {
 					continue
 				}
-				time.Sleep(time.Duration(200) * time.Millisecond)
+				time.Sleep(120 * time.Second)
 				tx, e := puller.getTransaction(t)
 				if e != nil {
 					fmt.Printf("[Transaction puller] An error occured while getting transaction %s : %+v\n", t, e)
