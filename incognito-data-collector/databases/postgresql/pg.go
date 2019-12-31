@@ -2,16 +2,17 @@ package postgresql
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )
 
 const (
-	userName = "postgres"
-	password = "postgres"
+	userName = ""
+	password = ""
 	dbName   = "pdex"
-	host     = "34.94.185.164"
+	host     = "127.0.0.1"
 	port     = "5432"
 )
 
@@ -28,7 +29,27 @@ func getPGConnection() (*sqlx.DB, error) {
 	if pgConn != nil {
 		return pgConn, nil
 	}
-	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", userName, password, host, port, dbName)
+	userNameP := os.Getenv("postgresuser")
+	if userNameP == "" {
+		userNameP = userName
+	}
+	passwordP := os.Getenv("postgrespwd")
+	if passwordP == "" {
+		passwordP = password
+	}
+	hostP := os.Getenv("postgreshost")
+	if hostP == "" {
+		hostP = host
+	}
+	portP := os.Getenv("postgresport")
+	if portP == "" {
+		portP = port
+	}
+	dbNameP := os.Getenv("postgresdb")
+	if dbNameP == "" {
+		dbNameP = dbName
+	}
+	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", userNameP, passwordP, hostP, portP, dbNameP)
 	pgConn, err := sqlx.Open("postgres", connStr)
 	if err != nil {
 		fmt.Println("An error occured while openning connection to pg")
