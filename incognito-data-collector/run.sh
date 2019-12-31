@@ -18,5 +18,9 @@ if [ -z "$postgresport" ]; then
     postgresport="5432";
 fi
 
+if [ -z "$postgresdb" ]; then
+    postgresdb="pdex";
+fi
+
 echo "run ./incognito-data-collector"
-postgreshost=$postgreshost postgresport=$postgresport postgresuser=$postgresuser postgrespwd=$postgrespwd ./incognito-data-collector  > /data/log.txt 2>/data/error_log.txt
+postgreshost=$postgreshost postgresport=$postgresport postgresuser=$postgresuser postgrespwd=$postgrespwd postgresdb=$postgresdb ./incognito-data-collector  > /data/log.txt 2>/data/error_log.txt
