@@ -60,7 +60,7 @@ run()
 }
 
 # kill existing run.sh processes
-ps aux | grep '[f]ullnode-run.sh' | awk '{ print $2}' | grep -v "^$$\$" | xargs kill -9
+ps aux | grep '[i]ncognito-fullnode.sh' | awk '{ print $2}' | grep -v "^$$\$" | xargs kill -9
 
 current_latest_tag=""
 while [ 1 = 1 ]
