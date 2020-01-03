@@ -69,7 +69,7 @@ func (puller *ShardBlockPuller) Execute() {
 
 	for {
 		fmt.Printf("[Shard block puller] Proccessing for shard %d block height: %d\n", puller.ShardID, blockHeight)
-		time.Sleep(120 * time.Second)
+		time.Sleep(500 * time.Millisecond)
 		shardBlockRes, err := puller.getShardBlock(blockHeight, puller.ShardID)
 		if err != nil {
 			fmt.Printf("[Shard block puller] An error occured while getting shard %d block height %d from chain: %+v \n", puller.ShardID, blockHeight, err)

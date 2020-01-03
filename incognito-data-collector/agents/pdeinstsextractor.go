@@ -75,7 +75,7 @@ func (pie *PDEInstsExtractor) Execute() {
 	}
 
 	for {
-		time.Sleep(20 * time.Second)
+		time.Sleep(500 * time.Millisecond)
 		fmt.Printf("[Instructions Extractor] Proccessing for beacon height: %d\n", bcHeight)
 		insts, err := pie.extractPDEInstsFromBeaconBlk(bcHeight)
 		if err != nil {
@@ -86,7 +86,7 @@ func (pie *PDEInstsExtractor) Execute() {
 			break
 		}
 		for _, trade := range insts.PDETrades {
-			time.Sleep(2 * time.Second)
+			time.Sleep(1 * time.Second)
 			tradeModel := models.PDETrade{
 				TraderAddressStr:    trade.TraderAddressStr,
 				ReceivingTokenIDStr: trade.ReceivingTokenIDStr,
