@@ -30,3 +30,17 @@ class TokenService:
         for r in resultSet:
             result = r[0]
         return result
+
+    def tokenInitTx(self, tokenId):
+        sql = """
+        select transactions.data from transactions
+        where transactions.tx_id in (
+            select json_array_elements_text(tokens.list_hash_tx) from tokens where tokens.token_id = '""" + tokenId + """'
+        )
+        order by created_time asc
+        limit 1
+        """
+
+        resultSet = db.execute(sql)
+        for r in resultSet:
+            return r[0]

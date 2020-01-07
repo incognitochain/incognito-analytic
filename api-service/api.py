@@ -530,6 +530,26 @@ def getListTokenTxs():
     return {'result': tokenAPI.listTokenTxs()}
 
 
+@app.route('/token/txs/init', methods=['GET'])
+def tokenInitTx():
+    """
+    Init tx of token
+    ---
+    tags:
+        - Token API
+    parameters:
+        - name: token_id
+          type: string
+          in: query
+          required: true
+    responses:
+        200:
+            description: Init tx of token
+    """
+    tokenAPI = TokenAPI(request.args)
+    return {'result': tokenAPI.tokenInitTx()}
+
+
 # Bock API
 @app.route('/block/beacon/count', methods=['GET'])
 def countBeaconBlock():
