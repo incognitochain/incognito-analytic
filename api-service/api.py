@@ -39,7 +39,7 @@ def pdexInfo():
     """
     result = {
         "name": "Incognito Privacy Decentralized Exchange",
-        "description": """Completely anonymous trading – no KYC, no records of buyers, sellers or transaction amounts. No third party risk – you control your money and hold your own private keys. Decentralized, scalable, cross-chain liquidity. Trade BTC, ETH, PRV and more with 100% confidentiality.""",
+        "description": """Incognito pDEX - Incognito Privacy Decentralized Exchange - is a different kind of exchange. It’s non-custodial (which means your money is actually yours), it’s decentralized (built entirely on-chain), and because it’s powered by Incognito — it’s completely anonymous, of course.There is no KYC, no records of buyers, sellers or transaction amounts, no third party risk – you control your money and hold your own private keys. It also facilitates instant matches by means of an automated market-making mechanism (more on this in a bit), and offers a chance for anyone to become a liquidity provider and earn a percentage of trading fees. Our pDEX is the privacy-focused, inter-blockchain and instant-matching rendition of Nick Johnson and Vitalik Buterin’s conversations on Reddit circa 2016, and Hayden Adam’s implementation of Uniswap in 2018. In conclusion, Incognito pDEX is specialized with these incredible features: decentralized, scalable and cross-chain liquidity. From now on, users can trade BTC, ETH, PRV and more with 100% confidentiality.""",
         "location": "Vietnam",
         "logo": "https://incognito.org/assets/236ce48.svg",
         "website": "https://incognito.org/",
@@ -56,7 +56,7 @@ def pdexInfo():
     return result
 
 
-@app.route("/market")
+@app.route("/markets")
 def pdexMarket():
     """
         Pdex Market
