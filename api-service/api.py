@@ -146,7 +146,7 @@ def pdexGetLastTradingTx():
 @app.route('/pdex/last-volume', methods=['GET'])
 def pdexLastVolume24Hours():
     """
-    Pdex last trading tx
+    Pdex last volume N hours of pairs
     ---
     tags:
         - Pdex API
@@ -174,6 +174,21 @@ def pdexLastVolume24Hours():
     """
     pdex = PdexApi(request.args)
     return {'result': pdex.lastHoursVolume()}
+
+
+@app.route('/pdex/common-pairs/latest-24hours', methods=['GET'])
+def pdexCommonPairsLatest24Hours():
+    """
+    Pdex Common pairs information - latest 24 hours
+    ---
+    tags:
+        - Pdex API
+    responses:
+        200:
+            description: Common pairs information - latest 24 hours of volume and price of last trade
+    """
+    pdex = PdexApi(request.args)
+    return {'result': pdex.commonPairsLatest24Hours()}
 
 
 @app.route('/pdex/trader/leader-board/by-count-trade-tx', methods=['GET'])

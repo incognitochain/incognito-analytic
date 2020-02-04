@@ -1,7 +1,7 @@
 import requests
 
 from service.blockservice import BlockService
-from service.pdex import PdexService
+from service.pdexservice import PdexService
 from service.token import TokenService
 from service.transactionservice import TransactionService
 

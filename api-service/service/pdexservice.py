@@ -78,7 +78,7 @@ class PdexService:
         sql = """
                 SELECT t.tx_id, t.metadata,  p.receive_amount, p.trader_address_str
                 FROM pde_trades p
-                JOIN transactions t ON t.created_time >= NOW() - INTERVAL '""" + hours + """ HOURS' and t.tx_id = p.requested_tx_id
+                JOIN transactions t ON t.created_time >= NOW() - INTERVAL '""" + str(hours) + """ HOURS' and t.tx_id = p.requested_tx_id
                 WHERE (p.token1_id_str = '""" + token2 + """' AND p.token2_id_str = '""" + token1 + """')
                 OR (p.token1_id_str = '""" + token1 + """' AND p.token2_id_str = '""" + token2 + """')
                 AND p.status = 'accepted'
