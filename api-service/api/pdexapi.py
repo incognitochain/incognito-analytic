@@ -198,6 +198,7 @@ class PdexApi():
                     'tokenSell': '1ff2da446abfebea3ba30385e2ca99b0f0bbeda5c6371f4c23c939672b429a42',
                 },
         }
+        service = PdexService()
         hours = 24
         direction = True
         result = {}
@@ -207,18 +208,34 @@ class PdexApi():
 
             result[pairKey] = {}
             tokenSellData = tradeTokens.get(tokenSell)
-            exchangerate = tokenSellData.get('exchange_rate')
+            exchangerateSellToken = tokenSellData.get('exchange_rate')
+            tokenBuyData = tradeTokens.get(tokenBuy)
+            exchangerateBuyToken = tokenBuyData.get('exchange_rate')
 
             # get volume of last 24 hours
+            result[pairKey]['volume24h'] = 0
             pair = self.lastHoursVolumeFunc(tokenBuy, tokenSell, hours, direction)
             for k in pair.keys():
                 if pair[k].get('tokenId') == tokenSell:
-                    result[pairKey]['volume24h'] = pair[k].get('sell') / float(exchangerate)
+                    result[pairKey]['volume24h'] = pair[k].get('sell') / float(exchangerateSellToken)
 
             # get price of last trade
+            result[pairKey]['last_trade_volume'] = 0
             lastTrade = self.getLastTradingTxFunc(tokenSell=tokenSell, tokenBuy=tokenBuy)
-            metadata = lastTrade.get('metadata')
-            result[pairKey]['price_of_last_trade'] = metadata.get('SellAmount') / float(exchangerate)
+            if lastTrade is not None:
+                metadata = lastTrade.get('metadata', {})
+                result[pairKey]['last_trade_volume'] = metadata.get('SellAmount', 0.0) / float(exchangerateSellToken)
+
+            # get last trade price
+            result[pairKey]['price_of_last_trade'] = 0
+            txId = lastTrade.get('tx_id')
+            if txId is not None and txId != '':
+                trade = service.getTradingTxByRequestTxId(txId=txId)
+                if trade is not None:
+                    result[pairKey]['price_of_last_trade'] = (trade.get('receive_amount') / metadata.get('SellAmount',
+                                                                                                         1.0)) / float(
+                        exchangerateBuyToken)
+
         return result
 
     def lastHoursVolume(self):

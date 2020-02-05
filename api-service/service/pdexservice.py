@@ -44,6 +44,27 @@ class PdexService:
         for r in result_set:
             return r[0]
 
+    def getTradingTxByRequestTxId(self, txId=''):
+        if txId == '':
+            return None
+
+        sql = """
+        select requested_tx_id, receive_amount, receiving_tokenid_str, token1_id_str, token2_id_str, trader_address_str, status, beacon_height, beacon_time_stamp from pde_trades where requested_tx_id = '""" + txId + """'
+        """
+        result_set = db.execute(sql)
+        result = {}
+        for r in result_set:
+            result['requestd_tx_id'] = r[0]
+            result['receive_amount'] = r[1]
+            result['receiving_tokenid_str'] = r[2]
+            result['token1_id_str'] = r[3]
+            result['token2_id_str'] = r[4]
+            result['trader_address_str'] = r[5]
+            result['status'] = r[6]
+            result['beacon_height'] = r[7]
+            result['beacon_time_stamp'] = r[8]
+        return result
+
     def lastTradingTx(self, tokenSell="", tokenBuy=""):
         sql = """
             SELECT tx_id, shard_id, prv_fee, info, block_height, block_hash, metadata, transacted_privacy_coin_fee, created_time FROM transactions WHERE tx_id in (
