@@ -147,56 +147,46 @@ class PdexApi():
                 'tokenBuy': '530cd74f506edcdd263e34e6dacdd15097f87677036cf412f8ebeb1c494e352d',
                 'tokenSell': '0000000000000000000000000000000000000000000000000000000000000004',
             },
-            'PRV-pBTC':
-                {
-                    'tokenBuy': '0000000000000000000000000000000000000000000000000000000000000004',
-                    'tokenSell': 'b832e5d3b1f01a4f0623f7fe91d6673461e1f5d37d91fe78c5c2e6183ff39696',
-                },
-            'pBTC-pUSDT':
-                {
-                    'tokenBuy': 'b832e5d3b1f01a4f0623f7fe91d6673461e1f5d37d91fe78c5c2e6183ff39696',
-                    'tokenSell': '716fd1009e2a1669caacc36891e707bfdf02590f96ebd897548e8963c95ebac0',
-                },
-            'PRV-pETH':
-                {
-                    'tokenBuy': '0000000000000000000000000000000000000000000000000000000000000004',
-                    'tokenSell': 'ffd8d42dc40a8d166ea4848baf8b5f6e912ad79875f4373070b59392b1756c8f',
-                },
-            'pETH-pTUSD':
-                {
-                    'tokenBuy': 'ffd8d42dc40a8d166ea4848baf8b5f6e912ad79875f4373070b59392b1756c8f',
-                    'tokenSell': '8c3a61e77061265aaefa1e7160abfe343c2189278dd224bb7da6e7edc6a1d4db',
-                },
-            'PRV-pBUSD':
-                {
-                    'tokenBuy': '0000000000000000000000000000000000000000000000000000000000000004',
-                    'tokenSell': '9e1142557e63fd20dee7f3c9524ffe0aa41198c494aa8d36447d12e85f0ddce7',
-                },
-            'pDAI-pTUSD':
-                {
-                    'tokenBuy': 'd240c61c6066fed0535df9302f1be9f5c9728ef6d01ce88d525c4f6ff9d65a56',
-                    'tokenSell': '8c3a61e77061265aaefa1e7160abfe343c2189278dd224bb7da6e7edc6a1d4db',
-                },
-            'PRV-pUSDT':
-                {
-                    'tokenBuy': '0000000000000000000000000000000000000000000000000000000000000004',
-                    'tokenSell': '716fd1009e2a1669caacc36891e707bfdf02590f96ebd897548e8963c95ebac0',
-                },
-            'PRV-pUSDC':
-                {
-                    'tokenBuy': '0000000000000000000000000000000000000000000000000000000000000004',
-                    'tokenSell': '1ff2da446abfebea3ba30385e2ca99b0f0bbeda5c6371f4c23c939672b429a42',
-                },
-            'PRV-pDAI':
-                {
-                    'tokenBuy': '0000000000000000000000000000000000000000000000000000000000000004',
-                    'tokenSell': '8c3a61e77061265aaefa1e7160abfe343c2189278dd224bb7da6e7edc6a1d4db',
-                },
-            'pDAI-pUSDC':
-                {
-                    'tokenBuy': '8c3a61e77061265aaefa1e7160abfe343c2189278dd224bb7da6e7edc6a1d4db',
-                    'tokenSell': '1ff2da446abfebea3ba30385e2ca99b0f0bbeda5c6371f4c23c939672b429a42',
-                },
+            'PRV-pBTC': {
+                'tokenBuy': '0000000000000000000000000000000000000000000000000000000000000004',
+                'tokenSell': 'b832e5d3b1f01a4f0623f7fe91d6673461e1f5d37d91fe78c5c2e6183ff39696',
+            },
+            'pBTC-pUSDT': {
+                'tokenBuy': 'b832e5d3b1f01a4f0623f7fe91d6673461e1f5d37d91fe78c5c2e6183ff39696',
+                'tokenSell': '716fd1009e2a1669caacc36891e707bfdf02590f96ebd897548e8963c95ebac0',
+            },
+            'PRV-pETH': {
+                'tokenBuy': '0000000000000000000000000000000000000000000000000000000000000004',
+                'tokenSell': 'ffd8d42dc40a8d166ea4848baf8b5f6e912ad79875f4373070b59392b1756c8f',
+            },
+            'pETH-pTUSD': {
+                'tokenBuy': 'ffd8d42dc40a8d166ea4848baf8b5f6e912ad79875f4373070b59392b1756c8f',
+                'tokenSell': '8c3a61e77061265aaefa1e7160abfe343c2189278dd224bb7da6e7edc6a1d4db',
+            },
+            'PRV-pBUSD': {
+                'tokenBuy': '0000000000000000000000000000000000000000000000000000000000000004',
+                'tokenSell': '9e1142557e63fd20dee7f3c9524ffe0aa41198c494aa8d36447d12e85f0ddce7',
+            },
+            'pDAI-pTUSD': {
+                'tokenBuy': 'd240c61c6066fed0535df9302f1be9f5c9728ef6d01ce88d525c4f6ff9d65a56',
+                'tokenSell': '8c3a61e77061265aaefa1e7160abfe343c2189278dd224bb7da6e7edc6a1d4db',
+            },
+            'PRV-pUSDT': {
+                'tokenBuy': '0000000000000000000000000000000000000000000000000000000000000004',
+                'tokenSell': '716fd1009e2a1669caacc36891e707bfdf02590f96ebd897548e8963c95ebac0',
+            },
+            'PRV-pUSDC': {
+                'tokenBuy': '0000000000000000000000000000000000000000000000000000000000000004',
+                'tokenSell': '1ff2da446abfebea3ba30385e2ca99b0f0bbeda5c6371f4c23c939672b429a42',
+            },
+            'PRV-pDAI': {
+                'tokenBuy': '0000000000000000000000000000000000000000000000000000000000000004',
+                'tokenSell': '8c3a61e77061265aaefa1e7160abfe343c2189278dd224bb7da6e7edc6a1d4db',
+            },
+            'pDAI-pUSDC': {
+                'tokenBuy': '8c3a61e77061265aaefa1e7160abfe343c2189278dd224bb7da6e7edc6a1d4db',
+                'tokenSell': '1ff2da446abfebea3ba30385e2ca99b0f0bbeda5c6371f4c23c939672b429a42',
+            },
         }
         service = PdexService()
         hours = 24
