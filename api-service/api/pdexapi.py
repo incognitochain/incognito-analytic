@@ -425,3 +425,27 @@ class PdexApi():
                 index += 1
 
             return result
+
+    def getPoolPair(self):
+        result = []
+
+        token1 = self.params.get('token1')
+        token2 = self.params.get('token2')
+
+        service = PdexService()
+        data = service.getPoolPair(token1=token1, token2=token2)
+
+        tokenService = TokenService()
+        tokens = tokenService.listTokens()
+
+        for i in data:
+            token1Data = tokens[i.get('token1_id_str')]
+            token2Data = tokens[i.get('token2_id_str')]
+            item = {
+                token1Data.get('name'): i.get('token1_pool_value'),
+                token2Data.get('name'): i.get('token2_pool_value'),
+                'time_stamp': i.get('beacon_time_stamp')
+            }
+            result.append(item)
+
+        return result

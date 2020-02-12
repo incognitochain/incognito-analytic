@@ -241,6 +241,32 @@ def leaderTraderByVolume():
     return {'result': pdex.leaderTraderByVolume()}
 
 
+@app.route('/pdex/pool-pairs', methods=['GET'])
+def getPoolPairs():
+    """
+        Get pdex Pool Pairs
+        ---
+        parameters:
+            - name: token1
+              in: query
+              type: string
+              required: true
+              default: '0000000000000000000000000000000000000000000000000000000000000004'
+            - name: token2
+              in: query
+              type: string
+              required: true
+              default: 716fd1009e2a1669caacc36891e707bfdf02590f96ebd897548e8963c95ebac0
+        tags:
+            - Pdex API
+        responses:
+            200:
+                description: Leader board by number of trading tx
+        """
+    pdex = PdexApi(request.args)
+    return {'result': pdex.getPoolPair()}
+
+
 # Transaction API
 @app.route('/transaction', methods=['GET'])
 def transactionApi():
