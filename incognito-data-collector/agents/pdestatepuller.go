@@ -6,6 +6,7 @@ import (
 	"github.com/incognitochain/incognito-analytic/incognito-data-collector/entities"
 	"github.com/incognitochain/incognito-analytic/incognito-data-collector/models"
 	"github.com/incognitochain/incognito-analytic/incognito-data-collector/utils"
+	"log"
 	"time"
 )
 
@@ -58,12 +59,12 @@ func (psp *PDEStatePuller) getPDEState(beaconHeight uint64) (*entities.PDEState,
 
 // Execute is to pull pde state from incognito chain and put into db
 func (psp *PDEStatePuller) Execute() {
-	fmt.Println("PDE State Puller agent is executing...")
+	log.Printf("[PDE State] Puller agent is executing...")
 	// return
 
 	bcHeight, err := psp.PDEStateStore.GetLatestProcessedBCHeight()
 	if err != nil {
-		fmt.Printf("[PDE State] An error occured while getting the latest processed beacon height: %+v \n", err)
+		log.Printf("[PDE State] An error occured while getting the latest processed beacon height: %+v \n", err)
 		return
 	}
 	if bcHeight == 0 {
@@ -71,14 +72,13 @@ func (psp *PDEStatePuller) Execute() {
 	} else {
 		bcHeight++
 	}
-
 	var lastPDEState *entities.PDEState
 	for {
-		fmt.Printf("[PDE State] Proccessing for beacon height: %d\n", bcHeight)
+		log.Printf("[PDE State] Proccessing for beacon height: %d\n", bcHeight)
 		time.Sleep(1 * time.Second)
 		pdeState, err := psp.getPDEState(bcHeight)
 		if err != nil {
-			fmt.Println("An error occured while getting pde state from chain: ", err)
+			log.Println("[PDE State] An error occured while getting pde state from chain: ", err)
 			return
 		}
 
@@ -96,14 +96,14 @@ func (psp *PDEStatePuller) Execute() {
 				BeaconHeight:    bcHeight,
 				BeaconTimeStamp: time.Unix(pdeState.BeaconTimeStamp, 0),
 			}
-			//fmt.Println(poolPairModel.BeaconTimeStamp.Format("2006-01-02 15:04:05"))
 			err := psp.PDEStateStore.StorePDEPoolPair(&poolPairModel)
 			if err != nil {
-				fmt.Println("An error occured while storing pde pool pair")
+				fmt.Println("[PDE State] An error occured while storing pde pool pair")
 				continue
 			}
+			log.Printf("[PDE State] Inserted for %+v", poolPairModel)
 		}
 		bcHeight++
 	}
-	fmt.Println("PDE State Puller agent is finished...")
+	log.Printf("[PDE State] Puller agent is finished...")
 }

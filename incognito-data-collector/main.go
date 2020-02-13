@@ -5,6 +5,7 @@ import (
 	"github.com/incognitochain/incognito-analytic/incognito-data-collector/agents"
 	pg "github.com/incognitochain/incognito-analytic/incognito-data-collector/databases/postgresql"
 	"github.com/incognitochain/incognito-analytic/incognito-data-collector/utils"
+	"log"
 	"os"
 	"os/signal"
 	"runtime"
@@ -213,6 +214,7 @@ func executeAgent(
 }
 
 func main() {
+	log.SetOutput(os.Stdout)
 	runtime.GOMAXPROCS(runtime.NumCPU())
 	s, err := NewServer()
 	if err != nil {
