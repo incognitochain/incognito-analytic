@@ -87,7 +87,7 @@ func (psp *PDEStatePuller) Execute() {
 		}
 		lastPDEState = pdeState
 		for _, poolPair := range pdeState.PDEPoolPairs {
-			time.Sleep(500 * time.Millisecond)
+			time.Sleep(10 * time.Millisecond)
 			poolPairModel := models.PDEPoolPair{
 				Token1IDStr:     poolPair.Token1IDStr,
 				Token1PoolValue: poolPair.Token1PoolValue,
