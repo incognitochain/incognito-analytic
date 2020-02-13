@@ -178,15 +178,23 @@ class PdexService:
 
         return result
 
-    def getPoolPair(self, token1='', token2=''):
+    def getPoolPair(self, token1='', token2='', page=0, limit=50):
+
+        pagenator = """"""
+        if limit > 0:
+            pagenator = """
+                                OFFSET """ + str(int(page) * int(limit)) + """
+                                LIMIT """ + str(limit)
+
         sql = """
-        SELECT token1_id_str, token1_pool_value, token2_id_str, token2_pool_value, beacon_height, beacon_time_stamp FROM pde_pool_pairs WHERE 
+        SELECT token1_id_str, token1_pool_value, token2_id_str, token2_pool_value, MAX(beacon_height), MAX(beacon_time_stamp) FROM pde_pool_pairs WHERE 
             token1_pool_value <> 0 
             AND token2_pool_value <> 0
             AND token1_id_str='""" + token1 + """'
             AND token2_id_str='""" + token2 + """'
-            ORDER BY beacon_height DESC
-        """
+            GROUP BY token1_id_str, token1_pool_value, token2_id_str, token2_pool_value
+            ORDER BY MAX(beacon_height) DESC
+        """ + pagenator
 
         data = db.execute(sql)
         result = []

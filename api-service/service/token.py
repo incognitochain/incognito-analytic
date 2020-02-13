@@ -19,6 +19,8 @@ class TokenService:
                 "count_tx": r[3],
                 "supply": r[4]
             }
+        result['0000000000000000000000000000000000000000000000000000000000000004'] = {'symbol': 'PRV',
+                                                                                      'name': 'Privacy'}
         return result
 
     def listTokenTxs(self, tokenId):

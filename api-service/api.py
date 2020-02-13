@@ -257,6 +257,16 @@ def getPoolPairs():
               type: string
               required: true
               default: 716fd1009e2a1669caacc36891e707bfdf02590f96ebd897548e8963c95ebac0
+            - name: page
+              in: query
+              type: string
+              required: false
+              default: '0'
+            - name: limit
+              in: query
+              type: string
+              required: false
+              default: 50
         tags:
             - Pdex API
         responses:

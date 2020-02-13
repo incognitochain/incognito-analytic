@@ -431,20 +431,27 @@ class PdexApi():
 
         token1 = self.params.get('token1')
         token2 = self.params.get('token2')
+        page = self.params.get('page', 0)
+        limit = self.params.get('limit', 50)
 
         service = PdexService()
-        data = service.getPoolPair(token1=token1, token2=token2)
+        data = service.getPoolPair(token1=token1, token2=token2, page=page, limit=limit)
 
         tokenService = TokenService()
         tokens = tokenService.listTokens()
 
+        pdexToken = self.getTokens()
+
         for i in data:
-            token1Data = tokens[i.get('token1_id_str')]
-            token2Data = tokens[i.get('token2_id_str')]
+            token1Data = tokens.get(i.get('token1_id_str'))
+            token2Data = tokens.get(i.get('token2_id_str'))
             item = {
-                token1Data.get('name'): i.get('token1_pool_value'),
-                token2Data.get('name'): i.get('token2_pool_value'),
-                'time_stamp': i.get('beacon_time_stamp')
+                token1Data.get('name'): i.get('token1_pool_value') / float(pdexToken.get(i.get('token1_id_str')).get(
+                    'exchange_rate')),
+                token2Data.get('name'): i.get('token2_pool_value') / float(pdexToken.get(i.get('token2_id_str')).get(
+                    'exchange_rate')),
+                'time_stamp': i.get('beacon_time_stamp'),
+                'beacon_heigh': i.get('beacon_height'),
             }
             result.append(item)
 
