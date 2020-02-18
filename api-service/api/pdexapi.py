@@ -476,22 +476,26 @@ class PdexApi():
 
         pdexToken = self.getTokens()
         for i in data:
-            tokenBuyData = tokens.get(i.get('token1_id_str'))
-            tokenSellData = tokens.get(i.get('token2_id_str'))
+            # tokenBuyData = tokens.get(i.get('token1_id_str'))
+            # tokenSellData = tokens.get(i.get('token2_id_str'))
 
-            tokenBuyValue = i.get('receive_amount') / float(pdexToken.get(i.get('token1_id_str')).get(
+            tokenBuyValue = i.get('receive_amount') / float(pdexToken.get(tokenBuy).get(
                 'exchange_rate'))
 
             txMetadata = i.get('tx_metadata')
-            tokenSellValue = txMetadata.get('SellAmount') / float(pdexToken.get(i.get('token2_id_str')).get(
+            tokenSellValue = txMetadata.get('SellAmount') / float(pdexToken.get(tokenSell).get(
                 'exchange_rate'))
+
+            price = (txMetadata.get('SellAmount') / i.get('receive_amount')) / float(
+                pdexToken.get(tokenSell).get(
+                    'exchange_rate'))
 
             item = {
                 'id': i.get('requested_tx_id'),
                 'timestamp': i.get('beacon_time_stamp').strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
-                'price': str(tokenSellValue / tokenBuyValue),
-                'amount': str(tokenSellValue),
-                'amount_quote': str(tokenBuyValue),
+                'price': "{:.4f}".format(price),
+                'amount': "{:.4f}".format(tokenSellValue),
+                'amount_quote': "{:.4f}".format(tokenBuyValue),
             }
             result.append(item)
 
