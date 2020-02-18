@@ -89,7 +89,7 @@ class PdexApi():
         #         "market_url": "https://www.cfbenchmarks.com/indices/XRP/XBT/RTI/seconds"
         #     }
         # ]
-        return json.dumps(result, indent=2)
+        return result
 
     def commonPairsLatest24Hours(self):
         tradeTokens = self.getTokens()

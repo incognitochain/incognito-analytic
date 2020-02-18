@@ -71,7 +71,7 @@ def pdexMarket():
         """
     pdex = PdexApi(request.args)
     result = pdex.getMarketInfo()
-    return result
+    return json.dumps(result, indent=2)
 
 
 @app.route('/trades', methods=['GET'])
