@@ -488,10 +488,10 @@ class PdexApi():
 
             item = {
                 'id': i.get('requested_tx_id'),
-                'timestamp': str(i.get('beacon_time_stamp')),
-                'price': tokenSellValue / tokenBuyValue,
-                'amount_' + tokenSellData.get('symbol'): tokenSellValue,
-                'amount_' + tokenBuyData.get('symbol'): tokenBuyValue,
+                'timestamp': i.get('beacon_time_stamp').strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
+                'price': str(tokenSellValue / tokenBuyValue),
+                'amount': str(tokenSellValue),
+                'amount_quote': str(tokenBuyValue),
             }
             result.append(item)
 

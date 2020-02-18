@@ -219,9 +219,15 @@ class PdexService:
         sql = """
         SELECT requested_tx_id, token1_id_str, token2_id_str, receiving_tokenid_str, receive_amount, beacon_height, beacon_time_stamp, txs.metadata FROM pde_trades trades
         JOIN transactions txs on txs.tx_id = trades.requested_tx_id 
-        WHERE token1_id_str = receiving_tokenid_str 
-        AND token1_id_str = '""" + tokenBuy + """' 
-        AND token2_id_str = '""" + tokenSell + """'
+        WHERE (
+        	token1_id_str = receiving_tokenid_str 
+	        AND token1_id_str = '""" + tokenBuy + """' 
+	        AND token2_id_str = '""" + tokenSell + """')
+        OR (
+	        token2_id_str = receiving_tokenid_str 
+	        AND token1_id_str = '""" + tokenSell + """'
+	        AND token2_id_str = '""" + tokenBuy + """'
+        )
         AND status = 'accepted'
         ORDER BY beacon_height DESC
         """ + pagenator
