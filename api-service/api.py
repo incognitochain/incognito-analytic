@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import json
+
 from flask import Flask
 
 from api.blockapi import BlockAPI
@@ -68,7 +70,35 @@ def pdexMarket():
                 description: Get pDex market
         """
     pdex = PdexApi(request.args)
-    return pdex.getMarketInfo()
+    result = pdex.getMarketInfo()
+    return result
+
+
+@app.route('/trades', methods=['GET'])
+def pdexTrades():
+    """
+        Pdex trades market
+        ---
+        parameters:
+            - name: market
+              in: query
+              type: string
+              required: true
+              default: 'PRV_pUSDT'
+        tags:
+            - Pdex API
+        responses:
+            200:
+                description: Leader board by number of trading tx
+        """
+    pdex = PdexApi(request.args)
+    market = request.args.get('market', 'PRV_pUSDT')
+    market = market.split('_', 2)
+    tokenBuy = market[0].strip()
+    tokenSell = market[1].strip()
+
+    result = pdex.getListTradingTxsFunc(tokenBuy=tokenBuy, tokenSell=tokenSell)
+    return json.dumps(result, indent=2)
 
 
 @app.route('/pdex/pairs', methods=['GET'])
@@ -107,7 +137,7 @@ def pdexGetTradingToken():
 @app.route('/pdex/count-trading-tx', methods=['GET'])
 def pdexCountTradingTxs():
     """
-    Pdex trading txs
+    Pdex counting trading txs
     ---
     tags:
         - Pdex API
@@ -122,7 +152,7 @@ def pdexCountTradingTxs():
 @app.route('/pdex/last-trading-tx', methods=['GET'])
 def pdexGetLastTradingTx():
     """
-    Pdex last trading tx
+    Pdex get last trading tx
     ---
     tags:
         - Pdex API
@@ -277,7 +307,7 @@ def getPoolPairs():
     return {'result': pdex.getPoolPair()}
 
 
-@app.route('/pdex/tradeing-txs', methods=['GET'])
+@app.route('/pdex/trading-txs', methods=['GET'])
 def listTradingTxs():
     """
         List trading transactions

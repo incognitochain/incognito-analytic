@@ -6,6 +6,7 @@ import (
 	"github.com/incognitochain/incognito-analytic/incognito-data-collector/entities"
 	"github.com/incognitochain/incognito-analytic/incognito-data-collector/models"
 	"github.com/incognitochain/incognito-analytic/incognito-data-collector/utils"
+	"log"
 	"time"
 )
 
@@ -65,7 +66,7 @@ func (pie *PDEInstsExtractor) Execute() {
 
 	bcHeight, err := pie.PDEInstructionsStore.GetLatestProcessedBCHeight()
 	if err != nil {
-		fmt.Printf("[Instructions Extractor] An error occured while getting the latest processed beacon height: %+v \n", err)
+		log.Printf("[Instructions Extractor] An error occured while getting the latest processed beacon height: %+v \n", err)
 		return
 	}
 	if bcHeight == 0 {
@@ -76,7 +77,7 @@ func (pie *PDEInstsExtractor) Execute() {
 
 	for {
 		time.Sleep(500 * time.Millisecond)
-		fmt.Printf("[Instructions Extractor] Proccessing for beacon height: %d\n", bcHeight)
+		log.Printf("[Instructions Extractor] Proccessing for beacon height: %d\n", bcHeight)
 		insts, err := pie.extractPDEInstsFromBeaconBlk(bcHeight)
 		if err != nil {
 			fmt.Println("An error occured while extracting pde instruction from chain: ", err)

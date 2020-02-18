@@ -7,6 +7,7 @@ import (
 	"github.com/incognitochain/incognito-analytic/incognito-data-collector/entities"
 	"github.com/incognitochain/incognito-analytic/incognito-data-collector/models"
 	"github.com/incognitochain/incognito-analytic/incognito-data-collector/utils"
+	"log"
 	"time"
 )
 
@@ -54,7 +55,7 @@ func (puller *BeaconBlockPuller) Execute() {
 
 	bcHeight, err := puller.BeaconBlockStore.GetLatestProcessedBCHeight()
 	if err != nil {
-		fmt.Printf("[Beacon block puller] An error occured while getting the latest processed beacon height: %+v \n", err)
+		log.Printf("[Beacon block puller] An error occured while getting the latest processed beacon height: %+v \n", err)
 		return
 	}
 	if bcHeight == 0 {
@@ -64,7 +65,7 @@ func (puller *BeaconBlockPuller) Execute() {
 	}
 
 	for {
-		fmt.Printf("[Beacon block puller] Proccessing for beacon height: %d\n", bcHeight)
+		log.Printf("[Beacon block puller] Proccessing for beacon height: %d\n", bcHeight)
 		time.Sleep(500 * time.Millisecond)
 		beaconBlockRes, err := puller.getBeaconBlock(bcHeight)
 		if err != nil {
@@ -113,5 +114,5 @@ func (puller *BeaconBlockPuller) Execute() {
 		bcHeight++
 	}
 
-	fmt.Println("[Beacon block puller] Agent is finished...")
+	log.Println("[Beacon block puller] Agent is finished...")
 }

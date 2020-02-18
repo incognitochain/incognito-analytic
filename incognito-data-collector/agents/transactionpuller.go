@@ -8,6 +8,7 @@ import (
 	"github.com/incognitochain/incognito-analytic/incognito-data-collector/entities"
 	"github.com/incognitochain/incognito-analytic/incognito-data-collector/models"
 	"github.com/incognitochain/incognito-analytic/incognito-data-collector/utils"
+	"log"
 	"time"
 )
 
@@ -63,19 +64,19 @@ func (puller *TransactionPuller) Execute() {
 	processingTxs := []string{}
 	latestBlockHeight, err := puller.TransactionsStore.GetLatestProcessedShardHeight(puller.ShardID)
 	if err != nil {
-		fmt.Printf("[Transaction puller] An error occured while GetLatestProcessedShardHeight the latest processed shard %d: %+v \n", puller.ShardID, err)
+		log.Printf("[Transaction puller] An error occured while GetLatestProcessedShardHeight the latest processed shard %d: %+v \n", puller.ShardID, err)
 		return
 	}
 	if latestBlockHeight > 0 {
 		latestTxs, err := puller.TransactionsStore.LatestProcessedTxByHeight(puller.ShardID, latestBlockHeight)
 		if err != nil {
-			fmt.Printf("[Transaction puller] An error occured while LatestProcessedTxByHeight the latest processed shard %d block height %d: %+v \n", puller.ShardID, latestBlockHeight, err)
+			log.Printf("[Transaction puller] An error occured while LatestProcessedTxByHeight the latest processed shard %d block height %d: %+v \n", puller.ShardID, latestBlockHeight, err)
 			return
 		}
 
 		temp, err := puller.TransactionsStore.ListProcessingTxByHeight(puller.ShardID, latestBlockHeight)
 		if err != nil {
-			fmt.Printf("[Transaction puller] An error occured while ListProcessingTxByHeight shard %d block height %d: %+v \n", puller.ShardID, latestBlockHeight, err)
+			log.Printf("[Transaction puller] An error occured while ListProcessingTxByHeight shard %d block height %d: %+v \n", puller.ShardID, latestBlockHeight, err)
 			return
 		}
 
@@ -99,7 +100,7 @@ func (puller *TransactionPuller) Execute() {
 			}
 			latestBlockHeight = temp[len(temp)-1].BlockHeight
 		} else {
-			fmt.Printf("[Transaction puller] No more tx to process\n")
+			log.Printf("[Transaction puller] No more tx to process\n")
 			continue
 		}
 
@@ -112,7 +113,7 @@ func (puller *TransactionPuller) Execute() {
 				time.Sleep(500 * time.Millisecond)
 				tx, e := puller.getTransaction(t)
 				if e != nil {
-					fmt.Printf("[Transaction puller] An error occured while getting transaction %s : %+v\n", t, e)
+					log.Printf("[Transaction puller] An error occured while getting transaction %s : %+v\n", t, e)
 					continue
 				}
 
@@ -154,10 +155,10 @@ func (puller *TransactionPuller) Execute() {
 				txModel.CreatedTime, _ = time.Parse("2006-01-02T15:04:05.999999", tx.LockTime)
 				err = puller.TransactionsStore.StoreTransaction(&txModel)
 				if err != nil {
-					fmt.Printf("[Transaction puller] An error occured while storing tx %s, shard %d err: %+v\n", t, puller.ShardID, err)
+					log.Printf("[Transaction puller] An error occured while storing tx %s, shard %d err: %+v\n", t, puller.ShardID, err)
 					continue
 				} else {
-					fmt.Printf("[Transaction puller] Success storing tx %s, shard %d\n", t, puller.ShardID)
+					log.Printf("[Transaction puller] Success storing tx %s, shard %d\n", t, puller.ShardID)
 				}
 			}
 		}

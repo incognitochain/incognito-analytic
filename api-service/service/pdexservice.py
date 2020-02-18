@@ -32,7 +32,7 @@ class PdexService:
         result_set = db.execute(sql)
         tokens = {}
         for r in result_set:
-            tokens[r[0]] = {"name": r[1], "exchange_rate": r[2]}
+            tokens[r[0]] = {"name": r[1], "exchange_rate": r[2], 'id': r[0]}
         return tokens
 
     def countTradingTxs(self):

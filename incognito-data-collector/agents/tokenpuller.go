@@ -7,6 +7,7 @@ import (
 	"github.com/incognitochain/incognito-analytic/incognito-data-collector/entities"
 	"github.com/incognitochain/incognito-analytic/incognito-data-collector/models"
 	"github.com/incognitochain/incognito-analytic/incognito-data-collector/utils"
+	"log"
 	"time"
 )
 
@@ -89,17 +90,17 @@ func (puller *TokenPuller) Execute() {
 
 				dataJson, err := json.Marshal(token)
 				if err != nil {
-					fmt.Printf("[Token puller] An error occured while json.Marshal %s %s: %+v\n", token.ID, token.Name, err)
+					log.Printf("[Token puller] An error occured while json.Marshal %s %s: %+v\n", token.ID, token.Name, err)
 					continue
 				}
 				tokenModel.Data = string(dataJson)
 
 				err = puller.TokenStore.StoreToken(&tokenModel)
 				if err != nil {
-					fmt.Printf("[Token puller] An error occured while StoreToken %s %s: %+v\n", token.ID, token.Name, err)
+					log.Printf("[Token puller] An error occured while StoreToken %s %s: %+v\n", token.ID, token.Name, err)
 					continue
 				} else {
-					fmt.Printf("[Token puller] Add token success %s %s\n", token.ID, token.Name)
+					log.Printf("[Token puller] Add token success %s %s\n", token.ID, token.Name)
 				}
 			}
 		}
@@ -107,7 +108,7 @@ func (puller *TokenPuller) Execute() {
 		for _, tokenId := range currentTokens {
 			token, err := puller.getToken(tokenId)
 			if err != nil {
-				fmt.Printf("[Token puller] An error occured while getToken by id %s %s\n", token.ID, token.Name, err)
+				log.Printf("[Token puller] An error occured while getToken by id %s %s\n", token.ID, token.Name, err)
 				continue
 			}
 			tokenModel := models.Token{
@@ -117,7 +118,7 @@ func (puller *TokenPuller) Execute() {
 			if tokenModel.CountTx > 0 {
 				jsonListTxs, err := json.Marshal(token.ListTxs)
 				if err != nil {
-					fmt.Printf("[Token puller] An error occured while json Marshal ListTxs by id %s %s: %+v\n", token.ID, token.Name, err)
+					log.Printf("[Token puller] An error occured while json Marshal ListTxs by id %s %s: %+v\n", token.ID, token.Name, err)
 					continue
 				}
 				jsonListTxsStr := string(jsonListTxs)
@@ -125,10 +126,10 @@ func (puller *TokenPuller) Execute() {
 			}
 			err = puller.TokenStore.UpdateToken(&tokenModel)
 			if err != nil {
-				fmt.Printf("[Token puller] An error occured while UpdateToken by id %s %s: %+v\n", token.ID, token.Name, err)
+				log.Printf("[Token puller] An error occured while UpdateToken by id %s %s: %+v\n", token.ID, token.Name, err)
 				continue
 			} else {
-				fmt.Printf("[Token puller] Update token success %s %s\n", token.ID, token.Name)
+				log.Printf("[Token puller] Update token success %s %s\n", token.ID, token.Name)
 			}
 		}
 		time.Sleep(120 * time.Second)

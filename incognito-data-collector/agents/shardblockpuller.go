@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/incognitochain/incognito-analytic/incognito-data-collector/entities"
@@ -58,7 +59,7 @@ func (puller *ShardBlockPuller) Execute() {
 
 	blockHeight, err := puller.ShardBlockStore.GetLatestProcessedShardHeight(puller.ShardID)
 	if err != nil {
-		fmt.Printf("[Shard block puller] An error occured while getting the latest processed shard block height: %+v \n", err)
+		log.Printf("[Shard block puller] An error occured while getting the latest processed shard block height: %+v \n", err)
 		return
 	}
 	if blockHeight == 0 {
@@ -68,11 +69,11 @@ func (puller *ShardBlockPuller) Execute() {
 	}
 
 	for {
-		fmt.Printf("[Shard block puller] Proccessing for shard %d block height: %d\n", puller.ShardID, blockHeight)
+		log.Printf("[Shard block puller] Proccessing for shard %d block height: %d\n", puller.ShardID, blockHeight)
 		time.Sleep(500 * time.Millisecond)
 		shardBlockRes, err := puller.getShardBlock(blockHeight, puller.ShardID)
 		if err != nil {
-			fmt.Printf("[Shard block puller] An error occured while getting shard %d block height %d from chain: %+v \n", puller.ShardID, blockHeight, err)
+			log.Printf("[Shard block puller] An error occured while getting shard %d block height %d from chain: %+v \n", puller.ShardID, blockHeight, err)
 			continue
 		}
 
@@ -123,11 +124,11 @@ func (puller *ShardBlockPuller) Execute() {
 
 		err = puller.ShardBlockStore.StoreShardBlock(&shardBlockModel)
 		if err != nil {
-			fmt.Printf("[Shard block puller] An error occured while storing shard block %d, shard %d err: %+v\n", blockHeight, puller.ShardID, err)
+			log.Printf("[Shard block puller] An error occured while storing shard block %d, shard %d err: %+v\n", blockHeight, puller.ShardID, err)
 			continue
 		}
 		blockHeight++
 	}
 
-	fmt.Println("[Shard block puller] Agent is finished...")
+	log.Println("[Shard block puller] Agent is finished...")
 }

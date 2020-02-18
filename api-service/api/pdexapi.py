@@ -49,7 +49,7 @@ class PdexApi():
             token2 = pair[keys[1]]
 
             item = {
-                "id": token1["name"] + "_" + token2["name"],
+                "id": token1["id"] + "_" + token2["id"],
                 "type": "spot",
                 "base": token1["name"],
                 "quote": token2["name"],
@@ -89,7 +89,7 @@ class PdexApi():
         #         "market_url": "https://www.cfbenchmarks.com/indices/XRP/XBT/RTI/seconds"
         #     }
         # ]
-        return json.dumps(result)
+        return json.dumps(result, indent=2)
 
     def commonPairsLatest24Hours(self):
         tradeTokens = self.getTokens()
@@ -464,6 +464,9 @@ class PdexApi():
         page = self.params.get('page', 0)
         limit = self.params.get('limit', 50)
 
+        return self.getListTradingTxsFunc(tokenBuy=tokenBuy, tokenSell=tokenSell, page=page, limit=limit)
+
+    def getListTradingTxsFunc(self, tokenBuy='', tokenSell='', page=0, limit=50):
         service = PdexService()
         data = service.getListTradingTxs(tokenBuy=tokenBuy, tokenSell=tokenSell, page=page, limit=limit)
 
@@ -485,7 +488,7 @@ class PdexApi():
 
             item = {
                 'id': i.get('requested_tx_id'),
-                'timestamp': i.get('beacon_time_stamp'),
+                'timestamp': str(i.get('beacon_time_stamp')),
                 'price': tokenSellValue / tokenBuyValue,
                 'amount_' + tokenSellData.get('symbol'): tokenSellValue,
                 'amount_' + tokenBuyData.get('symbol'): tokenBuyValue,
