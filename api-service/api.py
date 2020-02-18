@@ -97,7 +97,7 @@ def pdexTrades():
     tokenBuy = market[0].strip()
     tokenSell = market[1].strip()
 
-    result = pdex.getListTradingTxsFunc(tokenBuy=tokenBuy, tokenSell=tokenSell)
+    result = pdex.getListTradingTxsFunc(tokenBuy=tokenBuy, tokenSell=tokenSell, page=0, limit=1)
     return json.dumps(result, indent=2)
 
 
