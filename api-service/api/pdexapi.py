@@ -486,9 +486,11 @@ class PdexApi():
             tokenSellValue = txMetadata.get('SellAmount') / float(pdexToken.get(tokenSell).get(
                 'exchange_rate'))
 
-            price = (txMetadata.get('SellAmount') / i.get('receive_amount')) / float(
+            price = (txMetadata.get('SellAmount') / float(
                 pdexToken.get(tokenSell).get(
-                    'exchange_rate'))
+                    'exchange_rate'))) / (i.get('receive_amount') / float(
+                pdexToken.get(tokenBuy).get(
+                    'exchange_rate')))
 
             item = {
                 'id': i.get('requested_tx_id'),
