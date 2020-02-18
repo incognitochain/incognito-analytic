@@ -208,3 +208,39 @@ class PdexService:
             item['beacon_time_stamp'] = r[5]
             result.append(item)
         return result
+
+    def getListTradingTxs(self, tokenBuy='', tokenSell='', page=0, limit=50):
+        pagenator = """"""
+        if limit > 0:
+            pagenator = """
+                                        OFFSET """ + str(int(page) * int(limit)) + """
+                                        LIMIT """ + str(limit)
+
+        sql = """
+        SELECT requested_tx_id, token1_id_str, token2_id_str, receiving_tokenid_str, receive_amount, beacon_height, beacon_time_stamp, txs.metadata FROM pde_trades trades
+        JOIN transactions txs on txs.tx_id = trades.requested_tx_id 
+        WHERE token1_id_str = receiving_tokenid_str 
+        AND token1_id_str = '""" + tokenBuy + """' 
+        AND token2_id_str = '""" + tokenSell + """'
+        AND status = 'accepted'
+        ORDER BY beacon_height DESC
+        """ + pagenator
+
+        print sql
+
+        data = db.execute(sql)
+        result = []
+        for r in data:
+            item = {
+                'requested_tx_id': r[0],
+                'token1_id_str': r[1],
+                'token2_id_str': r[2],
+                'receiving_tokenid_str': r[3],
+                'receive_amount': r[4],
+                'beacon_height': r[5],
+                'beacon_time_stamp': r[6],
+                'tx_metadata': r[7],
+            }
+
+            result.append(item)
+        return result

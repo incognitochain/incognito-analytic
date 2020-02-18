@@ -456,3 +456,40 @@ class PdexApi():
             result.append(item)
 
         return result
+
+    def getListTradingTxs(self):
+        tokenBuy = self.params.get('token_buy')
+        tokenSell = self.params.get('token_sell')
+
+        page = self.params.get('page', 0)
+        limit = self.params.get('limit', 50)
+
+        service = PdexService()
+        data = service.getListTradingTxs(tokenBuy=tokenBuy, tokenSell=tokenSell, page=page, limit=limit)
+
+        result = []
+        tokenService = TokenService()
+        tokens = tokenService.listTokens()
+
+        pdexToken = self.getTokens()
+        for i in data:
+            tokenBuyData = tokens.get(i.get('token1_id_str'))
+            tokenSellData = tokens.get(i.get('token2_id_str'))
+
+            tokenBuyValue = i.get('receive_amount') / float(pdexToken.get(i.get('token1_id_str')).get(
+                'exchange_rate'))
+
+            txMetadata = i.get('tx_metadata')
+            tokenSellValue = txMetadata.get('SellAmount') / float(pdexToken.get(i.get('token2_id_str')).get(
+                'exchange_rate'))
+
+            item = {
+                'id': i.get('requested_tx_id'),
+                'timestamp': i.get('beacon_time_stamp'),
+                'price': tokenSellValue / tokenBuyValue,
+                'amount_' + tokenSellData.get('symbol'): tokenSellValue,
+                'amount_' + tokenBuyData.get('symbol'): tokenBuyValue,
+            }
+            result.append(item)
+
+        return result

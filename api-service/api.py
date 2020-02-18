@@ -277,6 +277,42 @@ def getPoolPairs():
     return {'result': pdex.getPoolPair()}
 
 
+@app.route('/pdex/tradeing-txs', methods=['GET'])
+def listTradingTxs():
+    """
+        List trading transactions
+        ---
+        parameters:
+            - name: token_buy
+              in: query
+              type: string
+              required: true
+              default: '0000000000000000000000000000000000000000000000000000000000000004'
+            - name: token_sell
+              in: query
+              type: string
+              required: true
+              default: 716fd1009e2a1669caacc36891e707bfdf02590f96ebd897548e8963c95ebac0
+            - name: page
+              in: query
+              type: string
+              required: false
+              default: '0'
+            - name: limit
+              in: query
+              type: string
+              required: false
+              default: 50
+        tags:
+            - Pdex API
+        responses:
+            200:
+                description: Leader board by number of trading tx
+        """
+    pdex = PdexApi(request.args)
+    return {'result': pdex.getListTradingTxs()}
+
+
 # Transaction API
 @app.route('/transaction', methods=['GET'])
 def transactionApi():
