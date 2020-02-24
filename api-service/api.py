@@ -928,15 +928,15 @@ def dailyPRVFee():
           required: false
           default: ''
         - name: page
-          type: int
+          type: string
           in: query
           required: true
           default: '0'
         - name: limit
-          type: int
+          type: string
           in: query
           required: true
-          default: 50
+          default: '50'
     tags:
         - Stake API
     responses:
@@ -993,15 +993,15 @@ def dailyTokenFee():
           required: false
           default: ''
         - name: page
-          type: int
+          type: string
           in: query
           required: true
           default: '0'
         - name: limit
-          type: int
+          type: string
           in: query
           required: true
-          default: 50
+          default: '50'
     tags:
         - Stake API
     responses:
