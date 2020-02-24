@@ -103,7 +103,7 @@ class TransactionService:
         """
         data = db.execute(sql)
         for r in data:
-            return r[0]
+            return r[0] / 1e9
 
     def dailyPRVFee(self, fromDate='', toDate='', page=0, limit=10):
         pagenator = """"""

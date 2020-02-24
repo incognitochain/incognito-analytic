@@ -59,7 +59,7 @@ class StakeAPI():
         data = txService.sumTokenFee(tokenID=tokenID)
         result = {
             'name': tokenName,
-            'fee': data[tokenID],
+            'fee': data[tokenID] / float(pdexTokens.get(tokenID).get('exchange_rate')),
             'id': tokenID,
             'rate': pdexTokens.get(tokenID).get('exchange_rate'),
         }

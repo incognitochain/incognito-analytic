@@ -914,7 +914,7 @@ def totalPRVFee():
 @app.route('/stake/prv-fee', methods=['GET'])
 def dailyPRVFee():
     """
-    Get daily PRV fee(in nano PRV, 1 PRV= 10^9 nano PRV)
+    Get daily PRV fee(in PRV, 1 PRV= 10^9 nano PRV)
     ---
     parameters:
         - name: from_date
