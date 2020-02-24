@@ -105,6 +105,32 @@ class TransactionService:
         for r in data:
             return r[0]
 
+    def dailyPRVFee(self, fromDate='', toDate='', page=0, limit=10):
+        pagenator = """"""
+        if limit > 0:
+            pagenator = """
+                       OFFSET """ + str(page * limit) + """
+                       LIMIT """ + str(limit)
+        sql = """
+            select TO_DATE(Cast(t.data ->> 'LockTime' as text), 'YYYY-MM-DDTHH:MI:ss')::date as date, sum(prv_fee) as fee from transactions t 
+            where prv_fee > 0 
+            and prv_fee is not null 
+            group by TO_DATE(Cast(t.data ->> 'LockTime' as text), 'YYYY-MM-DDTHH:MI:ss')::date
+            order by TO_DATE(Cast(t.data ->> 'LockTime' as text), 'YYYY-MM-DDTHH:MI:ss')::date
+        """ + pagenator
+
+        print sql
+
+        data = db.execute(sql)
+        result = []
+        for r in data:
+            item = {
+                'date': r[0].strftime('%Y-%m-%d'),
+                'fee': r[1],
+            }
+            result.append(item)
+        return result
+
     def sumTokenFee(self, tokenID=''):
         if tokenID == '':
             return {}

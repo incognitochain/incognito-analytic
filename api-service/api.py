@@ -911,6 +911,44 @@ def totalPRVFee():
     }
 
 
+@app.route('/stake/prv-fee', methods=['GET'])
+def dailyPRVFee():
+    """
+    Get daily PRV fee(in nano PRV, 1 PRV= 10^9 nano PRV)
+    ---
+    parameters:
+        - name: from_date
+          type: string
+          in: query
+          required: true
+          default: '2020-10-29'
+        - name: to_date
+          type: string
+          in: query
+          required: false
+          default: ''
+        - name: page
+          type: int
+          in: query
+          required: true
+          default: '0'
+        - name: limit
+          type: int
+          in: query
+          required: true
+          default: 50
+    tags:
+        - Stake API
+    responses:
+        200:
+            description: Get daily PRV fee
+    """
+    stakeAPI = StakeAPI(request.args)
+    return {
+        'result': stakeAPI.dailyPrvFee(),
+    }
+
+
 @app.route('/stake/total-token-fee', methods=['GET'])
 def totalTokenFee():
     """

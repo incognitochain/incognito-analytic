@@ -34,6 +34,15 @@ class StakeAPI():
         txService = TransactionService()
         return txService.sumPRVFee()
 
+    def dailyPrvFee(self):
+        txService = TransactionService()
+        fromDate = self.params.get('from_date', '')
+        toDate = self.params.get('to_date', '')
+        limit = self.params.get('limit', 0)
+        page = self.params.get('page', 0)
+        data = txService.dailyPRVFee(fromDate=fromDate, toDate=toDate, page=int(page), limit=int(limit))
+        return data
+
     def tokenFee(self):
         txService = TransactionService()
 
