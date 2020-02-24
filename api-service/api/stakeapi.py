@@ -64,3 +64,27 @@ class StakeAPI():
             'rate': pdexTokens.get(tokenID).get('exchange_rate'),
         }
         return result
+
+    def dailytokenFee(self):
+        txService = TransactionService()
+
+        tokenID = self.params.get('token_id', '')
+        fromDate = self.params.get('from_date', '')
+        toDate = self.params.get('to_date', '')
+        limit = self.params.get('limit', 0)
+        page = self.params.get('page', 0)
+
+        tokenServie = TokenService()
+        tokens = tokenServie.listTokens()
+
+        tokenName = tokens.get(tokenID).get('name')
+
+        pdexService = PdexService()
+        pdexTokens = pdexService.getTokens()
+
+        data = txService.dailyTokenFee(tokenID=tokenID, fromDate=fromDate, toDate=toDate, page=int(page),
+                                       limit=int(limit))
+
+        for i in data:
+            i['fee'] = i['fee'] / float(pdexTokens.get(tokenID).get('exchange_rate'))
+        return data

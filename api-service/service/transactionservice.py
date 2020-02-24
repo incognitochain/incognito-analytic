@@ -156,3 +156,44 @@ class TransactionService:
                 result[r[0]] = 0
             result[r[0]] += r[2]
         return result
+
+    def dailyTokenFee(self, tokenID='', fromDate='', toDate='', page=0, limit=10):
+        pagenator = """"""
+        if limit > 0:
+            pagenator = """
+                       OFFSET """ + str(page * limit) + """
+                       LIMIT """ + str(limit)
+
+        fromDateSql = ""
+        if fromDate != "":
+            fromDateSql = " and TO_DATE(Cast(t.data ->> 'LockTime' as text), 'YYYY-MM-DDTHH:MI:ss')::date >= '" + fromDate + """' """
+
+        toDateSql = ""
+        if toDate != "":
+            toDateSql = " and TO_DATE(Cast(t.data ->> 'LockTime' as text), 'YYYY-MM-DDTHH:MI:ss')::date <= '" + toDate + """' """
+
+        tokenID = """ and cast(transacted_privacy_coin->>'PropertyID' as text) = '""" + str(tokenID) + """' \n"""
+        sql = """
+        select TO_DATE(Cast(t.data ->> 'LockTime' as text), 'YYYY-MM-DDTHH:MI:ss')::date as date, sum(transacted_privacy_coin_fee) as fee
+        from transactions  t
+        where transacted_privacy_coin_fee > 0 
+        and transacted_privacy_coin_fee is not null """ + \
+              tokenID + \
+              fromDateSql + \
+              toDateSql + \
+              """\n
+              group by cast(transacted_privacy_coin->>'PropertyID' as text), TO_DATE(Cast(t.data ->> 'LockTime' as text), 'YYYY-MM-DDTHH:MI:ss')::date
+              order by TO_DATE(Cast(t.data ->> 'LockTime' as text), 'YYYY-MM-DDTHH:MI:ss')::date
+              """
+
+        print sql
+
+        data = db.execute(sql)
+        result = []
+        for r in data:
+            item = {
+                'date': r[0].strftime('%Y-%m-%d'),
+                'fee': r[1],
+            }
+            result.append(item)
+        return result

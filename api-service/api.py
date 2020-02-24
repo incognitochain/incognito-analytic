@@ -971,6 +971,48 @@ def totalTokenFee():
         'result': stakeAPI.tokenFee(),
     }
 
+@app.route('/stake/token-fee', methods=['GET'])
+def dailyTokenFee():
+    """
+    Get daily Token fee
+    ---
+    parameters:
+        - name: token_id
+          type: string
+          in: query
+          required: true
+          default: '716fd1009e2a1669caacc36891e707bfdf02590f96ebd897548e8963c95ebac0'
+        - name: from_date
+          type: string
+          in: query
+          required: true
+          default: '2020-10-29'
+        - name: to_date
+          type: string
+          in: query
+          required: false
+          default: ''
+        - name: page
+          type: int
+          in: query
+          required: true
+          default: '0'
+        - name: limit
+          type: int
+          in: query
+          required: true
+          default: 50
+    tags:
+        - Stake API
+    responses:
+        200:
+            description: Get daily PRV fee
+    """
+    stakeAPI = StakeAPI(request.args)
+    return {
+        'result': stakeAPI.dailytokenFee(),
+    }
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
