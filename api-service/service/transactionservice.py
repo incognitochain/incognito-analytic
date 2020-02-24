@@ -111,10 +111,21 @@ class TransactionService:
             pagenator = """
                        OFFSET """ + str(page * limit) + """
                        LIMIT """ + str(limit)
+
+        fromDateSql = ""
+        if fromDate != "":
+            fromDateSql = "\n and TO_DATE(Cast(t.data ->> 'LockTime' as text), 'YYYY-MM-DDTHH:MI:ss')::date >= '" + fromDate + """' """
+
+        toDateSql = ""
+        if toDate != "":
+            toDateSql = "\n and TO_DATE(Cast(t.data ->> 'LockTime' as text), 'YYYY-MM-DDTHH:MI:ss')::date <= '" + toDate + """' """
+
         sql = """
             select TO_DATE(Cast(t.data ->> 'LockTime' as text), 'YYYY-MM-DDTHH:MI:ss')::date as date, sum(prv_fee) as fee from transactions t 
             where prv_fee > 0 
-            and prv_fee is not null 
+            and prv_fee is not null """ \
+              + fromDateSql \
+              + toDateSql + """\n
             group by TO_DATE(Cast(t.data ->> 'LockTime' as text), 'YYYY-MM-DDTHH:MI:ss')::date
             order by TO_DATE(Cast(t.data ->> 'LockTime' as text), 'YYYY-MM-DDTHH:MI:ss')::date
         """ + pagenator
@@ -126,7 +137,7 @@ class TransactionService:
         for r in data:
             item = {
                 'date': r[0].strftime('%Y-%m-%d'),
-                'fee': r[1],
+                'fee': float(r[1] / 1e9),
             }
             result.append(item)
         return result
