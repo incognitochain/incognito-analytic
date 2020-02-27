@@ -2,6 +2,7 @@ from flask import jsonify
 from sqlalchemy import create_engine
 
 from service import SQLALCHEMY_DATABASE_URI
+from service.transactionservice import TransactionService
 
 db = create_engine(SQLALCHEMY_DATABASE_URI)
 
@@ -51,6 +52,9 @@ class PdexService:
         sql = """
         select requested_tx_id, receive_amount, receiving_tokenid_str, token1_id_str, token2_id_str, trader_address_str, status, beacon_height, beacon_time_stamp from pde_trades where requested_tx_id = '""" + txId + """'
         """
+
+        print sql
+
         result_set = db.execute(sql)
         result = {}
         for r in result_set:
@@ -209,7 +213,14 @@ class PdexService:
             result.append(item)
         return result
 
-    def getListTradingTxs(self, tokenBuy='', tokenSell='', page=0, limit=50):
+    def getListTradingTxs(self, tokenBuy='', tokenSell='', page=0, limit=50, since=None):
+
+        siceDate = ''
+        if since is not None:
+            tx = self.getTradingTxByRequestTxId(txId=since)
+            siceDate = """ AND beacon_time_stamp > '""" + tx.get(
+                'beacon_time_stamp').strftime('%Y-%m-%dT%H:%M:%S') + """'"""
+
         pagenator = """"""
         if limit > 0:
             pagenator = """
@@ -219,7 +230,7 @@ class PdexService:
         sql = """
         SELECT requested_tx_id, token1_id_str, token2_id_str, receiving_tokenid_str, receive_amount, beacon_height, beacon_time_stamp, txs.metadata FROM pde_trades trades
         JOIN transactions txs ON txs.tx_id = trades.requested_tx_id AND trades.status = 'accepted'
-        WHERE (
+        WHERE ((
         	token1_id_str = receiving_tokenid_str 
 	        AND token1_id_str = '""" + tokenBuy + """' 
 	        AND token2_id_str = '""" + tokenSell + """')
@@ -227,7 +238,7 @@ class PdexService:
 	        token2_id_str = receiving_tokenid_str 
 	        AND token1_id_str = '""" + tokenSell + """'
 	        AND token2_id_str = '""" + tokenBuy + """'
-        )
+        ))""" + siceDate + """
         ORDER BY beacon_height DESC
         """ + pagenator
 

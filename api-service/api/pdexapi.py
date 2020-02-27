@@ -480,9 +480,9 @@ class PdexApi():
 
         return self.getListTradingTxsFunc(tokenBuy=tokenBuy, tokenSell=tokenSell, page=page, limit=limit)
 
-    def getListTradingTxsFunc(self, tokenBuy='', tokenSell='', page=0, limit=50):
+    def getListTradingTxsFunc(self, tokenBuy='', tokenSell='', page=0, limit=50, since=None):
         service = PdexService()
-        data = service.getListTradingTxs(tokenBuy=tokenBuy, tokenSell=tokenSell, page=page, limit=limit)
+        data = service.getListTradingTxs(tokenBuy=tokenBuy, tokenSell=tokenSell, page=page, limit=limit, since=since)
 
         result = []
         tokenService = TokenService()

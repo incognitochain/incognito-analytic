@@ -85,6 +85,11 @@ def pdexTrades():
               type: string
               required: true
               default: '0000000000000000000000000000000000000000000000000000000000000004_716fd1009e2a1669caacc36891e707bfdf02590f96ebd897548e8963c95ebac0'
+            - name: since
+              in: query
+              type: string
+              required: true
+              default: ''
         tags:
             - Pdex API
         responses:
@@ -93,11 +98,12 @@ def pdexTrades():
         """
     pdex = PdexApi(request.args)
     market = request.args.get('market', 'PRV_pUSDT')
+    since = request.args.get('since', '')
     market = market.split('_', 2)
     tokenBuy = market[0].strip()
     tokenSell = market[1].strip()
 
-    result = pdex.getListTradingTxsFunc(tokenBuy=tokenBuy, tokenSell=tokenSell, page=0, limit=3)
+    result = pdex.getListTradingTxsFunc(tokenBuy=tokenBuy, tokenSell=tokenSell, page=0, limit=10, since=since)
     return json.dumps(result, indent=2)
 
 
