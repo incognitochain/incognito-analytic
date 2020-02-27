@@ -218,8 +218,9 @@ class PdexService:
         siceDate = ''
         if since is not None:
             tx = self.getTradingTxByRequestTxId(txId=since)
-            siceDate = """ AND beacon_time_stamp > '""" + tx.get(
-                'beacon_time_stamp').strftime('%Y-%m-%dT%H:%M:%S') + """'"""
+            if tx is not None:
+                siceDate = """ AND beacon_time_stamp > '""" + tx.get(
+                    'beacon_time_stamp').strftime('%Y-%m-%dT%H:%M:%S') + """'"""
 
         pagenator = """"""
         if limit > 0:
