@@ -15,6 +15,7 @@ type TokenStore interface {
 	GetListTokenIds() ([]string, error)
 	StoreToken(token *models.Token) error
 	UpdateToken(token *models.Token) error
+	UpdateTokenSupply(token *models.Token) error
 }
 
 type TokenPuller struct {
@@ -101,6 +102,19 @@ func (puller *TokenPuller) Execute() {
 					continue
 				} else {
 					log.Printf("[Token puller] Add token success %s %s\n", token.ID, token.Name)
+				}
+			} else {
+				// update supply
+				tokenModel := models.Token{
+					Supply:  token.Amount,
+					TokenID: token.ID,
+				}
+				err = puller.TokenStore.UpdateTokenSupply(&tokenModel)
+				if err != nil {
+					log.Printf("[Token puller] An error occured while Update supply %s %s: %+v\n", token.ID, token.Name, err)
+					continue
+				} else {
+					log.Printf("[Token puller] Update supply token success %s %s\n", token.ID, token.Name)
 				}
 			}
 		}

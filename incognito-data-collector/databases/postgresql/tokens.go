@@ -50,3 +50,14 @@ func (st *TokensStore) UpdateToken(token *models.Token) error {
 	_, err := tx.Exec(sqlStr, token.CountTx, token.ListHashTx, token.TokenID)
 	return err
 }
+
+func (st *TokensStore) UpdateTokenSupply(token *models.Token) error {
+	sqlStr := `
+		UPDATE tokens SET supply=$1 WHERE token_id=$2
+		RETURNING id
+	`
+	tx := st.DB.MustBegin()
+	defer tx.Commit()
+	_, err := tx.Exec(sqlStr, token.Supply, token.TokenID)
+	return err
+}
