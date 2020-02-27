@@ -240,7 +240,7 @@ class PdexService:
 	        AND token1_id_str = '""" + tokenSell + """'
 	        AND token2_id_str = '""" + tokenBuy + """'
         ))""" + siceDate + """
-        ORDER BY beacon_height DESC
+        ORDER BY beacon_height, beacon_time_stamp
         """ + pagenator
 
         print sql
