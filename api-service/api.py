@@ -185,19 +185,22 @@ def pdexLastVolume24Hours():
         in: query
         type: string
         required: true
+        default: '0000000000000000000000000000000000000000000000000000000000000004'
       - name: token2
         in: query
         type: string
         required: true
+        default: '716fd1009e2a1669caacc36891e707bfdf02590f96ebd897548e8963c95ebac0'
       - name: hours
         in: query
         type: string
         required: true
+        default: '24'
       - name: direction
         in: query
         type: string
         required: false
-        default: false
+        default: 'false'
     responses:
         200:
             description: Last trading tx
@@ -970,6 +973,7 @@ def totalTokenFee():
     return {
         'result': stakeAPI.tokenFee(),
     }
+
 
 @app.route('/stake/token-fee', methods=['GET'])
 def dailyTokenFee():

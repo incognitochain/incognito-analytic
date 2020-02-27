@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
+from decimal import Decimal
 
 import requests
 from operator import itemgetter
@@ -238,7 +239,8 @@ class PdexApi():
         result = self.lastHoursVolumeFunc(token1, token2, hours, direction)
 
         for k in result.keys():
-            result[k].pop('tokenId', None)
+            if direction:
+                result[k].pop('tokenId', None)
         return result
 
     def lastHoursVolumeFunc(self, token1, token2, hours, direction):
@@ -254,6 +256,7 @@ class PdexApi():
 
             result = {}
             tokens = tokenService.listTokens()
+            pdeToken = service.getTokens()
             if not direction:
                 for tx in data:
                     metadata = tx['metadata']
@@ -275,12 +278,18 @@ class PdexApi():
                     buyAmount = tx['receive_amount']
 
                     if sellToken not in result:
-                        result[sellToken] = 0
+                        result[sellToken] = Decimal(0)
+                    sellExchangeRate = pdeToken.get(sellTokenId).get('exchange_rate')
+                    sellAmount = Decimal(sellAmount / Decimal(sellExchangeRate))
                     result[sellToken] += sellAmount
 
                     if buyToken not in result:
-                        result[buyToken] = 0
+                        result[buyToken] = Decimal(0)
+                    buyExchangeRate = pdeToken.get(buyTokenId).get('exchange_rate')
+                    buyAmount = Decimal(buyAmount / Decimal(buyExchangeRate))
                     result[buyToken] += buyAmount
+                for i in result.keys():
+                    result[i] = float(result[i])
             else:
                 for tx in data:
                     metadata = tx['metadata']
@@ -306,11 +315,16 @@ class PdexApi():
                     if buyToken not in result:
                         result[buyToken] = {'sell': 0, 'buy': 0}
 
-                    result[sellToken]['sell'] += sellAmount
-                    result[buyToken]['tokenId'] = sellTokenId
-                    result[buyToken]['buy'] += buyAmount
-                    result[buyToken]['tokenId'] = buyTokenId
+                    sellExchangeRate = pdeToken.get(sellTokenId).get('exchange_rate')
+                    result[sellToken]['sell'] += Decimal(sellAmount / Decimal(sellExchangeRate))
+                    result[sellToken]['tokenId'] = sellTokenId
 
+                    buyExchangeRate = pdeToken.get(buyTokenId).get('exchange_rate')
+                    result[buyToken]['buy'] += Decimal(buyAmount / Decimal(buyExchangeRate))
+                    result[buyToken]['tokenId'] = buyTokenId
+                for i in result.keys():
+                    result[i]['buy'] = float(result[i]['buy'])
+                    result[i]['sell'] = float(result[i]['sell'])
             return result
 
     def updateListTokens(self):
