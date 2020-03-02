@@ -49,9 +49,8 @@ class TransactionService:
         sql = """
                 SELECT t.tx_id, t.metadata FROM transactions as t
                 WHERE CAST(t.metadata ->> 'Type' as INT) = """ + str(metadataType) + byBridgeTokenID + byDeBridgeTokenID \
-              + pagenator + """
-                ORDER BY t.created_time """ + order_trend + """
-        """
+              + """ ORDER BY t.created_time """ + order_trend + pagenator
+
         result_set = db.execute(sql)
         txs = []
         for r in result_set:

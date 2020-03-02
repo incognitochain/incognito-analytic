@@ -43,7 +43,7 @@ class TransactionAPI():
             result = []
             for tx in txs:
                 result.append(tx)
-            return json.dumps(result)
+            return result
 
     def listWithdrawLiquidityTx(self):
 
