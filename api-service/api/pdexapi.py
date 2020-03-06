@@ -352,7 +352,7 @@ class PdexApi():
         for t in pTokens:
             temps[t['TokenID']] = {
                 'address': t['Name'],
-                'rate': '1e' + str(t['Decimals']),
+                'rate': '1e' + str(t['PDecimals']),
                 'id': t['TokenID'],
             }
 
