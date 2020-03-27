@@ -47,7 +47,7 @@ func (puller *BeaconBlockPuller) getBeaconBlock(beaconHeight uint64) (*entities.
 	if beaconBlock.RPCError != nil {
 		return nil, errors.New(beaconBlock.RPCError.Message)
 	}
-	return beaconBlock.Result, nil
+	return beaconBlock.Result[0], nil
 }
 
 func (puller *BeaconBlockPuller) Execute() {

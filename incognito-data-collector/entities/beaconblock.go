@@ -18,5 +18,5 @@ type BeaconBlock struct {
 
 type BeaconBlockRes struct {
 	RPCBaseRes
-	Result *BeaconBlock
+	Result []*BeaconBlock
 }
