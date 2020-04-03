@@ -51,7 +51,11 @@ func (puller *ShardBlockPuller) getShardBlock(shardBlockHeight uint64, shardID i
 	if shardBlockRes.RPCError != nil {
 		return nil, errors.New(shardBlockRes.RPCError.Message)
 	}
-	return shardBlockRes.Result[0], nil
+	if len(shardBlockRes.Result) > 0 {
+		return shardBlockRes.Result[0], nil
+	} else {
+		return nil, nil
+	}
 }
 
 func (puller *ShardBlockPuller) Execute() {
@@ -72,6 +76,10 @@ func (puller *ShardBlockPuller) Execute() {
 		log.Printf("[Shard block puller] Proccessing for shard %d block height: %d\n", puller.ShardID, blockHeight)
 		time.Sleep(500 * time.Millisecond)
 		shardBlockRes, err := puller.getShardBlock(blockHeight, puller.ShardID)
+		if shardBlockRes == nil {
+			log.Printf("[Shard block puller] An error occured while getting shard %d block height %d from chain: it is not existed \n", puller.ShardID, blockHeight)
+			continue
+		}
 		if err != nil {
 			log.Printf("[Shard block puller] An error occured while getting shard %d block height %d from chain: %+v \n", puller.ShardID, blockHeight, err)
 			continue
