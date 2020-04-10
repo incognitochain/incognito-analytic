@@ -122,7 +122,7 @@ func (puller *TokenPuller) Execute() {
 		for _, tokenId := range currentTokens {
 			token, err := puller.getToken(tokenId)
 			if err != nil {
-				log.Printf("[Token puller] An error occured while getToken by id %s %+v\n", token.ID, err)
+				log.Printf("[Token puller] An error occured while getToken by id %s %+v\n", tokenId, err)
 				continue
 			}
 			tokenModel := models.Token{
