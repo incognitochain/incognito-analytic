@@ -3,6 +3,7 @@ package entities
 type TransactionDetail struct {
 	BlockHash   string `json:"BlockHash"`
 	BlockHeight uint64 `json:"BlockHeight"`
+	TxSize      uint64 `json:"TxSize"`
 	Index       uint64 `json:"Index"`
 	ShardID     byte   `json:"ShardID"`
 	Hash        string `json:"Hash"`
