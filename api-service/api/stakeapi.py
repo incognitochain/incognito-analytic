@@ -19,7 +19,8 @@ class StakeAPI():
         minedPRVToken = 0
         for k in data:
             minedPRVToken += (data[k] - 1) * 1386666000
-        return minedPRVToken
+        preminted = ((5 * 1e6) * 1e9)
+        return minedPRVToken + preminted
 
     def getTotalStakedTokens(self):
         txService = TransactionService()
