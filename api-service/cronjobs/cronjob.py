@@ -2,20 +2,21 @@ import schedule
 import time
 import requests
 import json
+import logging
 
 from cronjobs import Webhookvivian
 
 
 def job():
-    print("I'm working...")
+    logging.info("I'm working...")
 
 
 def notifyLastBlockIn24Hour():
     if Webhookvivian == "":
-        print("Can not send notification because dont know webhook")
+        logging.warnings("Can not send notification because dont know webhook")
         return
 
-    print("notifyLastBlockIn24Hour: Get data")
+    logging.info("notifyLastBlockIn24Hour: Get data")
     params = {
         'interval': 24,
         'shard_id': -1
@@ -29,13 +30,13 @@ def notifyLastBlockIn24Hour():
     for shardId in range(len(data['result'])):
         blocks = data['result'][shardId]
         result += "Shard %d: %d blocks \n" % (shardId, blocks)
-    print(result)
+    logging.info(result)
 
     response = requests.post(url=Webhookvivian,
                              data=json.dumps({'text': result}), headers={'Content-Type': 'application/json'})
-    print('Response: ' + str(response.text))
-    print('Response code: ' + str(response.status_code))
-    print("----------------------------")
+    logging.info('Response: ' + str(response.text))
+    logging.info('Response code: ' + str(response.status_code))
+    logging.info("----------------------------")
     return
 
 
