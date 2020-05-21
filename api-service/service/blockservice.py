@@ -111,3 +111,21 @@ class BlockService:
         dataSet = db.execute(sql)
         for r in dataSet:
             return r[0]
+
+    # Get count block of every shard in last N hours
+    def countBlocksByLastTime(self, interval=24, shard_id=-1):
+        sql = """
+        Select blocks.shard_id, count(blocks.block_hash)
+        From shard_blocks blocks 
+        Where (to_timestamp(Cast(blocks.data ->> 'Time' as DOUBLE PRECISION))) >= (now() - interval '""" + str(
+            interval) + """ hours')
+        """  + ("" if int(shard_id)==-1 else """ AND blocks.shard_id=""" + str(shard_id)) + """
+        GROUP BY blocks.shard_id
+        ORDER BY blocks.shard_id
+        """
+        dataSet = db.execute(sql)
+
+        result = []
+        for r in dataSet:
+            result.append(r[1])
+        return result

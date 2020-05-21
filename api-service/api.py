@@ -870,6 +870,34 @@ def getShardBlock():
     }
 
 
+@app.route('/block/shard/count-block-last-time', methods=['GET'])
+def getShardBlockLastTime():
+    """
+    Count shard block by last time interval
+    ---
+    tags:
+        - Shard Block API
+    parameters:
+        - name: interval
+          type: string
+          in: query
+          default: 0
+          required: false
+        - name: shard_id
+          type: string
+          in: query
+          default: 0
+          required: false
+    responses:
+        200:
+            description: Get shard block
+    """
+    blockAPI = BlockAPI(request.args)
+    return {
+        'result': blockAPI.countBlocksByLastTime()
+    }
+
+
 # Stake
 @app.route('/stake/minded-token', methods=['GET'])
 def mindedToken():

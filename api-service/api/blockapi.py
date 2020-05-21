@@ -50,3 +50,9 @@ class BlockAPI():
         blockHeight = self.params.get('block_height', 0)
         blockHash = self.params.get('block_hash', '')
         return blockService.getShardBlock(block_height=int(blockHeight), block_hash=blockHash)
+
+    def countBlocksByLastTime(self):
+        blockService = BlockService()
+        interval = self.params.get('interval', "24")
+        shard_id = self.params.get('shard_id', "-1")
+        return blockService.countBlocksByLastTime(interval=interval, shard_id=shard_id)
