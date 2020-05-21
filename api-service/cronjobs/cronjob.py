@@ -39,7 +39,7 @@ def notifyLastBlockIn24Hour():
     return
 
 
-# schedule.every(5).seconds.do(job)
+schedule.every(5).seconds.do(job)
 # schedule.every(5).seconds.do(notifyLastBlockIn24Hour)
 schedule.every().day.at("00:00:00").do(notifyLastBlockIn24Hour)
 
