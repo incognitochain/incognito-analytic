@@ -3,8 +3,11 @@ import time
 import requests
 import json
 import logging
+import sys
 
 from cronjobs import Webhookvivian
+
+sys.stdout.flush()
 
 
 def job():
