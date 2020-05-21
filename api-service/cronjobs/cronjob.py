@@ -25,7 +25,7 @@ def notifyLastBlockIn24Hour():
     data = r.json()
     print(data)
 
-    result = ""
+    result = "Count Blocks in 24 hours\n"
     for shardId in range(len(data['result'])):
         blocks = data['result'][shardId]
         result += "Shard %d: %d blocks \n" % (shardId, blocks)
@@ -35,13 +35,13 @@ def notifyLastBlockIn24Hour():
                              data=json.dumps({'text': result}), headers={'Content-Type': 'application/json'})
     print('Response: ' + str(response.text))
     print('Response code: ' + str(response.status_code))
+    print("----------------------------")
     return
 
 
 # schedule.every(5).seconds.do(job)
-schedule.every(5).seconds.do(notifyLastBlockIn24Hour)
-# schedule.every().day.at("00:00:00").do(job)
-
+# schedule.every(5).seconds.do(notifyLastBlockIn24Hour)
+schedule.every().day.at("00:00:00").do(notifyLastBlockIn24Hour)
 
 while True:
     schedule.run_pending()
