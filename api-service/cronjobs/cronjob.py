@@ -3,7 +3,7 @@ import time
 import requests
 import json
 
-from cronjobs import Webhookvivivan
+from cronjobs import Webhookvivian
 
 
 def job():
@@ -11,7 +11,7 @@ def job():
 
 
 def notifyLastBlockIn24Hour():
-    if Webhookvivivan == "":
+    if Webhookvivian == "":
         print("Can not send notification because dont know webhook")
         return
 
@@ -31,9 +31,7 @@ def notifyLastBlockIn24Hour():
         result += "Shard %d: %d blocks \n" % (shardId, blocks)
     print(result)
 
-    if Webhookvivivan == '':
-        webhookvivivan = "https://hooks.slack.com/services/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"
-    response = requests.post(url=webhookvivivan,
+    response = requests.post(url=Webhookvivian,
                              data=json.dumps({'text': result}), headers={'Content-Type': 'application/json'})
     print('Response: ' + str(response.text))
     print('Response code: ' + str(response.status_code))
