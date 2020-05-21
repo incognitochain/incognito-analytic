@@ -94,140 +94,177 @@ class PdexApi():
 
     def commonPairsLatest24Hours(self):
         tradeTokens = self.getTokens()
-
+        partner = self.params.get('partner', '')
         commonPairs = {
-            'pZRX-PRV': {
-                'tokenBuy': 'de395b1914718702687b477703bdd36e52119033a9037bb28f6b33a3d0c2f867',
-                'tokenSell': '0000000000000000000000000000000000000000000000000000000000000004',
-            },
-            'pLINK-PRV': {
-                'tokenBuy': 'e0926da2436adc42e65ca174e590c7b17040cd0b7bdf35982f0dd7fc067f6bcf',
-                'tokenSell': '0000000000000000000000000000000000000000000000000000000000000004',
-            },
-            'pTOMO-pUSDT': {
-                'tokenBuy': 'a0a22d131bbfdc892938542f0dbe1a7f2f48e16bc46bf1c5404319335dc1f0df',
-                'tokenSell': '716fd1009e2a1669caacc36891e707bfdf02590f96ebd897548e8963c95ebac0',
-            },
-            'pTOMO-PRV': {
-                'tokenBuy': 'a0a22d131bbfdc892938542f0dbe1a7f2f48e16bc46bf1c5404319335dc1f0df',
-                'tokenSell': '0000000000000000000000000000000000000000000000000000000000000004',
-            },
-            'pBAND-PRV': {
-                'tokenBuy': '2dda855fb4660225882d11136a64ad80effbddfa18a168f78924629b8664a6b3',
-                'tokenSell': '0000000000000000000000000000000000000000000000000000000000000004',
-            },
-            'pFTM-pUSDT': {
-                'tokenBuy': 'd09ad0af0a34ea3e13b772ef9918b71793a18c79b2b75aec42c53b69537029fe',
-                'tokenSell': '716fd1009e2a1669caacc36891e707bfdf02590f96ebd897548e8963c95ebac0',
-            },
-            'pZIL-PRV': {
-                'tokenBuy': '880ea0787f6c1555e59e3958a595086b7802fc7a38276bcd80d4525606557fbc',
-                'tokenSell': '0000000000000000000000000000000000000000000000000000000000000004',
-            },
-            'pMATIC-PRV': {
-                'tokenBuy': 'dae027b21d8d57114da11209dce8eeb587d01adf59d4fc356a8be5eedc146859',
-                'tokenSell': '0000000000000000000000000000000000000000000000000000000000000004',
-            },
-            'pONE-PRV': {
-                'tokenBuy': '4077654cf585a99b448564d1ecc915baf7b8ac58693d9f0a6af6c12b18143044',
-                'tokenSell': '0000000000000000000000000000000000000000000000000000000000000004',
-            },
-            'pONE-pUSDT': {
-                'tokenBuy': '4077654cf585a99b448564d1ecc915baf7b8ac58693d9f0a6af6c12b18143044',
-                'tokenSell': '716fd1009e2a1669caacc36891e707bfdf02590f96ebd897548e8963c95ebac0',
-            },
-            'pBAT-PRV': {
-                'tokenBuy': '1fe75e9afa01b85126370a1583c7af9f1a5731625ef076ece396fcc6584c2b44',
-                'tokenSell': '0000000000000000000000000000000000000000000000000000000000000004',
-            },
-            'pBNB-PRV': {
-                'tokenBuy': 'b2655152784e8639fa19521a7035f331eea1f1e911b2f3200a507ebb4554387b',
-                'tokenSell': '0000000000000000000000000000000000000000000000000000000000000004',
-            },
-            'pWTC-PRV': {
-                'tokenBuy': '530cd74f506edcdd263e34e6dacdd15097f87677036cf412f8ebeb1c494e352d',
-                'tokenSell': '0000000000000000000000000000000000000000000000000000000000000004',
-            },
-            'PRV-pBTC': {
-                'tokenBuy': '0000000000000000000000000000000000000000000000000000000000000004',
-                'tokenSell': 'b832e5d3b1f01a4f0623f7fe91d6673461e1f5d37d91fe78c5c2e6183ff39696',
-            },
-            'pBTC-pUSDT': {
-                'tokenBuy': 'b832e5d3b1f01a4f0623f7fe91d6673461e1f5d37d91fe78c5c2e6183ff39696',
-                'tokenSell': '716fd1009e2a1669caacc36891e707bfdf02590f96ebd897548e8963c95ebac0',
-            },
-            'PRV-pETH': {
-                'tokenBuy': '0000000000000000000000000000000000000000000000000000000000000004',
-                'tokenSell': 'ffd8d42dc40a8d166ea4848baf8b5f6e912ad79875f4373070b59392b1756c8f',
-            },
-            'pETH-pTUSD': {
-                'tokenBuy': 'ffd8d42dc40a8d166ea4848baf8b5f6e912ad79875f4373070b59392b1756c8f',
-                'tokenSell': '8c3a61e77061265aaefa1e7160abfe343c2189278dd224bb7da6e7edc6a1d4db',
-            },
-            'PRV-pBUSD': {
-                'tokenBuy': '0000000000000000000000000000000000000000000000000000000000000004',
-                'tokenSell': '9e1142557e63fd20dee7f3c9524ffe0aa41198c494aa8d36447d12e85f0ddce7',
-            },
-            'pDAI-pTUSD': {
-                'tokenBuy': 'd240c61c6066fed0535df9302f1be9f5c9728ef6d01ce88d525c4f6ff9d65a56',
-                'tokenSell': '8c3a61e77061265aaefa1e7160abfe343c2189278dd224bb7da6e7edc6a1d4db',
-            },
+            # 'pZRX-PRV': {
+            #     'tokenBuy': 'de395b1914718702687b477703bdd36e52119033a9037bb28f6b33a3d0c2f867',
+            #     'tokenSell': '0000000000000000000000000000000000000000000000000000000000000004',
+            # },
+            # 'pLINK-PRV': {
+            #     'tokenBuy': 'e0926da2436adc42e65ca174e590c7b17040cd0b7bdf35982f0dd7fc067f6bcf',
+            #     'tokenSell': '0000000000000000000000000000000000000000000000000000000000000004',
+            # },
+            # 'pTOMO-pUSDT': {
+            #     'tokenBuy': 'a0a22d131bbfdc892938542f0dbe1a7f2f48e16bc46bf1c5404319335dc1f0df',
+            #     'tokenSell': '716fd1009e2a1669caacc36891e707bfdf02590f96ebd897548e8963c95ebac0',
+            # },
+            # 'pTOMO-PRV': {
+            #     'tokenBuy': 'a0a22d131bbfdc892938542f0dbe1a7f2f48e16bc46bf1c5404319335dc1f0df',
+            #     'tokenSell': '0000000000000000000000000000000000000000000000000000000000000004',
+            # },
+            # 'pBAND-PRV': {
+            #     'tokenBuy': '2dda855fb4660225882d11136a64ad80effbddfa18a168f78924629b8664a6b3',
+            #     'tokenSell': '0000000000000000000000000000000000000000000000000000000000000004',
+            # },
+            # 'pFTM-pUSDT': {
+            #     'tokenBuy': 'd09ad0af0a34ea3e13b772ef9918b71793a18c79b2b75aec42c53b69537029fe',
+            #     'tokenSell': '716fd1009e2a1669caacc36891e707bfdf02590f96ebd897548e8963c95ebac0',
+            # },
+            # 'pZIL-PRV': {
+            #     'tokenBuy': '880ea0787f6c1555e59e3958a595086b7802fc7a38276bcd80d4525606557fbc',
+            #     'tokenSell': '0000000000000000000000000000000000000000000000000000000000000004',
+            # },
+            # 'pMATIC-PRV': {
+            #     'tokenBuy': 'dae027b21d8d57114da11209dce8eeb587d01adf59d4fc356a8be5eedc146859',
+            #     'tokenSell': '0000000000000000000000000000000000000000000000000000000000000004',
+            # },
+            # 'pONE-PRV': {
+            #     'tokenBuy': '4077654cf585a99b448564d1ecc915baf7b8ac58693d9f0a6af6c12b18143044',
+            #     'tokenSell': '0000000000000000000000000000000000000000000000000000000000000004',
+            # },
+            # 'pONE-pUSDT': {
+            #     'tokenBuy': '4077654cf585a99b448564d1ecc915baf7b8ac58693d9f0a6af6c12b18143044',
+            #     'tokenSell': '716fd1009e2a1669caacc36891e707bfdf02590f96ebd897548e8963c95ebac0',
+            # },
+            # 'pBAT-PRV': {
+            #     'tokenBuy': '1fe75e9afa01b85126370a1583c7af9f1a5731625ef076ece396fcc6584c2b44',
+            #     'tokenSell': '0000000000000000000000000000000000000000000000000000000000000004',
+            # },
+            # 'pBNB-PRV': {
+            #     'tokenBuy': 'b2655152784e8639fa19521a7035f331eea1f1e911b2f3200a507ebb4554387b',
+            #     'tokenSell': '0000000000000000000000000000000000000000000000000000000000000004',
+            # },
+            # 'pWTC-PRV': {
+            #     'tokenBuy': '530cd74f506edcdd263e34e6dacdd15097f87677036cf412f8ebeb1c494e352d',
+            #     'tokenSell': '0000000000000000000000000000000000000000000000000000000000000004',
+            # },
+            # 'PRV-pBTC': {
+            #     'tokenBuy': '0000000000000000000000000000000000000000000000000000000000000004',
+            #     'tokenSell': 'b832e5d3b1f01a4f0623f7fe91d6673461e1f5d37d91fe78c5c2e6183ff39696',
+            # },
+            # 'pBTC-pUSDT': {
+            #     'tokenBuy': 'b832e5d3b1f01a4f0623f7fe91d6673461e1f5d37d91fe78c5c2e6183ff39696',
+            #     'tokenSell': '716fd1009e2a1669caacc36891e707bfdf02590f96ebd897548e8963c95ebac0',
+            # },
+            # 'PRV-pETH': {
+            #     'tokenBuy': '0000000000000000000000000000000000000000000000000000000000000004',
+            #     'tokenSell': 'ffd8d42dc40a8d166ea4848baf8b5f6e912ad79875f4373070b59392b1756c8f',
+            # },
+            # 'pETH-pTUSD': {
+            #     'tokenBuy': 'ffd8d42dc40a8d166ea4848baf8b5f6e912ad79875f4373070b59392b1756c8f',
+            #     'tokenSell': '8c3a61e77061265aaefa1e7160abfe343c2189278dd224bb7da6e7edc6a1d4db',
+            # },
+            # 'PRV-pBUSD': {
+            #     'tokenBuy': '0000000000000000000000000000000000000000000000000000000000000004',
+            #     'tokenSell': '9e1142557e63fd20dee7f3c9524ffe0aa41198c494aa8d36447d12e85f0ddce7',
+            # },
+            # 'pDAI-pTUSD': {
+            #     'tokenBuy': 'd240c61c6066fed0535df9302f1be9f5c9728ef6d01ce88d525c4f6ff9d65a56',
+            #     'tokenSell': '8c3a61e77061265aaefa1e7160abfe343c2189278dd224bb7da6e7edc6a1d4db',
+            # },
             'PRV-pUSDT': {
                 'tokenBuy': '0000000000000000000000000000000000000000000000000000000000000004',
                 'tokenSell': '716fd1009e2a1669caacc36891e707bfdf02590f96ebd897548e8963c95ebac0',
             },
-            'PRV-pUSDC': {
-                'tokenBuy': '0000000000000000000000000000000000000000000000000000000000000004',
-                'tokenSell': '1ff2da446abfebea3ba30385e2ca99b0f0bbeda5c6371f4c23c939672b429a42',
-            },
-            'PRV-pDAI': {
-                'tokenBuy': '0000000000000000000000000000000000000000000000000000000000000004',
-                'tokenSell': '8c3a61e77061265aaefa1e7160abfe343c2189278dd224bb7da6e7edc6a1d4db',
-            },
-            'pDAI-pUSDC': {
-                'tokenBuy': '8c3a61e77061265aaefa1e7160abfe343c2189278dd224bb7da6e7edc6a1d4db',
-                'tokenSell': '1ff2da446abfebea3ba30385e2ca99b0f0bbeda5c6371f4c23c939672b429a42',
-            },
+            # 'PRV-pUSDC': {
+            #     'tokenBuy': '0000000000000000000000000000000000000000000000000000000000000004',
+            #     'tokenSell': '1ff2da446abfebea3ba30385e2ca99b0f0bbeda5c6371f4c23c939672b429a42',
+            # },
+            # 'PRV-pDAI': {
+            #     'tokenBuy': '0000000000000000000000000000000000000000000000000000000000000004',
+            #     'tokenSell': '8c3a61e77061265aaefa1e7160abfe343c2189278dd224bb7da6e7edc6a1d4db',
+            # },
+            # 'pDAI-pUSDC': {
+            #     'tokenBuy': '8c3a61e77061265aaefa1e7160abfe343c2189278dd224bb7da6e7edc6a1d4db',
+            #     'tokenSell': '1ff2da446abfebea3ba30385e2ca99b0f0bbeda5c6371f4c23c939672b429a42',
+            # },
         }
         service = PdexService()
         hours = 24
         direction = True
         result = {}
+        result1 = []
         for pairKey in commonPairs.keys():
             tokenBuy = commonPairs[pairKey].get('tokenBuy')
             tokenSell = commonPairs[pairKey].get('tokenSell')
 
-            result[pairKey] = {}
             tokenSellData = tradeTokens.get(tokenSell)
             exchangerateSellToken = tokenSellData.get('exchange_rate')
             tokenBuyData = tradeTokens.get(tokenBuy)
             exchangerateBuyToken = tokenBuyData.get('exchange_rate')
 
-            # get volume of last 24 hours
-            result[pairKey]['volume24h'] = 0
             pair = self.lastHoursVolumeFunc(tokenBuy, tokenSell, hours, direction)
-            for k in pair.keys():
-                if pair[k].get('tokenId') == tokenSell:
-                    result[pairKey]['volume24h'] = pair[k].get('sell') / float(exchangerateSellToken)
-
-            # get price of last trade
-            result[pairKey]['last_trade_volume'] = 0
             lastTrade = self.getLastTradingTxFunc(tokenSell=tokenSell, tokenBuy=tokenBuy)
             if lastTrade is not None:
                 metadata = lastTrade.get('metadata', {})
-                result[pairKey]['last_trade_volume'] = metadata.get('SellAmount', 0.0) / float(exchangerateSellToken)
 
-            # get last trade price
-            result[pairKey]['price_of_last_trade'] = 0
-            txId = lastTrade.get('tx_id')
-            if txId is not None and txId != '':
-                trade = service.getTradingTxByRequestTxId(txId=txId)
-                if trade is not None:
-                    buy = (trade.get('receive_amount') / float(exchangerateBuyToken))
-                    sell = (metadata.get('SellAmount', 1.0) / float(exchangerateSellToken))
-                    result[pairKey]['price_of_last_trade'] = sell / buy
+            symbol_anchor = pairKey.split("-")
+            symbol_anchor_map = {
+                tokenBuy: symbol_anchor[0],
+                tokenSell: symbol_anchor[1],
+            }
 
-        return result
+            if partner == 'coinmarketcap-CN':
+                item = {
+                    'symbol': symbol_anchor[0],
+                    'anchor': symbol_anchor[1],
+                }
+                # get volume of last 24 hours
+                for k in pair.keys():
+                    if pair[k].get('tokenId') == tokenSell:
+                        item['volume_24h_of_' + symbol_anchor_map[tokenSell]] = pair[k].get(
+                            'sell')  # / float(exchangerateSellToken)
+                    if pair[k].get('tokenId') == tokenBuy:
+                        item['volume_24h_of_' + symbol_anchor_map[tokenBuy]] = pair[k].get(
+                            'buy')  # / float(exchangerateBuyToken)
+
+                # get last trade price
+                item['last_price'] = 0
+                txId = lastTrade.get('tx_id')
+                if txId is not None and txId != '':
+                    trade = service.getTradingTxByRequestTxId(txId=txId)
+                    if trade is not None:
+                        buy = (trade.get('receive_amount') / float(exchangerateBuyToken))
+                        sell = (metadata.get('SellAmount', 1.0) / float(exchangerateSellToken))
+                        item['last_price'] = sell / buy
+                    item['price_updated_at'] = lastTrade.get('lock_time')
+                result1.append(item)
+            else:
+                result[pairKey] = {}
+                # get volume of last 24 hours
+                result[pairKey]['volume24h'] = 0
+                for k in pair.keys():
+                    if pair[k].get('tokenId') == tokenSell:
+                        result[pairKey]['volume24h'] = pair[k].get('sell') / float(exchangerateSellToken)
+
+                # get volume of last trade
+                result[pairKey]['last_trade_volume'] = metadata.get('SellAmount', 0.0) / float(
+                    exchangerateSellToken)
+
+                # get last trade price
+                result[pairKey]['price_of_last_trade'] = 0
+                txId = lastTrade.get('tx_id')
+                if txId is not None and txId != '':
+                    trade = service.getTradingTxByRequestTxId(txId=txId)
+                    if trade is not None:
+                        buy = (trade.get('receive_amount') / float(exchangerateBuyToken))
+                        sell = (metadata.get('SellAmount', 1.0) / float(exchangerateSellToken))
+                        result[pairKey]['price_of_last_trade'] = sell / buy
+
+        if partner == 'coinmarketcap-CN':
+            return result1
+        else:
+            return result
 
     def lastHoursVolume(self):
         token1 = self.params.get('token1', '')
@@ -288,6 +325,7 @@ class PdexApi():
                     buyExchangeRate = pdeToken.get(buyTokenId).get('exchange_rate')
                     buyAmount = Decimal(buyAmount / Decimal(buyExchangeRate))
                     result[buyToken] += buyAmount
+
                 for i in result.keys():
                     result[i] = float(result[i])
             else:
@@ -322,6 +360,7 @@ class PdexApi():
                     buyExchangeRate = pdeToken.get(buyTokenId).get('exchange_rate')
                     result[buyToken]['buy'] += Decimal(buyAmount / Decimal(buyExchangeRate))
                     result[buyToken]['tokenId'] = buyTokenId
+
                 for i in result.keys():
                     result[i]['buy'] = float(result[i]['buy'])
                     result[i]['sell'] = float(result[i]['sell'])

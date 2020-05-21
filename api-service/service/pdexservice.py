@@ -71,14 +71,14 @@ class PdexService:
 
     def lastTradingTx(self, tokenSell="", tokenBuy=""):
         sql = """
-            SELECT tx_id, shard_id, prv_fee, info, block_height, block_hash, metadata, transacted_privacy_coin_fee, created_time FROM transactions WHERE tx_id in (
+            SELECT tx_id, shard_id, prv_fee, info, block_height, block_hash, metadata, transacted_privacy_coin_fee, created_time, Cast(transactions.data ->> 'LockTime' as text) FROM transactions WHERE tx_id in (
                 SELECT requested_tx_id FROM pde_trades order by beacon_height desc limit 1
             )
         """
 
         if tokenSell != "" and tokenBuy != "":
             sql = """
-                        SELECT tx_id, shard_id, prv_fee, info, block_height, block_hash, metadata, transacted_privacy_coin_fee, created_time FROM transactions WHERE tx_id in (
+                        SELECT tx_id, shard_id, prv_fee, info, block_height, block_hash, metadata, transacted_privacy_coin_fee, created_time, Cast(transactions.data ->> 'LockTime' as text) FROM transactions WHERE tx_id in (
                             SELECT requested_tx_id FROM pde_trades WHERE receiving_tokenid_str='""" + tokenBuy + """' 
                             AND (token2_id_str='""" + tokenSell + """' OR token1_id_str='""" + tokenSell + """') ORDER BY beacon_height desc limit 1
                         )
@@ -96,12 +96,13 @@ class PdexService:
                 "metadata": r[6],
                 "transacted_privacy_coin_fee": r[7],
                 "created_time": r[8],
+                "lock_time": r[9],
             }
         return {}
 
     def lastTradingTxInHours(self, token1, token2, hours=24):
         sql = """
-                SELECT t.tx_id, t.metadata,  p.receive_amount, p.trader_address_str
+                SELECT t.tx_id, t.metadata,  p.receive_amount, p.trader_address_str, p.beacon_time_stamp
                 FROM pde_trades p
                 JOIN transactions t ON t.created_time >= NOW() - INTERVAL '""" + str(hours) + """ HOURS' and t.tx_id = p.requested_tx_id
                 WHERE (p.token1_id_str = '""" + token2 + """' AND p.token2_id_str = '""" + token1 + """')
@@ -118,6 +119,7 @@ class PdexService:
                 'metadata': r[1],
                 'receive_amount': r[2],
                 'trader_address_str': r[3],
+                'beacon_time_stamp': r[4],
             }
             result.append(item)
         return result

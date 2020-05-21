@@ -222,6 +222,12 @@ def pdexCommonPairsLatest24Hours():
     """
     Pdex Common pairs information - latest 24 hours
     ---
+    parameters:
+        - name: partner
+          in: query
+          type: string
+          required: false
+          default:
     tags:
         - Pdex API
     responses:
