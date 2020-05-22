@@ -21,7 +21,7 @@ def notifyLastBlockIn24Hour():
         'shard_id': -1
     }
 
-    r = requests.get(url="http://0.0.0.0:5000/block/shard/count-block-last-time", params=params)
+    r = requests.get(url="http://analytic-api.incognito.org/block/shard/count-block-last-time", params=params)
     data = r.json()
     print(data)
 
