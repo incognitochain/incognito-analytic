@@ -96,6 +96,20 @@ class TransactionService:
             })
         return result
 
+    def listUnStakingTxs(self):
+        sql = """
+            SELECT tx_id, tx_version, shard_id, tx_type, prv_fee, proof_detail, metadata, created_time FROM transactions WHERE CAST(metadata->>'Type' as INT) = 127
+        """
+        data = db.execute(sql)
+        result = []
+        for r in data:
+            result.append({
+                'tx_id': r[0],
+                'metadata': r[6],
+                'created_time': r[7],
+            })
+        return result
+
     def sumPRVFee(self):
         sql = """
             select sum(prv_fee) from transactions where prv_fee > 0 and prv_fee is not null

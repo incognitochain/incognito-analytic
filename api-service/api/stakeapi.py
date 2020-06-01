@@ -29,6 +29,11 @@ class StakeAPI():
         total = 0
         for v in stakingTxs:
             total += v.get('metadata').get('StakingAmountShard')
+
+        unstakeTxs = txService.listUnStakingTxs()
+        # for v in unstakeTxs:
+        total -= (len(unstakeTxs) * 1750000000000)
+
         return total
 
     def prvFee(self):
