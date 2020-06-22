@@ -1,5 +1,5 @@
 import json
-from flask_restful import Resource
+from service.pdexservice import PdexService
 
 from service.transactionservice import TransactionService
 
@@ -31,6 +31,21 @@ class TransactionAPI():
 
         service = TransactionService()
         txs = service.listTxByMetadataType(metadataType=90, page=int(page), limit=int(limit), order_trend=order_trend)
+
+        pDexService = PdexService()
+        data = pDexService.getTokens()
+
+        for tx in txs:
+            metadata = tx.get('metadata')
+            tokenIDStr = metadata.get('TokenIDStr')
+            token = data.get(tokenIDStr)
+            if token is not None:
+                tokeName = token.get('name')
+                metadata['TokenNameStr'] = tokeName
+            else:
+                metadata['TokenNameStr'] = tokenIDStr
+            tx['metadata'] = metadata
+
         if int(group) == 1:
             result = {}
             for tx in txs:
