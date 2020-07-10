@@ -349,7 +349,7 @@ def listTradingTxs():
               in: query
               type: string
               required: false
-              default: 50
+              default: 20
         tags:
             - Pdex API
         responses:

@@ -184,7 +184,7 @@ class PdexService:
 
         return result
 
-    def getPoolPair(self, token1='', token2='', page=0, limit=50):
+    def getPoolPair(self, token1='', token2='', page=0, limit=20):
 
         pagenator = """"""
         if limit > 0:
@@ -202,6 +202,8 @@ class PdexService:
             ORDER BY MAX(beacon_height) DESC
         """ + pagenator
 
+        print(sql)
+
         data = db.execute(sql)
         result = []
         for r in data:
@@ -211,7 +213,7 @@ class PdexService:
             item['token2_id_str'] = r[2]
             item['token2_pool_value'] = r[3]
             item['beacon_height'] = r[4]
-            item['beacon_time_stamp'] = r[5]
+            item['beacon_time_stamp'] = str(r[5])
             result.append(item)
         return result
 

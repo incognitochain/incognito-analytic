@@ -3,13 +3,18 @@ import json
 from decimal import Decimal
 
 import requests
+import redis
 from operator import itemgetter
+
+from api import redishost
 from service.pdexservice import PdexService
 from service.token import TokenService
 
 
 class PdexApi():
     def __init__(self, args):
+        # self.redis_cache = redis.Redis(host='51.77.128.201', port=6379, db=0)
+        self.redis_cache = redis.Redis(host=redishost, port=6379, db=0)
         self.params = args
 
     def get(self):
@@ -485,10 +490,19 @@ class PdexApi():
         token1 = self.params.get('token1')
         token2 = self.params.get('token2')
         page = self.params.get('page', 0)
-        limit = self.params.get('limit', 50)
+        limit = self.params.get('limit', 20)
 
         service = PdexService()
-        data = service.getPoolPair(token1=token1, token2=token2, page=page, limit=limit)
+        redis_key = "getPoolPair_" + token1 + "_" + token2 + "_" + str(page) + "_" + str(limit)
+        dataJson = self.redis_cache.get(redis_key)
+        if dataJson == None:
+            data = service.getPoolPair(token1=token1, token2=token2, page=page, limit=limit)
+
+            # cache 60 minutes
+            jsonData = json.dumps(data)
+            self.redis_cache.set(redis_key, jsonData, ex=(60 * 60))
+        else:
+            data = json.loads(dataJson)
 
         tokenService = TokenService()
         tokens = tokenService.listTokens()
