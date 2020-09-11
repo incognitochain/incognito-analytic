@@ -28,9 +28,7 @@ func (st *PDEStatePGStore) EnsurePDEStatePGStore() {
 
 func (st *PDEStatePGStore) GetLatestProcessedBCHeight() (uint64, error) {
 	sqlStr := `
-		SELECT beacon_height FROM pde_pool_pairs
-		ORDER BY beacon_height DESC
-		LIMIT 1
+		SELECT MAX(beacon_height) FROM pde_pool_pairs
 	`
 	bcHeights := []uint64{}
 	err := st.DB.Select(&bcHeights, sqlStr)
