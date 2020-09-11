@@ -11,6 +11,7 @@ class PdexService:
     def getTradingPairs(self):
         result_set = db.execute("""
             SELECT distinct token1_id_str, token2_id_str FROM pde_pool_pairs
+            WHERE beacon_height BETWEEN ((SELECT MAX(beacon_height) FROM pde_pool_pairs) - 1) and (SELECT MAX(beacon_height) FROM pde_pool_pairs)
         """)
 
         pairs = []
