@@ -68,33 +68,6 @@ class PdexApi():
 
             result.append(item)
 
-        # result = [
-        #     {
-        #         "id": "ETH_BTC",
-        #         "type": "spot",
-        #         "base": "ETH",
-        #         "quote": "BTC"
-        #     },
-        #     {
-        #         "id": "BTC_USDT",
-        #         "type": "derivative",
-        #         "base": "BTC",
-        #         "quote": "USDT",
-        #         "active": True,
-        #         "subtypes": ["perpetual", "future"],
-        #         "settlement": "USDT",
-        #         "market_url": "https://www.binance.com/en/futures/BTCUSDT",
-        #         "description": "Binance perpetual futures market for BTC quoted in USDT"
-        #     },
-        #     {
-        #         "id": "in_xrpxbt",
-        #         "type": "index",
-        #         "base": "XRP",
-        #         "quote": "XBT",
-        #         "active": True,
-        #         "market_url": "https://www.cfbenchmarks.com/indices/XRP/XBT/RTI/seconds"
-        #     }
-        # ]
         return result
 
     def commonPairsLatest24Hours(self):
@@ -499,8 +472,11 @@ class PdexApi():
             data = service.getPoolPair(token1=token1, token2=token2, page=page, limit=limit)
 
             # cache 60 minutes
-            jsonData = json.dumps(data)
-            self.redis_cache.set(redis_key, jsonData, ex=(60 * 60))
+            try:
+                jsonData = json.dumps(data)
+                self.redis_cache.set(redis_key, jsonData, ex=(60 * 60))
+            except:
+                print("Can not write to redis")
         else:
             data = json.loads(dataJson)
 

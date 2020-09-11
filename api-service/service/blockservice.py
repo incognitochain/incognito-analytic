@@ -119,10 +119,13 @@ class BlockService:
         From shard_blocks blocks 
         Where (to_timestamp(Cast(blocks.data ->> 'Time' as DOUBLE PRECISION))) >= (now() - interval '""" + str(
             interval) + """ hours')
-        """  + ("" if int(shard_id)==-1 else """ AND blocks.shard_id=""" + str(shard_id)) + """
+        """ + ("" if int(shard_id) == -1 else """ AND blocks.shard_id=""" + str(shard_id)) + """
         GROUP BY blocks.shard_id
         ORDER BY blocks.shard_id
         """
+
+        print(sql)
+
         dataSet = db.execute(sql)
 
         result = []
