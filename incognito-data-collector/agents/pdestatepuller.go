@@ -75,7 +75,7 @@ func (psp *PDEStatePuller) Execute() {
 	var lastPDEState *entities.PDEState
 	for {
 		log.Printf("[PDE State] Proccessing for beacon height: %d\n", bcHeight)
-		time.Sleep(10 * time.Second)
+		time.Sleep(3 * time.Second)
 		pdeState, err := psp.getPDEState(bcHeight)
 		if err != nil {
 			log.Println("[PDE State] An error occured while getting pde state from chain: ", err)
@@ -87,7 +87,7 @@ func (psp *PDEStatePuller) Execute() {
 		}
 		lastPDEState = pdeState
 		for _, poolPair := range pdeState.PDEPoolPairs {
-			time.Sleep(10 * time.Millisecond)
+			time.Sleep(500 * time.Millisecond)
 			poolPairModel := models.PDEPoolPair{
 				Token1IDStr:     poolPair.Token1IDStr,
 				Token1PoolValue: poolPair.Token1PoolValue,
